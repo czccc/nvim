@@ -45,6 +45,7 @@ local plugin_files = {
   "plugins.lsp_signature",
   "plugins.neoclip",
   "plugins.sidebar",
+  "plugins.spectre",
   "plugins.todo",
   "plugins.zenmode",
 }
