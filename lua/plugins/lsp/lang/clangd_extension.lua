@@ -26,7 +26,19 @@ M.setup = function()
       -- options to pass to nvim-lspconfig
       -- i.e. the arguments to require("lspconfig").clangd.setup({})
       cmd = { "clangd", unpack(clangd_flags) },
-      on_attach = require("plugins.lsp").common_on_attach,
+      on_attach = function(client, bufnr)
+        require("plugins.lsp").common_on_attach(client, bufnr)
+        require("plugins.which_key").register({
+          ["m"] = {
+            s = { "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source Header" },
+            i = { "<cmd>ClangdSymbolInfo<cr>", "Symbol Info" },
+            t = { "<cmd>ClangdTypeHierarchy<cr>", "Type Hierarchy" },
+            T = { "<cmd>ClangdToggleInlayHints<cr>", "Toggle Inlay Hints" },
+            m = { "<cmd>ClangdMemoryUsage<cr>", "Memory Usage" },
+            a = { "<cmd>ClangdAST<cr>", "AST" },
+          },
+        }, { mode = "n", buffer = bufnr, prefix = "<Leader>" })
+      end,
       on_init = require("plugins.lsp").common_on_init,
       capabilities = require("plugins.lsp").common_capabilities(),
     },
@@ -66,12 +78,6 @@ M.setup = function()
         -- The color of the hints
         highlight = "Comment",
       },
-    },
-  }
-
-  require("plugins.which_key").register {
-    ["m"] = {
-      s = { "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source Header" },
     },
   }
 end

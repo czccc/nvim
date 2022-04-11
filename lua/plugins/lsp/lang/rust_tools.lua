@@ -29,6 +29,17 @@ executor.execute_command = function(command, args, cwd)
   vim.api.nvim_buf_attach(executor.latest_buf_id, false, { on_detach = onDetach })
 end
 
+M.get_lldb_command = function()
+  local path = require "utils.path"
+  local extension_path = path.join(vim.env.HOME, ".vscode-server", "extensions", "vadimcn.vscode-lldb-1.6.10")
+  local codelldb_path = path.join(extension_path, "adapter", "codelldb")
+  local liblldb_path = path.join(extension_path, "lldb", "lib", "liblldb.so")
+  -- print(path.is_file(codelldb_path), " ", codelldb_path)
+  -- print(path.is_file(liblldb_path), " ", liblldb_path)
+  local adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path)
+  return adapter
+end
+
 M.setup = function()
   local status_ok, rust_tools = pcall(require, "rust-tools")
   if not status_ok then
@@ -89,31 +100,35 @@ M.setup = function()
     },
     server = {
       cmd_env = requested_server._default_options.cmd_env,
-      on_attach = require("plugins.lsp").common_on_attach,
+      on_attach = function(client, bufnr)
+        require("plugins.lsp").common_on_attach(client, bufnr)
+        require("plugins.which_key").register({
+          ["m"] = {
+            t = { "<cmd>RustToggleInlayHints<cr>", "Toggle Inlay Hints" },
+            r = { "<cmd>RustRunnables<cr>", "Runnables" },
+            d = { "<cmd>RustDebuggables<cr>", "Debuggables" },
+            e = { "<cmd>RustExpandMacro<cr>", "Expand Macro" },
+            c = { "<cmd>RustOpenCargo<cr>", "Open Cargo" },
+            R = { "<cmd>RustReloadWorkspace<cr>", "Reload" },
+            a = { "<cmd>RustHoverActions<cr>", "Hover Actions" },
+            A = { "<cmd>RustHoverRange<cr>", "Hover Range" },
+            l = { "<cmd>RustJoinLines<cr>", "Join Lines" },
+            j = { "<cmd>RustMoveItemDown<cr>", "Move Item Down" },
+            k = { "<cmd>RustMoveItemUp<cr>", "Move Item Up" },
+            p = { "<cmd>RustParentModule<cr>", "Parent Module" },
+            s = { "<cmd>RustSSR<cr>", "Structural Search Replace" },
+            g = { "<cmd>RustViewCrateGraph<cr>", "View Crate Graph" },
+            S = { "<cmd>RustStartStandaloneServerForBuffer <cr>", "Standalone Server" },
+          },
+        }, { mode = "n", buffer = bufnr, prefix = "<Leader>" })
+      end,
       on_init = require("plugins.lsp").common_on_init,
+    },
+    dap = {
+      adapter = M.get_lldb_command(),
     },
   }
   rust_tools.setup(opts)
 end
-
-require("plugins.which_key").register {
-  ["m"] = {
-    t = { "<cmd>RustToggleInlayHints<cr>", "Toggle Inlay Hints" },
-    r = { "<cmd>RustRunnables<cr>", "Runnables" },
-    d = { "<cmd>RustDebuggables<cr>", "Debuggables" },
-    e = { "<cmd>RustExpandMacro<cr>", "Expand Macro" },
-    c = { "<cmd>RustOpenCargo<cr>", "Open Cargo" },
-    R = { "<cmd>RustReloadWorkspace<cr>", "Reload" },
-    a = { "<cmd>RustHoverActions<cr>", "Hover Actions" },
-    A = { "<cmd>RustHoverRange<cr>", "Hover Range" },
-    l = { "<cmd>RustJoinLines<cr>", "Join Lines" },
-    j = { "<cmd>RustMoveItemDown<cr>", "Move Item Down" },
-    k = { "<cmd>RustMoveItemUp<cr>", "Move Item Up" },
-    p = { "<cmd>RustParentModule<cr>", "Parent Module" },
-    s = { "<cmd>RustSSR<cr>", "Structural Search Replace" },
-    g = { "<cmd>RustViewCrateGraph<cr>", "View Crate Graph" },
-    S = { "<cmd>RustStartStandaloneServerForBuffer <cr>", "Standalone Server" },
-  },
-}
 
 return M

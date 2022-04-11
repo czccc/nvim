@@ -53,7 +53,6 @@ end
 
 function M.setup()
   M.load(require("plugins").packers)
-  require("plugins").setup()
 end
 
 -- packer expects a space separated list

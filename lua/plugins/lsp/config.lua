@@ -44,7 +44,7 @@ return {
   on_init_callback = nil,
   automatic_servers_installation = true,
   buffer_mappings = {
-    normal_mode = {
+    ["n"] = {
       ["K"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show hover" },
       ["g]"] = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Diagnostic Next" },
       ["g["] = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Diagnostic Prev" },
@@ -60,8 +60,8 @@ return {
       ["]d"] = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
       ["[d"] = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Previous Diagnostic" },
     },
-    insert_mode = {},
-    visual_mode = {},
+    ["i"] = {},
+    ["v"] = {},
   },
   which_key_mapping = {
     ["l"] = {

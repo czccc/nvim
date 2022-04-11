@@ -20,7 +20,7 @@ local dev_opts = {
         },
         workspace = {
           library = {
-            [require("utils.path").join(require("utils.path").runtime_dir, "nvim", "lua")] = true,
+            [require("utils.path").join(require("utils.path").config, "lua")] = true,
           },
           maxPreload = 100000,
           preloadFileSize = 10000,

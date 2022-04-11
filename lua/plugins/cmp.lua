@@ -40,6 +40,12 @@ M.packers = {
     requires = "nvim-treesitter/nvim-treesitter",
   },
   {
+    "abecodes/tabout.nvim",
+    config = function()
+      require("plugins.cmp").setup_tabout()
+    end,
+  },
+  {
     "github/copilot.vim",
     -- "gelfand/copilot.vim",
     config = function()
@@ -302,6 +308,17 @@ M.setup_cmp = function()
     },
     documentation = {
       border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+      -- border = {
+      --   { "╭", "CmpBorder" },
+      --   { "─", "CmpBorder" },
+      --   { "╮", "CmpBorder" },
+      --   { "│", "CmpBorder" },
+      --   { "╯", "CmpBorder" },
+      --   { "─", "CmpBorder" },
+      --   { "╰", "CmpBorder" },
+      --   { "│", "CmpBorder" },
+      -- },
+      scrollbar = "║",
     },
     sources = {
       { name = "nvim_lsp" },
@@ -321,24 +338,23 @@ M.setup_cmp = function()
       ["<C-j>"] = cmp.mapping.select_next_item(),
       ["<C-d>"] = cmp.mapping.scroll_docs(-4),
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
-      -- TODO: potentially fix emmet nonsense
       ["<Tab>"] = cmp.mapping(function(fallback)
-        -- local copilot_keys = vim.fn["copilot#Accept"] ""
-        -- print("bbb" .. copilot_keys)
+        local copilot_keys = vim.fn["copilot#Accept"]()
         if cmp.visible() then
           cmp.select_next_item()
+        elseif vim.api.nvim_get_mode().mode == "c" then
+          fallback()
+        elseif copilot_keys ~= "" then -- prioritise copilot over snippets
+          -- Copilot keys do not need to be wrapped in termcodes
+          vim.api.nvim_feedkeys(copilot_keys, "i", true)
         elseif luasnip.expandable() then
           luasnip.expand()
         elseif jumpable() then
           luasnip.jump(1)
-          -- elseif copilot_keys ~= "" then
-          --   -- print("aaa" .. copilot_keys)
-          --   vim.api.nvim_feedkeys(copilot_keys, "i", true)
         elseif check_backspace() then
           fallback()
-        elseif is_emmet_active() then
-          return vim.fn["cmp#complete"]()
         else
+          -- feedkeys("<Plug>(Tabout)", "")
           fallback()
         end
       end, {
@@ -348,9 +364,12 @@ M.setup_cmp = function()
       ["<S-Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item()
+        elseif vim.api.nvim_get_mode().mode == "c" then
+          fallback()
         elseif jumpable(-1) then
           luasnip.jump(-1)
         else
+          -- feedkeys("<Plug>(TaboutBack)", "")
           fallback()
         end
       end, {
@@ -363,6 +382,9 @@ M.setup_cmp = function()
       ["<Esc>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.abort()
+        elseif jumpable() then
+          luasnip.session.current_nodes[vim.api.nvim_get_current_buf()] = nil
+          fallback()
         else
           fallback()
         end
@@ -374,7 +396,6 @@ M.setup_cmp = function()
           end
           return
         end
-
         if jumpable() then
           if not luasnip.jump(1) then
             fallback()
@@ -408,7 +429,36 @@ M.setup_copilot = function()
     typescriptreact = true,
     terraform = true,
   }
-  vim.cmd [[ imap <silent><script><expr> <C-L> copilot#Accept("\<CR>") ]]
+  require("core.keymap").load {
+    ["i"] = {
+      ["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } },
+      ["<c-l>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } },
+      ["<M-]>"] = { "<Plug>(copilot-next)", { silent = true } },
+      ["<M-[>"] = { "<Plug>(copilot-previous)", { silent = true } },
+      ["<M-\\>"] = { "<Cmd>vertical Copilot panel<CR>", { silent = true } },
+    },
+  }
+end
+
+M.setup_tabout = function()
+  require("tabout").setup {
+    tabkey = "<Tab>", -- key to trigger tabout, set to an empty string to disable
+    backwards_tabkey = "<S-Tab>", -- key to trigger backwards tabout, set to an empty string to disable
+    act_as_tab = true, -- shift content if tab out is not possible
+    act_as_shift_tab = true, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
+    enable_backwards = true, -- well ...
+    completion = false, -- if the tabkey is used in a completion pum
+    tabouts = {
+      { open = "'", close = "'" },
+      { open = '"', close = '"' },
+      { open = "`", close = "`" },
+      { open = "(", close = ")" },
+      { open = "[", close = "]" },
+      { open = "{", close = "}" },
+    },
+    ignore_beginning = true, --[[ if the cursor is at the beginning of a filled element it will rather tab out than shift the content ]]
+    exclude = {}, -- tabout will ignore these filetypes
+  }
 end
 
 return M

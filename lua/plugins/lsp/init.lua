@@ -3,9 +3,26 @@ local Log = require "core.log"
 local autocmds = require "core.autocmds"
 
 M.packers = {
-  { "neovim/nvim-lspconfig" },
-  { "jose-elias-alvarez/null-ls.nvim" },
-  { "williamboman/nvim-lsp-installer" },
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      require("plugins.lsp").setup()
+    end,
+  },
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    config = function()
+      require("plugins.lsp.null-ls").setup()
+    end,
+  },
+  {
+    "williamboman/nvim-lsp-installer",
+    config = function()
+      require("nvim-lsp-installer").on_server_ready(function(server)
+        require("plugins.lsp.manager").setup(server.name)
+      end)
+    end,
+  },
   {
     "filipdutescu/renamer.nvim",
     config = function()
@@ -18,6 +35,7 @@ M.packers = {
   },
   {
     "simrat39/rust-tools.nvim",
+    -- "fabiocaruso/rust-tools.nvim",
     config = function()
       require("plugins.lsp.lang.rust_tools").setup()
     end,
@@ -34,41 +52,19 @@ M.packers = {
 
 M.config = require "plugins.lsp.config"
 
-local function lsp_highlight_document(client)
-  if M.config.document_highlight == false then
-    return -- we don't need further
-  end
-  autocmds.enable_lsp_document_highlight(client.id)
-end
-
-local function lsp_code_lens_refresh(client)
-  if M.config.code_lens_refresh == false then
-    return
-  end
-
-  if client.resolved_capabilities.code_lens then
-    autocmds.enable_code_lens_refresh()
-  end
-end
-
 local function add_lsp_buffer_keybindings(bufnr)
-  local mappings = {
-    normal_mode = "n",
-    insert_mode = "i",
-    visual_mode = "v",
-  }
-
   -- Remap using which_key
   local wk = require "plugins.which_key"
   if wk:load() then
-    for mode_name, mode_char in pairs(mappings) do
-      wk.register(M.config.buffer_mappings[mode_name], { mode = mode_char, buffer = bufnr })
+    for mode_char, mapping in pairs(M.config.buffer_mappings) do
+      wk.register(mapping, { mode = mode_char, buffer = bufnr })
     end
-    wk.register(M.config.which_key_mapping)
+    wk.register(M.config.which_key_mapping, { mode = "n", buffer = bufnr, prefix = "<Leader>" })
+    return
   end
   -- Remap using nvim api
-  for mode_name, mode_char in pairs(mappings) do
-    for key, remap in pairs(M.config.buffer_mappings[mode_name]) do
+  for mode_char, mapping in pairs(M.config.buffer_mappings) do
+    for key, remap in pairs(mapping) do
       vim.api.nvim_buf_set_keymap(bufnr, mode_char, key, remap[1], { noremap = true, silent = true })
     end
   end
@@ -110,30 +106,19 @@ local function select_default_formater(client)
 end
 
 function M.common_on_exit(_, _)
-  if M.config.document_highlight then
-    autocmds.disable_lsp_document_highlight()
-  end
-  if M.config.code_lens_refresh then
-    autocmds.disable_code_lens_refresh()
-  end
+  autocmds.disable_lsp_document_highlight()
+  autocmds.disable_code_lens_refresh()
 end
 
 function M.common_on_init(client, _)
-  -- if M.config.on_init_callback then
-  --   M.config.on_init_callback(client, bufnr)
-  --   Log:debug "Called lsp.on_init_callback"
-  --   return
-  -- end
   select_default_formater(client)
 end
 
 function M.common_on_attach(client, bufnr)
-  -- if M.config.on_attach_callback then
-  --   M.config.on_attach_callback(client, bufnr)
-  --   Log:debug "Called lsp.on_attach_callback"
-  -- end
-  lsp_highlight_document(client)
-  lsp_code_lens_refresh(client)
+  autocmds.enable_lsp_document_highlight(client.id)
+  if client.resolved_capabilities.code_lens then
+    autocmds.enable_code_lens_refresh()
+  end
   add_lsp_buffer_keybindings(bufnr)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 end
@@ -165,17 +150,6 @@ function M.setup()
   vim.diagnostic.config(M.config.diagnostics)
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, M.config.float)
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, M.config.float)
-
-  local lsp_installer_status_ok, lsp_installer = pcall(require, "nvim-lsp-installer")
-  if lsp_installer_status_ok then
-    -- Register a handler that will be called for all installed servers.
-    -- Alternatively, you may also register handlers on specific server instances instead (see example below).
-    lsp_installer.on_server_ready(function(server)
-      require("plugins.lsp.manager").setup(server.name)
-    end)
-  end
-
-  require("plugins.lsp.null-ls").setup()
 
   require("core.autocmds").configure_format_on_save()
 end

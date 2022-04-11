@@ -18,15 +18,13 @@ function M:setup()
   end
   M.config.setup.sources = {
     null_ls.builtins.formatting.stylua,
-    null_ls.builtins.formatting.black.with { extra_args = { "--fast" }, filetypes = { "python" } },
+    null_ls.builtins.formatting.black,
     -- null_ls.builtins.formatting.isort.with { extra_args = { "--profile", "black" }, filetypes = { "python" } },
 
     null_ls.builtins.diagnostics.shellcheck,
-    -- null_ls.builtins.diagnostics.luacheck,
+    null_ls.builtins.diagnostics.luacheck,
     null_ls.builtins.diagnostics.vint,
-    -- null_ls.builtins.diagnostics.markdownlint.with {
-    --   filetypes = { "markdown" },
-    -- },
+    null_ls.builtins.diagnostics.markdownlint,
 
     null_ls.builtins.code_actions.shellcheck,
     null_ls.builtins.code_actions.gitsigns,

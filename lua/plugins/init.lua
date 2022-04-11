@@ -74,10 +74,6 @@ M.init = function()
   end
 end
 
-M.setup = function()
-  require("plugins.lsp").setup()
-end
-
 M.reload = function()
   M.packers = {}
   for _, plugin_file in ipairs(plugin_files) do
