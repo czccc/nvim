@@ -18,11 +18,8 @@ stds.nvim = {
     "jit",
     "os",
     "vim",
+    "packer_plugins",
     "join_paths",
-    "get_runtime_dir",
-    "get_config_dir",
-    "get_cache_dir",
-    "get_lvim_base_dir",
     "require_clean",
   },
 }

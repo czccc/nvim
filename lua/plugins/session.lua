@@ -236,7 +236,7 @@ end
 
 function M.restore_explorer()
   ---@diagnostic disable-next-line: unused-local
-  local neotree_status_ok, neotree = pcall(require, "neo-tree.command")
+  local neotree_status_ok, _ = pcall(require, "neo-tree.command")
   if neotree_status_ok then
     -- pcall(neotree.execute, { action = "close" })
     -- pcall(neotree.execute, { action = "focus" })
