@@ -33,6 +33,7 @@ local plugin_files = {
 
   "plugins.lsp",
   "plugins.dap",
+  "plugins.lang",
 
   -- "plugins.lsp.lang.clangd_extension",
   -- "plugins.lsp.lang.rust_tools",

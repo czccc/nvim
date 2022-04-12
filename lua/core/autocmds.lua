@@ -4,7 +4,7 @@ local Log = require "core.log"
 M.autocommands = {
   general_settings = {
     { "VimResized", "*", "tabdo wincmd =" },
-    { "CursorHold", "* checktime" },
+    { "WinEnter", "*", "checktime" },
     {
       "TextYankPost",
       "*",

@@ -33,21 +33,6 @@ M.packers = {
     "folke/lua-dev.nvim",
     module = "lua-dev",
   },
-  {
-    "simrat39/rust-tools.nvim",
-    -- "fabiocaruso/rust-tools.nvim",
-    config = function()
-      require("plugins.lsp.lang.rust_tools").setup()
-    end,
-    ft = { "rust", "rs" },
-  },
-  {
-    "p00f/clangd_extensions.nvim",
-    config = function()
-      require("plugins.lsp.lang.clangd_extension").setup()
-    end,
-    ft = { "c", "cpp", "objc", "objcpp" },
-  },
 }
 
 M.config = require "plugins.lsp.config"
