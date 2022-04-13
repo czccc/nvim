@@ -30,6 +30,7 @@ M.packers = {
     config = function()
       require("plugins.treesitter").setup_context()
     end,
+    disable = true,
   },
   {
     "SmiteshP/nvim-gps",
@@ -64,6 +65,9 @@ M.opts = {
   matchup = {
     enable = true, -- mandatory, false will disable the whole extension
     -- disable = { "c", "ruby" },  -- optional, list of language that will be disabled
+    matchparen_offscreen = { method = "popup" },
+    vim.cmd [[ let g:matchup_matchparen_offscreen = {'method': 'popup'} ]],
+    -- vim.cmd [[ let g:matchup_matchparen_offscreen = {'method': 'status_manual'} ]],
   },
   highlight = {
     enable = true, -- false will disable the whole extension
