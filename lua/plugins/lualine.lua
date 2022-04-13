@@ -391,51 +391,51 @@ M.config = {
     lualine_z = {},
   },
   tabline = {},
-  extensions = {
-    {
-      sections = {
-        lualine_c = {
-          {
-            function()
-              return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
-            end,
-            color = { gui = "bold" },
-          },
-        },
-      },
-      filetypes = { "NvimTree", "neo-tree" },
-    },
-    {
-      sections = {
-        lualine_c = {
-          {
-            function()
-              return "ToggleTerm #" .. vim.b.toggle_number
-            end,
-            color = { fg = colors.blue, gui = "bold" },
-          },
-        },
-      },
-      filetypes = { "toggleterm" },
-    },
-    {
-      sections = { lualine_c = { { "filetype", color = { gui = "bold" } } } },
-      filetypes = { "Outline", "SidebarNvim" },
-    },
-    {
-      sections = {
-        lualine_c = {
-          {
-            function()
-              return "Sidebar"
-            end,
-            color = { gui = "bold" },
-          },
-        },
-      },
-      filetypes = { "SidebarNvim" },
-    },
-  },
+  -- extensions = {
+  --   {
+  --     sections = {
+  --       lualine_c = {
+  --         {
+  --           function()
+  --             return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+  --           end,
+  --           color = { gui = "bold" },
+  --         },
+  --       },
+  --     },
+  --     filetypes = { "NvimTree", "neo-tree" },
+  --   },
+  --   {
+  --     sections = {
+  --       lualine_c = {
+  --         {
+  --           function()
+  --             return "ToggleTerm #" .. vim.b.toggle_number
+  --           end,
+  --           color = { fg = colors.blue, gui = "bold" },
+  --         },
+  --       },
+  --     },
+  --     filetypes = { "toggleterm" },
+  --   },
+  --   {
+  --     sections = { lualine_c = { { "filetype", color = { gui = "bold" } } } },
+  --     filetypes = { "Outline", "SidebarNvim" },
+  --   },
+  --   {
+  --     sections = {
+  --       lualine_c = {
+  --         {
+  --           function()
+  --             return "Sidebar"
+  --           end,
+  --           color = { gui = "bold" },
+  --         },
+  --       },
+  --     },
+  --     filetypes = { "SidebarNvim" },
+  --   },
+  -- },
 }
 
 M.setup = function()

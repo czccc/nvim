@@ -1,5 +1,12 @@
 local M = {}
 
+M.packer = {
+  "filipdutescu/renamer.nvim",
+  config = function()
+    require("plugins.lsp.renamer").config()
+  end,
+}
+
 M.config = function()
   local status_ok, renamer = pcall(require, "renamer")
   if not status_ok then
@@ -46,6 +53,11 @@ M.config = function()
     -- Custom handler to be run after successfully renaming the word. Receives
     -- the LSP 'textDocument/rename' raw response as its parameter.
     handler = nil,
+  }
+  require("plugins.which_key").register {
+    ["l"] = {
+      R = { "<cmd>lua require('renamer').rename()<cr>", "Rename" },
+    },
   }
 end
 

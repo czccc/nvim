@@ -23,12 +23,12 @@ M.packers = {
       end)
     end,
   },
-  {
-    "filipdutescu/renamer.nvim",
-    config = function()
-      require("plugins.lsp.renamer").config()
-    end,
-  },
+  -- {
+  --   "filipdutescu/renamer.nvim",
+  --   config = function()
+  --     require("plugins.lsp.renamer").config()
+  --   end,
+  -- },
   {
     "folke/lua-dev.nvim",
     module = "lua-dev",

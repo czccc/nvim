@@ -20,8 +20,14 @@ M.packers = {
   -- {
   --   "nvim-telescope/telescope-file-browser.nvim",
   -- },
+  -- {
+  --   "nvim-telescope/telescope-ui-select.nvim",
+  -- },
   {
-    "nvim-telescope/telescope-ui-select.nvim",
+    "stevearc/dressing.nvim",
+    config = function()
+      require("plugins.telescope").setup_dressing()
+    end,
   },
 }
 
@@ -189,10 +195,38 @@ function M.setup()
   require("telescope").load_extension "fzf"
   require("telescope").load_extension "frecency"
   -- require("telescope").load_extension "file_browser"
-  require("telescope").load_extension "ui-select"
+  -- require("telescope").load_extension "ui-select"
 
   require("core.autocmds").define_augroups {
     telescope_fold_fix = { { "BufRead", "*", "autocmd BufWinEnter * ++once normal! zx" } },
+  }
+end
+
+M.setup_dressing = function()
+  require("dressing").setup {
+    input = {
+      enabled = true,
+      -- Default prompt string
+      default_prompt = "Input:",
+    },
+    select = {
+      -- Set to false to disable the vim.ui.select implementation
+      enabled = true,
+
+      -- Priority list of preferred vim.select implementations
+      backend = { "telescope", "fzf_lua", "fzf", "builtin", "nui" },
+
+      -- Options for telescope selector
+      -- These are passed into the telescope picker directly. Can be used like:
+      -- telescope = require('telescope.themes').get_ivy({...})
+      telescope = nil,
+
+      -- Used to override format_item. See :help dressing-format
+      format_item_override = {},
+
+      -- see :help dressing_get_config
+      get_config = nil,
+    },
   }
 end
 

@@ -33,6 +33,9 @@ M.packers = {
     "hrsh7th/cmp-path",
   },
   {
+    "hrsh7th/cmp-cmdline",
+  },
+  {
     "danymat/neogen",
     config = function()
       require("neogen").setup { snippet_engine = "luasnip" }
@@ -306,18 +309,12 @@ M.setup_cmp = function()
         require("luasnip").lsp_expand(args.body)
       end,
     },
+    window = {
+      border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+      scrollbar = "║",
+    },
     documentation = {
       border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-      -- border = {
-      --   { "╭", "CmpBorder" },
-      --   { "─", "CmpBorder" },
-      --   { "╮", "CmpBorder" },
-      --   { "│", "CmpBorder" },
-      --   { "╯", "CmpBorder" },
-      --   { "─", "CmpBorder" },
-      --   { "╰", "CmpBorder" },
-      --   { "│", "CmpBorder" },
-      -- },
       scrollbar = "║",
     },
     sources = {
@@ -359,7 +356,7 @@ M.setup_cmp = function()
         end
       end, {
         "i",
-        "c",
+        "s",
       }),
       ["<S-Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
@@ -374,7 +371,7 @@ M.setup_cmp = function()
         end
       end, {
         "i",
-        "c",
+        "s",
       }),
 
       ["<C-Space>"] = cmp.mapping.complete(),
@@ -407,6 +404,17 @@ M.setup_cmp = function()
     },
   }
   require("cmp").setup(M.config)
+  require("cmp").setup.cmdline(":", {
+    sources = {
+      { name = "path" },
+      { name = "cmdline" },
+    },
+  })
+  require("cmp").setup.cmdline("/", {
+    sources = {
+      { name = "buffer" },
+    },
+  })
 end
 
 M.setup_copilot = function()
