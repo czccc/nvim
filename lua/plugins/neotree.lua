@@ -70,7 +70,7 @@ M.config = {
     git_status = {
       symbols = {
         -- Change type
-        added = "✚",
+        -- added = "✚",
         deleted = "✖",
         -- modified = "",
         modified = "",

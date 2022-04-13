@@ -207,7 +207,7 @@ local components = {
       if not status_ok then
         return ""
       end
-      if not gps.is_avaliable() then
+      if not gps.is_available() then
         return ""
       end
       return gps.get_location()
