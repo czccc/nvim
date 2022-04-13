@@ -7,20 +7,26 @@ M.packer = {
   end,
   disable = false,
 }
+
+local globalstatus = vim.version().minor >= 7
+
 local conditions = {
+  global_status = function()
+    return vim.version().minor >= 7
+  end,
   buffer_not_empty = function()
     return vim.fn.empty(vim.fn.expand "%:t") ~= 1
   end,
   wide_window = function()
-    return vim.fn.winwidth(0) > 80
+    return globalstatus or vim.fn.winwidth(0) > 80
   end,
   large_window = function()
-    return vim.fn.winwidth(0) > 130
+    return globalstatus or vim.fn.winwidth(0) > 130
   end,
   check_git_workspace = function()
     local filepath = vim.fn.expand "%:p:h"
     local gitdir = vim.fn.finddir(".git", filepath .. ";")
-    return gitdir and #gitdir > 0 and #gitdir < #filepath
+    return gitdir and #gitdir > 0 and #gitdir - 5 < #filepath
   end,
 }
 
@@ -88,7 +94,15 @@ local components = {
     cond = function()
       return conditions.check_git_workspace() and conditions.large_window()
     end,
-    padding = 0,
+    padding = { left = 0, right = 1 },
+  },
+  cwd = {
+    function()
+      return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+    end,
+    cond = conditions.global_status,
+    color = { gui = "bold" },
+    padding = { left = 1, right = 1 },
   },
   filename = {
     "filename",
@@ -334,7 +348,7 @@ M.config = {
     theme = "auto",
     disabled_filetypes = { "dashboard", "alpha" },
     always_divide_middle = true,
-    -- globalstatus = true,
+    globalstatus = globalstatus,
   },
   sections = {
     -- these are to remove the defaults
@@ -343,6 +357,7 @@ M.config = {
     lualine_c = {
       -- components.left,
       components.mode1,
+      components.cwd,
       components.branch,
       components.filetype,
       components.filename,
