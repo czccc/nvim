@@ -312,10 +312,10 @@ M.setup_cmp = function()
     window = {
       border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
       scrollbar = "║",
-    },
-    documentation = {
-      border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-      scrollbar = "║",
+      documentation = {
+        border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+        scrollbar = "║",
+      },
     },
     sources = {
       { name = "nvim_lsp" },
