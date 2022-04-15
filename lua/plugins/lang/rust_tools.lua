@@ -28,6 +28,7 @@ executor.execute_command = function(command, args, cwd)
   end
   vim.api.nvim_buf_attach(executor.latest_buf_id, false, { on_detach = onDetach })
 end
+-- executor.execute_command = require("plugins.async").exector_with_args
 
 M.get_lldb_command = function()
   local path = require "utils.path"

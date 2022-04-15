@@ -112,6 +112,7 @@ M.setup_kanagawa = function()
 end
 
 M.setup_onedark = function()
+  vim.g.onedark_disable_terminal_colors = true
   require("onedark").setup {
     -- Main options --
     style = "cool", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
@@ -161,6 +162,7 @@ M.setup_onedark = function()
   }
   -- require("onedark").load()
   local cl = require "core.colors"
+  vim.g.terminal_color_8 = cl.colors.cool.grey
   cl.define_links("LspReferenceText", "Visual")
   cl.define_links("LspReferenceRead", "Visual")
   cl.define_links("LspReferenceWrite", "Visual")

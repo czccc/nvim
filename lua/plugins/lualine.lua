@@ -9,6 +9,13 @@ M.packer = {
 }
 
 local globalstatus = vim.version().minor >= 7
+local winwidth = function()
+  if globalstatus then
+    return vim.api.nvim_get_option "columns"
+  else
+    return vim.fn.winwidth(0)
+  end
+end
 
 local conditions = {
   global_status = function()
@@ -18,32 +25,20 @@ local conditions = {
     return vim.fn.empty(vim.fn.expand "%:t") ~= 1
   end,
   wide_window = function()
-    return globalstatus or vim.fn.winwidth(0) > 80
+    return winwidth(0) > 80
   end,
   large_window = function()
-    return globalstatus or vim.fn.winwidth(0) > 130
+    return winwidth(0) > 150
   end,
   check_git_workspace = function()
-    local filepath = vim.fn.expand "%:p:h"
+    -- local filepath = vim.fn.expand "%:p:h"
+    local filepath = vim.fn.getcwd()
     local gitdir = vim.fn.finddir(".git", filepath .. ";")
     return gitdir and #gitdir > 0 and #gitdir - 5 < #filepath
   end,
 }
 
-local colors = {
-  bg = "#202328",
-  fg = "#bbc2cf",
-  yellow = "#ECBE7B",
-  cyan = "#008080",
-  darkblue = "#081633",
-  green = "#98be65",
-  orange = "#FF8800",
-  violet = "#a9a1e1",
-  magenta = "#c678dd",
-  purple = "#c678dd",
-  blue = "#51afef",
-  red = "#ec5f67",
-}
+local colors = require("core.colors").colors.cool
 
 local components = {
   left = {
@@ -85,10 +80,19 @@ local components = {
       return icons.normal
     end,
     color = { fg = colors.blue, gui = "bold" },
-    padding = { left = 1, right = 1 },
+    padding = { left = 2, right = 1 },
   },
   branch = {
     "b:gitsigns_head",
+    icon = " ",
+    color = { fg = colors.blue, gui = "bold" },
+    cond = function()
+      return conditions.check_git_workspace() and conditions.large_window()
+    end,
+    padding = { left = 0, right = 1 },
+  },
+  branch1 = {
+    "branch",
     icon = " ",
     color = { fg = colors.blue, gui = "bold" },
     cond = function()
@@ -100,7 +104,7 @@ local components = {
     function()
       return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
     end,
-    cond = conditions.global_status,
+    cond = conditions.large_window,
     color = { gui = "bold" },
     padding = { left = 1, right = 1 },
   },
@@ -143,7 +147,8 @@ local components = {
     "diagnostics",
     sources = { "nvim_diagnostic" },
     symbols = { error = " ", warn = " ", info = " ", hint = " " },
-    cond = conditions.wide_window,
+    cond = nil,
+    -- cond = conditions.wide_window,
   },
   treesitter = {
     function()
@@ -257,7 +262,7 @@ local components = {
   encoding = {
     "o:encoding",
     fmt = string.upper,
-    color = { fg = colors.orange },
+    color = { fg = colors.green },
     cond = conditions.wide_window,
   },
   fileformat = {
@@ -269,7 +274,7 @@ local components = {
       mac = "CR",
     },
     fmt = string.upper,
-    color = { fg = colors.green },
+    color = { fg = colors.orange },
     cond = conditions.wide_window,
   },
   filesize = {
@@ -358,7 +363,8 @@ M.config = {
       -- components.left,
       components.mode1,
       components.cwd,
-      components.branch,
+      -- components.branch,
+      components.branch1,
       components.filetype,
       components.filename,
       components.diff,
@@ -370,10 +376,10 @@ M.config = {
       components.diagnostics,
       components.lsp,
       -- components.treesitter,
+      components.filesize,
+      components.spaces,
       components.encoding,
       components.fileformat,
-      components.spaces,
-      components.filesize,
       components.clock,
       components.location,
       components.scrollbar,
