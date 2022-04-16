@@ -1,10 +1,10 @@
 local M = {}
-local Log = require "core.log"
+local Log = require("core.log")
 
 M.packers = {
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = vim.fn.has "nvim-0.6" == 1 and "master" or "0.5-compat",
+    branch = vim.fn.has("nvim-0.6") == 1 and "master" or "0.5-compat",
     -- run = ":TSUpdate",
     config = function()
       require("plugins.treesitter").setup()
@@ -66,7 +66,7 @@ M.opts = {
     enable = true, -- mandatory, false will disable the whole extension
     -- disable = { "c", "ruby" },  -- optional, list of language that will be disabled
     matchparen_offscreen = { method = "popup" },
-    vim.cmd [[ let g:matchup_matchparen_offscreen = {'method': 'popup'} ]],
+    vim.cmd([[ let g:matchup_matchparen_offscreen = {'method': 'popup'} ]]),
     -- vim.cmd [[ let g:matchup_matchparen_offscreen = {'method': 'status_manual'} ]],
   },
   highlight = {
@@ -192,34 +192,42 @@ M.opts = {
 function M.setup()
   -- avoid running in headless mode since it's harder to detect failures
   if #vim.api.nvim_list_uis() == 0 then
-    Log:debug "headless mode detected, skipping running setup for treesitter"
+    Log:debug("headless mode detected, skipping running setup for treesitter")
     return
   end
 
   local status_ok, treesitter_configs = pcall(require, "nvim-treesitter.configs")
   if not status_ok then
-    Log:error "Failed to load nvim-treesitter.configs"
+    Log:error("Failed to load nvim-treesitter.configs")
     return
   end
 
   treesitter_configs.setup(M.opts)
 
-  local wk = require "plugins.which_key"
-  wk.register(M.opts.textobjects.select.keymaps, { mode = "o", prefix = "", preset = true })
-  wk.register({
-    ["]f"] = "Next Function Start",
-    ["]c"] = "Next Class Start",
-    ["]F"] = "Next Function End",
-    ["]C"] = "Next Class End",
-    ["[f"] = "Previous Function Start",
-    ["[c"] = "Previous Class Start",
-    ["[F"] = "Previous Function End",
-    ["[C"] = "Previous Class End",
-  }, { mode = "n", prefix = "", preset = true })
+  local Key = require("utils.key").Key
+  require("utils.key").load({
+    Key("o", "af"):desc("Function Outer"),
+    Key("o", "if"):desc("Function Inner"),
+    Key("o", "ac"):desc("Class Outer"),
+    Key("o", "ic"):desc("Class Inner"),
+    Key("o", "al"):desc("Loop Outer"),
+    Key("o", "il"):desc("Loop Inner"),
+    Key("o", "aa"):desc("Parameter Outer"),
+    Key("o", "ia"):desc("Parameter Inner"),
+
+    Key("n", "]f"):desc("Next Function Start"),
+    Key("n", "]c"):desc("Next Class Start"),
+    Key("n", "]F"):desc("Next Function End"),
+    Key("n", "]C"):desc("Next Class End"),
+    Key("n", "[f"):desc("Previous Function Start"),
+    Key("n", "[c"):desc("Previous Class Start"),
+    Key("n", "[F"):desc("Previous Function End"),
+    Key("n", "[C"):desc("Previous Class End"),
+  })
 end
 
 M.setup_gps = function()
-  require("nvim-gps").setup {
+  require("nvim-gps").setup({
 
     disable_icons = false, -- Setting it to true will disable all icons
 
@@ -329,11 +337,11 @@ M.setup_gps = function()
 
     -- indicator used when context hits depth limit
     depth_limit_indicator = "..",
-  }
+  })
 end
 
 M.setup_context = function()
-  require("treesitter-context").setup {
+  require("treesitter-context").setup({
     enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
     throttle = true, -- Throttles plugin updates (may improve performance)
     max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
@@ -364,7 +372,7 @@ M.setup_context = function()
       -- exactly match "impl_item" only)
       -- rust = true,
     },
-  }
+  })
 end
 
 return M

@@ -12,7 +12,7 @@ M.load_core = function()
   pcall(require, "impatient")
   -- require("impatient").enable_profile()
   leader_map()
-  require "core.global"
+  require("core.global")
   require("core.options").setup()
   require("core.keymap").setup()
   require("core.autocmds").setup()
@@ -39,7 +39,7 @@ M.reload = function()
   require("core.osconf").setup()
   require("core.pack").setup()
 
-  vim.notify "Reloaded"
+  vim.notify("Reloaded")
 end
 
 return M

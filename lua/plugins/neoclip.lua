@@ -1,5 +1,5 @@
 local M = {}
-local Log = require "core.log"
+local Log = require("core.log")
 
 M.packer = {
   "AckslD/nvim-neoclip.lua",
@@ -31,14 +31,14 @@ end
 M.setup = function()
   local status_ok, neoclip = pcall(require, "neoclip")
   if not status_ok then
-    Log:warn "neoclip: not found"
+    Log:warn("neoclip: not found")
     return
   end
 
-  neoclip.setup {
+  neoclip.setup({
     history = 50,
     enable_persistent_history = true,
-    db_path = vim.fn.stdpath "data" .. "/neoclip.sqlite3",
+    db_path = vim.fn.stdpath("data") .. "/neoclip.sqlite3",
     default_register = { '"', "+", "*" },
     filter = function(data)
       return not all(data.event.regcontents, is_whitespace)
@@ -49,7 +49,7 @@ M.setup = function()
     --     n = { select = "p", paste = "<CR>", paste_behind = "P" },
     --   },
     -- },
-  }
+  })
   local function clip()
     local opts = {
       winblend = 10,
@@ -72,9 +72,10 @@ M.setup = function()
     local dropdown = require("telescope.themes").get_dropdown(opts)
     require("telescope").extensions.neoclip.default(dropdown)
   end
-  require("plugins.which_key").register {
-    ["y"] = { clip, "Neoclip" },
-  }
+  local Key = require("utils.key").Key
+  require("utils.key").load({
+    Key("n", "<Leader>y", clip):desc("NeoClip"),
+  })
 end
 
 return M

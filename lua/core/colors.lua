@@ -71,7 +71,7 @@ M.setup_highlights = function()
 end
 
 M.setup = function()
-  require("core.autocmds").define_augroups {
+  require("core.autocmds").define_augroups({
     add_user_highlight = {
       {
         "ColorScheme",
@@ -79,7 +79,7 @@ M.setup = function()
         "lua require('core.colors').setup_highlights()",
       },
     },
-  }
+  })
   M.setup_colorscheme()
   M.setup_highlights()
 end

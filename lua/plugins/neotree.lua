@@ -28,13 +28,13 @@ M.config = {
     {
       event = "neo_tree_buffer_enter",
       handler = function()
-        vim.cmd "highlight! Cursor blend=100"
+        vim.cmd("highlight! Cursor blend=100")
       end,
     },
     {
       event = "neo_tree_buffer_leave",
       handler = function()
-        vim.cmd "highlight! Cursor guibg=#5f87af blend=0"
+        vim.cmd("highlight! Cursor guibg=#5f87af blend=0")
       end,
     },
   },
@@ -113,14 +113,14 @@ M.config = {
         local tree = state.tree
         local node = tree:get_node()
         local siblings = tree:get_nodes(node:get_parent_id())
-        local renderer = require "neo-tree.ui.renderer"
+        local renderer = require("neo-tree.ui.renderer")
         renderer.focus_node(state, siblings[#siblings]:get_id())
       end,
       ["K"] = function(state)
         local tree = state.tree
         local node = tree:get_node()
         local siblings = tree:get_nodes(node:get_parent_id())
-        local renderer = require "neo-tree.ui.renderer"
+        local renderer = require("neo-tree.ui.renderer")
         renderer.focus_node(state, siblings[1]:get_id())
       end,
     },
@@ -240,20 +240,19 @@ M.config = {
 }
 
 M.setup = function()
-  vim.cmd [[ let g:neo_tree_remove_legacy_commands = 1 ]]
+  vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 
   require("neo-tree").setup(M.config)
 
-  require("plugins.which_key").register {
-    ["e"] = { "<cmd>Neotree filesystem reveal<CR>", "Explorer" },
-    ["E"] = { "<cmd>Neotree toggle<CR>", "Explorer" },
-    ["v"] = {
-      ["g"] = { "<cmd>Neotree git_status left<cr>", "Git Status" },
-      ["G"] = { "<cmd>Neotree git_status float<cr>", "Git Status" },
-      ["b"] = { "<cmd>Neotree buffers left<cr>", "Buffers" },
-      ["B"] = { "<cmd>Neotree buffers float<cr>", "Buffers" },
-    },
-  }
+  local Key = require("utils.key").Key
+  require("utils.key").load({
+    Key("n", "<Leader>e", "<cmd>Neotree filesystem reveal<cr>"):desc("Explorer"),
+    Key("n", "<Leader>E", "<cmd>Neotree toggle<cr>"):desc("Explorer"),
+    Key("n", "<Leader>vg", "<cmd>Neotree git_status left<cr>"):desc("Git Status"),
+    Key("n", "<Leader>vG", "<cmd>Neotree git_status float<cr>"):desc("Git Status"),
+    Key("n", "<Leader>vb", "<cmd>Neotree buffers left<cr>"):desc("Opened Files"),
+    Key("n", "<Leader>vB", "<cmd>Neotree buffers float<cr>"):desc("Opened Files"),
+  })
 
   -- require("core.colors").define_links("NeoTreeDirectoryIcon", "NvimTreeFolderIcon")
   -- require("core.colors").define_links("NeoTreeDirectoryName", "NvimTreeFolderName")
@@ -268,11 +267,11 @@ M.setup = function()
   -- require("core.colors").define_styles("NeoTreeDirectoryName", { guifg = "#51afef" })
   -- require("core.colors").define_styles("NeoTreeCursorLine", { guibg = "#323842" })
 
-  require("core.autocmds").define_augroups {
+  require("core.autocmds").define_augroups({
     neotree_tab_key = {
       { "FileType", "neo-tree", "nnoremap <silent> <buffer> <Tab> <C-w>l" },
     },
-  }
+  })
 end
 
 return M

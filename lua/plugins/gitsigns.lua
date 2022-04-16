@@ -82,48 +82,37 @@ M.config = {
 }
 
 M.setup = function()
-  local gitsigns = require "gitsigns"
+  local gitsigns = require("gitsigns")
   gitsigns.setup(M.config)
-  local wk = require "plugins.which_key"
-  wk.register {
-    ["g"] = {
-      name = "Git",
-      j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
-      k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
-      l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
-      p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
-      r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
-      R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
-      s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-      u = {
-        "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
-        "Undo Stage Hunk",
-      },
-      o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
-      b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-      c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
-      C = {
-        "<cmd>Telescope git_bcommits<cr>",
-        "Checkout commit(for current file)",
-      },
-      d = {
-        "<cmd>Gitsigns diffthis HEAD<cr>",
-        "Git Diff",
-      },
-      t = {
-        name = "Toggle",
-        s = { "<cmd>Gitsigns toggle_signcolumn<cr>", "Toggle Signcolumn" },
-        n = { "<cmd>Gitsigns toggle_numhl<cr>", "Toggle Numhl" },
-        l = { "<cmd>Gitsigns toggle_linehl<cr>", "Toggle Linehl" },
-        w = { "<cmd>Gitsigns toggle_word_diff<cr>", "Toggle Word Diff" },
-        b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Toggle Line Blame" },
-      },
-    },
-  }
-  wk.register({
-    ["]g"] = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Git Hunk" },
-    ["[g"] = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Previous Git Hunk" },
-  }, { mode = "n", prefix = "", preset = true })
+
+  local Key = require("utils.key").Key
+  require("utils.key").load({
+    Key("n", "]g", gitsigns.next_hunk):desc("Next Git Hunk"),
+    Key("n", "[g", gitsigns.prev_hunk):desc("Previous Git Hunk"),
+
+    Key("n", "<Leader>g"):group("Git"),
+    Key("n", "<Leader>gj", gitsigns.next_hunk):desc("Next Hunk"),
+    Key("n", "<Leader>gk", gitsigns.prev_hunk):desc("Prev Hunk"),
+    Key("n", "<Leader>gl", gitsigns.blame_line):desc("Blame"),
+    Key("n", "<Leader>gp", gitsigns.preview_hunk):desc("Preview Hunk"),
+    Key("n", "<Leader>gr", gitsigns.reset_hunk):desc("Reset Hunk"),
+    Key("n", "<Leader>gR", gitsigns.reset_buffer):desc("Reset Buffer"),
+    Key("n", "<Leader>gs", gitsigns.stage_hunk):desc("Stage Hunk"),
+    Key("n", "<Leader>gu", gitsigns.undo_stage_hunk):desc("Undo Stage Hunk"),
+
+    Key("n", "<Leader>go", "<cmd>Telescope git_status<cr>"):desc("Open changed file"),
+    Key("n", "<Leader>gb", "<cmd>Telescope git_branches<cr>"):desc("Checkout branch"),
+    Key("n", "<Leader>gv", "<cmd>Telescope git_commits<cr>"):desc("Checkout commit"),
+    Key("n", "<Leader>gC", "<cmd>Telescope git_bcommits<cr>"):desc("Checkout commit(for current file)"),
+    Key("n", "<Leader>gd", "<cmd>Telescope git_bcommits<cr>"):desc("Checkout commit(for current file)"),
+
+    Key("n", "<Leader>gt"):group("Toggle"),
+    Key("n", "<Leader>gts", "<cmd>Gitsigns toggle_signcolumn<cr>"):desc("Toggle Signcolumn"),
+    Key("n", "<Leader>gtn", "<cmd>Gitsigns toggle_numhl<cr>"):desc("Toggle Numhl"),
+    Key("n", "<Leader>gtl", "<cmd>Gitsigns toggle_linehl<cr>"):desc("Toggle Linehl"),
+    Key("n", "<Leader>gtw", "<cmd>Gitsigns toggle_word_diff<cr>"):desc("Toggle Word Diff"),
+    Key("n", "<Leader>gtb", "<cmd>Gitsigns toggle_current_line_blame<cr>"):desc("Toggle Line Blame"),
+  })
 end
 
 return M

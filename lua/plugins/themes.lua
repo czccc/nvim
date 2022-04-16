@@ -6,30 +6,10 @@ end
 
 M.packers = {
   {
-    "Mofiqul/vscode.nvim",
-    -- opt = true,
-    config = function()
-      vim.g.vscode_style = "dark"
-    end,
-    disable = true,
-  },
-  {
     "folke/tokyonight.nvim",
     config = function()
       require("plugins.themes").setup_tokyonight()
     end,
-  },
-  {
-    "rebelot/kanagawa.nvim",
-    -- opt = true,
-    config = function()
-      require("plugins.themes").setup_kanagawa()
-    end,
-    disable = true,
-  },
-  {
-    "LunarVim/onedarker.nvim",
-    disable = true,
   },
   {
     "navarasu/onedark.nvim",
@@ -37,30 +17,6 @@ M.packers = {
     config = function()
       require("plugins.themes").setup_onedark()
     end,
-  },
-  {
-    "olimorris/onedarkpro.nvim",
-    -- opt = true,
-    config = function()
-      require("plugins.themes").setup_onedark_pro()
-    end,
-    disable = true,
-  },
-  {
-    "NTBBloodbath/doom-one.nvim",
-    -- opt = true,
-    config = function()
-      require("plugins.themes").setup_doom_one()
-    end,
-    disable = true,
-  },
-  {
-    "EdenEast/nightfox.nvim",
-    -- opt = true,
-    config = function()
-      require("plugins.themes").setup_nightfox()
-    end,
-    disable = true,
   },
 }
 
@@ -92,28 +48,9 @@ M.setup_tokyonight = function()
   }
 end
 
-M.setup_kanagawa = function()
-  require("kanagawa").setup {
-    undercurl = true, -- enable undercurls
-    commentStyle = "italic",
-    functionStyle = "NONE",
-    keywordStyle = "italic",
-    statementStyle = "bold",
-    typeStyle = "NONE",
-    variablebuiltinStyle = "italic",
-    specialReturn = true, -- special highlight for the return keyword
-    specialException = true, -- special highlight for exception handling keywords
-    transparent = false, -- do not set background color
-    dimInactive = false, -- dim inactive window `:h hl-NormalNC`
-    globalStatus = false, -- adjust window separators highlight for laststatus=3
-    colors = {},
-    overrides = {},
-  }
-end
-
 M.setup_onedark = function()
   vim.g.onedark_disable_terminal_colors = true
-  require("onedark").setup {
+  require("onedark").setup({
     -- Main options --
     style = "cool", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
     transparent = false, -- Show/hide background
@@ -159,9 +96,9 @@ M.setup_onedark = function()
       undercurl = true, -- use undercurl instead of underline for diagnostics
       background = false, -- use background color for virtual text
     },
-  }
+  })
   -- require("onedark").load()
-  local cl = require "core.colors"
+  local cl = require("core.colors")
   vim.g.terminal_color_8 = cl.colors.cool.grey
   cl.define_links("LspReferenceText", "Visual")
   cl.define_links("LspReferenceRead", "Visual")
@@ -172,116 +109,6 @@ M.setup_onedark = function()
   cl.define_links("OperatorSandwichDelete", "IncSearch")
   cl.define_links("OperatorSandwichAdd", "IncSearch")
   cl.setup_colorscheme()
-end
-
-M.setup_onedark_pro = function()
-  vim.o.background = "dark"
-  require("onedarkpro").setup {
-    -- Theme can be overwritten with 'onedark' or 'onelight' as a string
-    theme = function()
-      if vim.o.background == "dark" then
-        return "onedark"
-      else
-        return "onelight"
-      end
-    end,
-    colors = {}, -- Override default colors by specifying colors for 'onelight' or 'onedark' themes
-    hlgroups = {
-      StatusLine = { bg = "#33373e" },
-      StatusLineNC = { bg = "#33373e" },
-    }, -- Override default highlight groups
-    filetype_hlgroups = {}, -- Override default highlight groups for specific filetypes
-    plugins = { -- Override which plugins highlight groups are loaded
-      native_lsp = true,
-      polygot = true,
-      treesitter = true,
-      -- NOTE: Other plugins have been omitted for brevity
-    },
-    styles = {
-      strings = "NONE", -- Style that is applied to strings
-      comments = "NONE", -- Style that is applied to comments
-      keywords = "NONE", -- Style that is applied to keywords
-      functions = "NONE", -- Style that is applied to functions
-      variables = "NONE", -- Style that is applied to variables
-    },
-    options = {
-      bold = true, -- Use the themes opinionated bold styles?
-      italic = true, -- Use the themes opinionated italic styles?
-      underline = false, -- Use the themes opinionated underline styles?
-      undercurl = false, -- Use the themes opinionated undercurl styles?
-      cursorline = true, -- Use cursorline highlighting?
-      transparency = false, -- Use a transparent background?
-      terminal_colors = false, -- Use the theme's colors for Neovim's :terminal?
-      window_unfocussed_color = true, -- When the window is out of focus, change the normal background?
-    },
-  }
-  -- require("onedarkpro").load()
-  local cl = require "core.colors"
-  cl.define_links("LspReferenceText", "Visual")
-  cl.define_links("LspReferenceRead", "Visual")
-  cl.define_links("LspReferenceWrite", "Visual")
-  cl.define_links("FocusedSymbol", "Visual")
-  cl.setup_colorscheme()
-end
-
-M.setup_doom_one = function()
-  require("doom-one").setup {
-    cursor_coloring = false,
-    terminal_colors = false,
-    italic_comments = false,
-    enable_treesitter = true,
-    transparent_background = false,
-    pumblend = {
-      enable = true,
-      transparency_amount = 20,
-    },
-    plugins_integrations = {
-      neorg = true,
-      barbar = true,
-      bufferline = false,
-      gitgutter = false,
-      gitsigns = true,
-      telescope = false,
-      neogit = true,
-      nvim_tree = true,
-      dashboard = true,
-      startify = true,
-      whichkey = true,
-      indent_blankline = true,
-      vim_illuminate = true,
-      lspsaga = false,
-    },
-  }
-end
-
-M.setup_nightfox = function()
-  require("nightfox").setup {
-    options = {
-      -- Compiled file's destination location
-      compile_path = vim.fn.stdpath "cache" .. "/nightfox",
-      compile_file_suffix = "_compiled", -- Compiled file suffix
-      transparent = false, -- Disable setting background
-      terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
-      dim_inactive = false, -- Non focused panes set to alternative background
-      styles = { -- Style to be applied to different syntax groups
-        comments = "NONE", -- Value is any valid attr-list value `:help attr-list`
-        functions = "NONE",
-        keywords = "NONE",
-        numbers = "NONE",
-        strings = "NONE",
-        types = "NONE",
-        variables = "NONE",
-      },
-      inverse = { -- Inverse highlight for different types
-        match_paren = false,
-        visual = false,
-        search = false,
-      },
-      modules = { -- List of various plugins and additional options
-        -- ...
-      },
-    },
-  }
 end
 
 return M

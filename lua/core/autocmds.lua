@@ -1,5 +1,5 @@
 local M = {}
-local Log = require "core.log"
+local Log = require("core.log")
 
 M.autocommands = {
   general_settings = {
@@ -52,8 +52,8 @@ function M.disable_augroup(name)
   vim.schedule(function()
     if vim.fn.exists("#" .. name) == 1 then
       vim.cmd("augroup " .. name)
-      vim.cmd "autocmd!"
-      vim.cmd "augroup END"
+      vim.cmd("autocmd!")
+      vim.cmd("augroup END")
     end
   end)
 end
@@ -62,17 +62,17 @@ function M.define_augroups(definitions, buffer)
   for group_name, definition in pairs(definitions) do
     vim.cmd("augroup " .. group_name)
     if buffer then
-      vim.cmd [[autocmd! * <buffer>]]
+      vim.cmd([[autocmd! * <buffer>]])
     else
-      vim.cmd [[autocmd!]]
+      vim.cmd([[autocmd!]])
     end
 
     for _, def in pairs(definition) do
-      local command = table.concat(vim.tbl_flatten { "autocmd", def }, " ")
+      local command = table.concat(vim.tbl_flatten({ "autocmd", def }), " ")
       vim.cmd(command)
     end
 
-    vim.cmd "augroup END"
+    vim.cmd("augroup END")
   end
 end
 
@@ -92,15 +92,15 @@ end
 
 function M.enable_format_on_save(opts)
   local fmd_cmd = string.format(":silent lua vim.lsp.buf.formatting_sync({}, %s)", opts.timeout)
-  M.define_augroups {
+  M.define_augroups({
     format_on_save = { { "BufWritePre", opts.pattern, fmd_cmd } },
-  }
-  Log:debug "enabled format-on-save"
+  })
+  Log:debug("enabled format-on-save")
 end
 
 function M.disable_format_on_save()
-  M.disable_augroup "format_on_save"
-  Log:debug "disabled format-on-save"
+  M.disable_augroup("format_on_save")
+  Log:debug("disabled format-on-save")
 end
 
 function M.configure_format_on_save()
@@ -113,7 +113,7 @@ function M.configure_format_on_save()
 end
 
 function M.toggle_format_on_save()
-  if vim.fn.exists "#format_on_save#BufWritePre" == 0 then
+  if vim.fn.exists("#format_on_save#BufWritePre") == 0 then
     local opts = get_format_on_save_opts()
     M.enable_format_on_save(opts)
   else
@@ -139,7 +139,7 @@ function M.enable_lsp_document_highlight(client_id)
 end
 
 function M.disable_lsp_document_highlight()
-  M.disable_augroup "lsp_document_highlight"
+  M.disable_augroup("lsp_document_highlight")
 end
 
 function M.enable_code_lens_refresh()
@@ -160,7 +160,7 @@ function M.enable_code_lens_refresh()
 end
 
 function M.disable_code_lens_refresh()
-  M.disable_augroup "lsp_code_lens_refresh"
+  M.disable_augroup("lsp_code_lens_refresh")
 end
 
 return M

@@ -3,7 +3,7 @@ local M = {}
 M.packer = {
   "folke/trouble.nvim",
   config = function()
-    require("trouble").setup {
+    require("trouble").setup({
       auto_open = false,
       auto_close = true,
       padding = false,
@@ -17,7 +17,7 @@ M.packer = {
         previous = { "k", "<S-tab>" }, -- preview item
         next = { "j", "<tab>" }, -- next item
       },
-    }
+    })
   end,
   cmd = "Trouble",
 }

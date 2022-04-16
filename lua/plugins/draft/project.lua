@@ -1,5 +1,5 @@
 local M = {}
-local path = require "utils.path"
+local path = require("utils.path")
 
 M.packer = {
   "ahmedkhalf/project.nvim",
@@ -44,7 +44,7 @@ M.config = {
 
 M.setup = function()
   require("project_nvim").setup(M.config)
-  require("telescope").load_extension "projects"
+  require("telescope").load_extension("projects")
   require("plugins.which_key").config.nmappings["s"]["p"] = {
     ":lua require('plugins.projects').projects()<cr>",
     "projects",

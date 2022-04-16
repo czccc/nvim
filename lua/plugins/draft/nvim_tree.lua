@@ -1,5 +1,5 @@
 local M = {}
-local Log = require "core.log"
+local Log = require("core.log")
 
 M.packer = {
   "kyazdani42/nvim-tree.lua",
@@ -133,7 +133,7 @@ require("plugins.which_key").config.nmappings["E"] = { "<cmd>NvimTreeToggle<CR>"
 M.setup = function()
   local status_ok, nvim_tree_config = pcall(require, "nvim-tree.config")
   if not status_ok then
-    Log:error "Failed to load nvim-tree.config"
+    Log:error("Failed to load nvim-tree.config")
     return
   end
 
@@ -150,11 +150,11 @@ M.setup = function()
     end
     M.config.setup.view.mappings.list = {
       { key = "<Tab>", cb = "<C-w>l" },
-      { key = { "l", "<CR>", "o" }, cb = tree_cb "edit" },
-      { key = "h", cb = tree_cb "close_node" },
-      { key = "v", cb = tree_cb "vsplit" },
+      { key = { "l", "<CR>", "o" }, cb = tree_cb("edit") },
+      { key = "h", cb = tree_cb("close_node") },
+      { key = "v", cb = tree_cb("vsplit") },
       { key = "R", action = "refresh", action_cb = nvim_refresh },
-      { key = "C", cb = tree_cb "cd" },
+      { key = "C", cb = tree_cb("cd") },
     }
   end
   require("nvim-tree").setup(M.config.setup)

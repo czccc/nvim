@@ -29,20 +29,20 @@ M.config = {
     },
   },
   on_open = function()
-    vim.cmd [[
+    vim.cmd([[
         set foldlevel=10
         lua require("plugins.zenmode").hide_diagnostics()
         IndentBlanklineDisable!
-        ]]
+        ]])
   end,
   on_close = function()
-    vim.cmd [[
+    vim.cmd([[
         set foldlevel=4
         set foldmethod=expr
         set foldexpr=nvim_treesitter#foldexpr()
         lua require("plugins.zenmode").show_diagnostics()
         IndentBlanklineEnable!
-        ]]
+        ]])
   end,
 }
 
@@ -67,8 +67,9 @@ M.setup = function()
   if not status_ok then
     return
   end
-
   zen_mode.setup(M.config)
+  local Key = require("utils.key").Key
+  Key("n", "<Leader>uz", "<cmd>ZenMode<cr>"):desc("ZenMode"):set()
 end
 
 return M

@@ -1,5 +1,5 @@
 local Log = {}
-local path = require "utils.path"
+local path = require("utils.path")
 
 local logfile = string.format("%s/%s.log", path.cache_path, "neovim")
 
@@ -47,7 +47,7 @@ function Log:init()
           processors = {
             structlog.processors.Namer(),
             structlog.processors.StackWriter({ "line", "file" }, { max_parents = 0, stack_level = 2 }),
-            structlog.processors.Timestamper "%H:%M:%S",
+            structlog.processors.Timestamper("%H:%M:%S"),
           },
           formatter = structlog.formatters.FormatColorizer( --
             "%s [%-5s] %s: %-30s",
@@ -59,7 +59,7 @@ function Log:init()
           processors = {
             structlog.processors.Namer(),
             structlog.processors.StackWriter({ "line", "file" }, { max_parents = 3, stack_level = 2 }),
-            structlog.processors.Timestamper "%H:%M:%S",
+            structlog.processors.Timestamper("%H:%M:%S"),
           },
           formatter = structlog.formatters.Format( --
             "%s [%-5s] %s: %-30s",
@@ -71,7 +71,7 @@ function Log:init()
   }
 
   structlog.configure(neovim_log)
-  local logger = structlog.get_logger "neovim"
+  local logger = structlog.get_logger("neovim")
 
   -- Overwrite `vim.notify` to use the logger
   if self.config.override_notify then

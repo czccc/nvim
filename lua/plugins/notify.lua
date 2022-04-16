@@ -1,5 +1,5 @@
 local M = {}
-local Log = require "core.log"
+local Log = require("core.log")
 
 M.packer = {
   "rcarriga/nvim-notify",
@@ -53,7 +53,7 @@ M.setup = function()
 
   local status_ok, notify = pcall(require, "notify")
   if not status_ok then
-    print "notify not loaded"
+    print("notify not loaded")
     return
   end
 

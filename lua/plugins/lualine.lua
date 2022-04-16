@@ -11,7 +11,7 @@ M.packer = {
 local globalstatus = vim.version().minor >= 7
 local winwidth = function()
   if globalstatus then
-    return vim.api.nvim_get_option "columns"
+    return vim.api.nvim_get_option("columns")
   else
     return vim.fn.winwidth(0)
   end
@@ -22,7 +22,7 @@ local conditions = {
     return vim.version().minor >= 7
   end,
   buffer_not_empty = function()
-    return vim.fn.empty(vim.fn.expand "%:t") ~= 1
+    return vim.fn.empty(vim.fn.expand("%:t")) ~= 1
   end,
   wide_window = function()
     return winwidth(0) > 80
@@ -183,12 +183,12 @@ local components = {
       end
 
       -- add formatter
-      local formatters = require "plugins.lsp.null-ls.formatters"
+      local formatters = require("plugins.lsp.null-ls.formatters")
       local supported_formatters = formatters.list_registered(buf_ft)
       vim.list_extend(buf_client_names, supported_formatters)
 
       -- add linter
-      local linters = require "plugins.lsp.null-ls.linters"
+      local linters = require("plugins.lsp.null-ls.linters")
       local supported_linters = linters.list_registered(buf_ft)
       vim.list_extend(buf_client_names, supported_linters)
 
@@ -292,7 +292,7 @@ local components = {
         end
         return string.format("%.1f%s", size, sufixes[i])
       end
-      local file = vim.fn.expand "%:p"
+      local file = vim.fn.expand("%:p")
       if string.len(file) == 0 then
         return ""
       end
@@ -303,7 +303,7 @@ local components = {
   },
   clock = {
     function()
-      return " " .. os.date "%H:%M"
+      return " " .. os.date("%H:%M")
     end,
     color = { fg = colors.purple },
     cond = conditions.large_window,
@@ -329,8 +329,8 @@ local components = {
   },
   scrollbar = {
     function()
-      local current_line = vim.fn.line "."
-      local total_lines = vim.fn.line "$"
+      local current_line = vim.fn.line(".")
+      local total_lines = vim.fn.line("$")
       local chars = { "__", "▁▁", "▂▂", "▃▃", "▄▄", "▅▅", "▆▆", "▇▇", "██" }
       local line_ratio = current_line / total_lines
       local index = math.ceil(line_ratio * #chars)
@@ -342,7 +342,7 @@ local components = {
   },
 }
 
-vim.cmd [[autocmd User LspProgressUpdate let &ro = &ro]]
+vim.cmd([[autocmd User LspProgressUpdate let &ro = &ro]])
 
 M.config = {
   options = {
@@ -445,7 +445,7 @@ M.config = {
 }
 
 M.setup = function()
-  local lualine = require "lualine"
+  local lualine = require("lualine")
   lualine.setup(M.config)
 end
 

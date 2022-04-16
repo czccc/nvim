@@ -21,23 +21,22 @@ M.setup = function()
     "--ranking-model=heuristics",
     "--folding-ranges",
   }
-  clangd_extensions.setup {
+  clangd_extensions.setup({
     server = {
       -- options to pass to nvim-lspconfig
       -- i.e. the arguments to require("lspconfig").clangd.setup({})
       cmd = { "clangd", unpack(clangd_flags) },
       on_attach = function(client, bufnr)
         require("plugins.lsp").common_on_attach(client, bufnr)
-        require("plugins.which_key").register({
-          ["m"] = {
-            s = { "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source Header" },
-            i = { "<cmd>ClangdSymbolInfo<cr>", "Symbol Info" },
-            t = { "<cmd>ClangdTypeHierarchy<cr>", "Type Hierarchy" },
-            T = { "<cmd>ClangdToggleInlayHints<cr>", "Toggle Inlay Hints" },
-            m = { "<cmd>ClangdMemoryUsage<cr>", "Memory Usage" },
-            a = { "<cmd>ClangdAST<cr>", "AST" },
-          },
-        }, { mode = "n", buffer = bufnr, prefix = "<Leader>" })
+        local Key = require("utils.key").Key
+        require("utils.key").load({
+          Key("n", "<Leader>ms", "<cmd>ClangdSwitchSourceHeader<cr>"):buffer(bufnr):desc("Switch Source Header"),
+          Key("n", "<Leader>mi", "<cmd>ClangdSymbolInfo<cr>"):buffer(bufnr):desc("Symbol Info"),
+          Key("n", "<Leader>mt", "<cmd>ClangdTypeHierarchy<cr>"):buffer(bufnr):desc("Type Hierarchy"),
+          Key("n", "<Leader>mT", "<cmd>ClangdToggleInlayHints<cr>"):buffer(bufnr):desc("Toggle Inlay Hints"),
+          Key("n", "<Leader>mm", "<cmd>ClangdMemoryUsage<cr>"):buffer(bufnr):desc("Memory Usage"),
+          Key("n", "<Leader>ma", "<cmd>ClangdAST<cr>"):buffer(bufnr):desc("AST"),
+        })
       end,
       on_init = require("plugins.lsp").common_on_init,
       capabilities = require("plugins.lsp").common_capabilities(),
@@ -79,7 +78,7 @@ M.setup = function()
         highlight = "Comment",
       },
     },
-  }
+  })
 end
 
 return M

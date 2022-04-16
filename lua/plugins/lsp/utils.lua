@@ -1,6 +1,6 @@
 local M = {}
 
-local tbl = require "utils.table"
+local tbl = require("utils.table")
 
 function M.show_line_diagnostics()
   local config = require("plugins.lsp").config.diagnostics.float
@@ -41,7 +41,7 @@ function M.get_client_capabilities(client_id)
     client = vim.lsp.get_client_by_id(tonumber(client_id))
   end
   if not client then
-    error "Unable to determine client_id"
+    error("Unable to determine client_id")
     return
   end
 
@@ -76,7 +76,7 @@ end
 ---@param filetype string
 ---@return table list of names of supported servers
 function M.get_supported_servers_per_filetype(filetype)
-  local filetype_server_map = require "nvim-lsp-installer._generated.filetype_map"
+  local filetype_server_map = require("nvim-lsp-installer._generated.filetype_map")
   return filetype_server_map[filetype]
 end
 

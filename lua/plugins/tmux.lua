@@ -62,26 +62,15 @@ M.config = {
 }
 
 M.setup = function()
-  ---@diagnostic disable-next-line: redundant-parameter
-  require("tmux").setup(M.config)
-  local wk = require "plugins.which_key"
-  wk.register {
-    ["t"] = {
-      ["m"] = {
-        name = "Tmux",
-        ["h"] = { [[<cmd>lua require("tmux").move_left()<cr>]], "Left" },
-        ["j"] = { [[<cmd>lua require("tmux").move_bottom()<cr>]], "Bottom" },
-        ["k"] = { [[<cmd>lua require("tmux").move_up()<cr>]], "Up" },
-        ["l"] = { [[<cmd>lua require("tmux").move_right()<cr>]], "Right" },
-      },
-    },
-  }
-  wk.register({
-    ["<C-h>"] = "Move Left",
-    ["<C-j>"] = "Move Bottom",
-    ["<C-k>"] = "Move Up",
-    ["<C-l>"] = "Move Right",
-  }, wk.config.opts)
+  local tmux = require("tmux")
+  tmux.setup(M.config)
+  local LeadertmKey = require("utils.key").PrefixModeKey("<Leader>tm", "n")
+  require("utils.key").load({
+    LeadertmKey("h", tmux.move_left):desc("Navigate Left"),
+    LeadertmKey("j", tmux.move_bottom):desc("Navigate Down"),
+    LeadertmKey("k", tmux.move_top):desc("Navigate Up"),
+    LeadertmKey("l", tmux.move_right):desc("Navigate Right"),
+  })
 end
 
 return M

@@ -153,17 +153,52 @@ M.config = {
       -- show_scores = true,
     },
     ["ui-select"] = {
-      require("telescope.themes").get_dropdown {
+      require("telescope.themes").get_dropdown({
         -- even more opts
-      },
+      }),
     },
   },
 }
+function M.set_keys()
+  local LeaderfKey = require("utils.key").PrefixModeKey("<Leader>f", "n")
+  local LeadersKey = require("utils.key").PrefixModeKey("<Leader>s", "n")
+  local builtin = require("telescope.builtin")
+  require("utils.key").load({
+    LeaderfKey(""):group("Find Files"),
+    LeaderfKey("b", M.curbuf):desc("Current Buffer"),
+    LeaderfKey("B", M.curbuf_grep_cursor_string):desc("Buffer CurWord"),
+    LeaderfKey("e", builtin.oldfiles):desc("History"),
+    LeaderfKey("f", builtin.find_files):desc("History"),
+    LeaderfKey("g", M.git_files):desc("Git Files"),
+    LeaderfKey("j", builtin.jumplist):desc("Jump List"),
+    LeaderfKey("m", builtin.marks):desc("Marks"),
+    LeaderfKey("p", M.project_search):desc("Project Files"),
+    LeaderfKey("r", M.workspace_frequency):desc("Frequency"),
+    LeaderfKey("s", M.git_status):desc("Git Status"),
+    LeaderfKey("t", "<cmd>TodoTelescope<cr>"):desc("Todo"),
+    LeaderfKey("w", M.live_grep):desc("Live Grep"),
+    LeaderfKey("W", M.grep_cursor_string):desc("Live Grep CurWord"),
+    LeaderfKey("z", M.search_only_certain_files):desc("Certain Filetype"),
+
+    LeadersKey(""):group("Search"),
+    LeadersKey("b", builtin.git_branches):desc("Checkout Branch"),
+    LeadersKey("c", builtin.colorscheme):desc("Colorschemes"),
+    LeadersKey("C", function()
+      require("telescope.builtin.internal").colorscheme({ enable_preview = true })
+    end):desc("Colorschemes with Preview"),
+    LeadersKey("h", builtin.help_tags):desc("Find Help"),
+    LeadersKey("H", builtin.highlights):desc("Highlights"),
+    LeadersKey("k", builtin.keymaps):desc("Keymaps"),
+    LeadersKey("m", builtin.commands):desc("Commands"),
+    LeadersKey("M", builtin.man_pages):desc("Man Pages"),
+    LeadersKey("s", builtin.builtin):desc("Telescope"),
+  })
+end
 
 function M.setup()
-  local previewers = require "telescope.previewers"
-  local sorters = require "telescope.sorters"
-  local actions = require "telescope.actions"
+  local previewers = require("telescope.previewers")
+  local sorters = require("telescope.sorters")
+  local actions = require("telescope.actions")
 
   M.config = vim.tbl_extend("keep", {
     file_previewer = previewers.vim_buffer_cat.new,
@@ -190,20 +225,21 @@ function M.setup()
     },
   }, M.config)
 
-  local telescope = require "telescope"
+  local telescope = require("telescope")
   telescope.setup(M.config)
-  require("telescope").load_extension "fzf"
-  require("telescope").load_extension "frecency"
+  require("telescope").load_extension("fzf")
+  require("telescope").load_extension("frecency")
   -- require("telescope").load_extension "file_browser"
   -- require("telescope").load_extension "ui-select"
 
-  require("core.autocmds").define_augroups {
+  require("core.autocmds").define_augroups({
     telescope_fold_fix = { { "BufRead", "*", "autocmd BufWinEnter * ++once normal! zx" } },
-  }
+  })
+  M.set_keys()
 end
 
 M.setup_dressing = function()
-  require("dressing").setup {
+  require("dressing").setup({
     input = {
       enabled = true,
       -- Default prompt string
@@ -227,11 +263,11 @@ M.setup_dressing = function()
       -- see :help dressing_get_config
       get_config = nil,
     },
-  }
+  })
 end
 
 local function dropdown_opts()
-  return require("telescope.themes").get_dropdown {
+  return require("telescope.themes").get_dropdown({
     winblend = 15,
     layout_config = {
       prompt_position = "top",
@@ -246,12 +282,12 @@ local function dropdown_opts()
     border = {},
     previewer = false,
     shorten_path = false,
-  }
+  })
 end
 M.dropdown_opts = dropdown_opts
 
 local function ivy_opts()
-  return require("telescope.themes").get_ivy {
+  return require("telescope.themes").get_ivy({
     layout_strategy = "bottom_pane",
     layout_config = {
       height = 25,
@@ -264,7 +300,7 @@ local function ivy_opts()
     },
     sorting_strategy = "ascending",
     ignore_filename = false,
-  }
+  })
 end
 M.ivy_opts = ivy_opts
 
@@ -309,18 +345,18 @@ function M.git_status()
 end
 
 function M.search_only_certain_files()
-  require("telescope.builtin").find_files {
+  require("telescope.builtin").find_files({
     find_command = {
       "rg",
       "--files",
       "--type",
-      vim.fn.input "Type: ",
+      vim.fn.input("Type: "),
     },
-  }
+  })
 end
 
 function M.git_files()
-  local path = vim.fn.expand "%:h"
+  local path = vim.fn.expand("%:h")
   if path == "" then
     path = nil
   end
@@ -357,9 +393,9 @@ function M.live_grep()
 end
 
 local visual_selection = function()
-  local save_previous = vim.fn.getreg "a"
-  vim.api.nvim_command 'silent! normal! "ayiw'
-  local selection = vim.fn.trim(vim.fn.getreg "a")
+  local save_previous = vim.fn.getreg("a")
+  vim.api.nvim_command('silent! normal! "ayiw')
+  local selection = vim.fn.trim(vim.fn.getreg("a"))
   vim.fn.setreg("a", save_previous)
   return vim.fn.substitute(selection, [[\n]], [[\\n]], "g")
 end

@@ -1,7 +1,7 @@
 local M = {}
 
-local Log = require "core.log"
-local lvim_lsp_utils = require "plugins.lsp.utils"
+local Log = require("core.log")
+local lvim_lsp_utils = require("plugins.lsp.utils")
 
 ---Resolve the configuration for a server based on both common and user configuration
 ---@param name string
@@ -52,7 +52,7 @@ end
 ---@param server_name string name of the language server
 ---@param user_config table [optional] when available it will take predence over any default configurations
 function M.setup(server_name, user_config)
-  vim.validate { name = { server_name, "string" } }
+  vim.validate({ name = { server_name, "string" } })
   local lsp_config = require("plugins.lsp").config
 
   if lvim_lsp_utils.is_client_active(server_name) or client_is_configured(server_name) then
@@ -62,7 +62,7 @@ function M.setup(server_name, user_config)
 
   local config = resolve_config(server_name, user_config)
 
-  local servers = require "nvim-lsp-installer.servers"
+  local servers = require("nvim-lsp-installer.servers")
   local server_available, requested_server = servers.get_server(server_name)
 
   local is_overridden = vim.tbl_contains(lsp_config.override, server_name)
@@ -79,7 +79,7 @@ function M.setup(server_name, user_config)
 
   if not requested_server:is_installed() then
     if lsp_config.automatic_servers_installation then
-      Log:debug "Automatic server installation detected"
+      Log:debug("Automatic server installation detected")
       requested_server:install()
       install_notification = true
     else

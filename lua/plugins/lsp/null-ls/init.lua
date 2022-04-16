@@ -1,7 +1,7 @@
 local M = {}
 
-local Log = require "core.log"
-local path = require "utils.path"
+local Log = require("core.log")
+local path = require("utils.path")
 
 M.config = {
   setup = {
@@ -14,7 +14,7 @@ M.config = {
 function M:setup()
   local status_ok, null_ls = pcall(require, "null-ls")
   if not status_ok then
-    Log:error "Missing null-ls dependency"
+    Log:error("Missing null-ls dependency")
     return
   end
   M.config.setup.sources = {
@@ -26,10 +26,10 @@ function M:setup()
     null_ls.builtins.diagnostics.shellcheck,
     null_ls.builtins.diagnostics.luacheck,
     null_ls.builtins.diagnostics.vint,
-    null_ls.builtins.diagnostics.markdownlint.with {
+    null_ls.builtins.diagnostics.markdownlint.with({
       extra_args = { "--config", path.join(path.config_dir, "markdownlint.json") },
       filetypes = { "markdown" },
-    },
+    }),
 
     null_ls.builtins.code_actions.shellcheck,
     null_ls.builtins.code_actions.gitsigns,

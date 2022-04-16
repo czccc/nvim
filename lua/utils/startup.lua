@@ -9,7 +9,7 @@ M.setup = function(options)
   local startup_time_pattern = "([%d.]+)  [%d.]+: [-]+ NVIM STARTED [-]+"
 
   -- read startup time file
-  local startup_time_file = io.open(opts.startup_file) and io.open(opts.startup_file):read "*all" or nil
+  local startup_time_file = io.open(opts.startup_file) and io.open(opts.startup_file):read("*all") or nil
 
   -- get startup time and converts to number (in case `message` is function)
   local startup_time = startup_time_file and tonumber(startup_time_file:match(startup_time_pattern)) or nil
@@ -21,7 +21,7 @@ M.setup = function(options)
     opts.print(message)
     return startup_time
   elseif startup_time_file and not startup_time then
-    opts.print "nvim-startup: running on the next (n)vim instance"
+    opts.print("nvim-startup: running on the next (n)vim instance")
   else
     opts.print("nvim-startup: startup time log not found (" .. opts.startup_file .. ")")
   end

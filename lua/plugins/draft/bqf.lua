@@ -15,7 +15,7 @@ M.setup = function()
     return
   end
 
-  bqf.setup {
+  bqf.setup({
     auto_resize_height = true,
     func_map = {
       tab = "st",
@@ -52,7 +52,7 @@ M.setup = function()
         return ret
       end,
     },
-  }
+  })
 end
 
 return M

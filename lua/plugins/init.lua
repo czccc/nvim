@@ -1,5 +1,5 @@
 local M = {}
-local Log = require "core.log"
+local Log = require("core.log")
 
 local plugin_files = {
   "plugins.which_key",

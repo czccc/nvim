@@ -5,8 +5,8 @@ Path.os_name = vim.loop.os_uname().sysname
 Path.is_mac = Path.os_name == "Darwin"
 Path.is_linux = Path.os_name == "Linux"
 Path.is_windows = Path.os_name == "Windows_NT"
-Path.is_wsl = Path.is_linux and vim.fn.has "wsl" ~= 0
-Path.home_dir = Path.is_windows and os.getenv "USERPROFILE" or os.getenv "HOME"
+Path.is_wsl = Path.is_linux and vim.fn.has("wsl") ~= 0
+Path.home_dir = Path.is_windows and os.getenv("USERPROFILE") or os.getenv("HOME")
 Path.in_headless = #vim.api.nvim_list_uis() == 0
 
 -- local function get_separator()
@@ -16,7 +16,7 @@ Path.in_headless = #vim.api.nvim_list_uis() == 0
 --     return '/'
 -- end
 
-Path.separator = vim.loop.os_uname().version:match "Windows" and "\\" or "/"
+Path.separator = vim.loop.os_uname().version:match("Windows") and "\\" or "/"
 Path.join = function(...)
   return table.concat({ ... }, Path.separator)
 end
@@ -51,11 +51,11 @@ function Path.require_clean(module)
   return requested
 end
 
-Path.runtime_dir = vim.fn.stdpath "data"
-Path.config_dir = vim.fn.stdpath "config"
-Path.cache_dir = vim.fn.stdpath "cache"
+Path.runtime_dir = vim.fn.stdpath("data")
+Path.config_dir = vim.fn.stdpath("config")
+Path.cache_dir = vim.fn.stdpath("cache")
 
-Path.site_dir = Path.join(vim.fn.stdpath "data", "site")
+Path.site_dir = Path.join(vim.fn.stdpath("data"), "site")
 Path.pack_dir = Path.join(Path.runtime_dir, "site", "pack")
 Path.pack_install_dir = Path.join(Path.runtime_dir, "site", "pack", "packer", "start", "packer.nvim")
 Path.pack_compile_path = Path.join(Path.config_dir, "plugin", "packer_compiled.lua")
@@ -64,7 +64,7 @@ Path.session_dir = Path.join(Path.runtime_dir, "sessions")
 Path.dap_install_path = Path.join(Path.runtime_dir, "dap_install")
 Path.lsp_install_path = Path.join(Path.runtime_dir, "lsp_servers")
 
-Path.cache_path = vim.fn.stdpath "cache"
+Path.cache_path = vim.fn.stdpath("cache")
 
 local create_dir = function()
   local data_dir = {

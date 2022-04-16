@@ -21,7 +21,7 @@ M.packers = {
   {
     "karb94/neoscroll.nvim",
     config = function()
-      require("neoscroll").setup { easing_function = "quadratic" }
+      require("neoscroll").setup({ easing_function = "quadratic" })
     end,
     event = "BufRead",
     disable = false,
@@ -42,7 +42,7 @@ M.packers = {
   {
     "ethanholz/nvim-lastplace",
     config = function()
-      require("nvim-lastplace").setup {
+      require("nvim-lastplace").setup({
         lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
         lastplace_ignore_filetype = {
           "gitcommit",
@@ -51,7 +51,7 @@ M.packers = {
           "hgcommit",
         },
         lastplace_open_folds = true,
-      }
+      })
     end,
     event = "BufWinEnter",
     disable = false,
@@ -86,7 +86,7 @@ M.config = {}
 M.setup = function() end
 
 M.setup_sandwich = function()
-  vim.cmd [[
+  vim.cmd([[
     let g:sandwich_no_default_key_mappings = 1
     silent! nmap <unique><silent> Sd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
     silent! nmap <unique><silent> Sr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
@@ -101,16 +101,20 @@ M.setup_sandwich = function()
     silent! xmap <unique> Sd <Plug>(operator-sandwich-delete)
     " replace
     silent! xmap <uni]que> Sr <Plug>(operator-sandwich-replace)
-  ]]
+  ]])
+  local Key = require("utils.key").Key
+  Key("n", "S"):group("Sandwich"):set()
 end
 
 M.setup_undotree = function()
-  vim.cmd [[ let g:undotree_WindowLayout = 3 ]]
-  vim.cmd [[ let g:undotree_SetFocusWhenToggle = 1 ]]
+  vim.cmd([[ let g:undotree_WindowLayout = 3 ]])
+  vim.cmd([[ let g:undotree_SetFocusWhenToggle = 1 ]])
+  local Key = require("utils.key").Key
+  Key("n", "<Leader>uu", "<cmd>UndotreeToggle<cr>"):desc("Undo Tree"):set()
 end
 
 M.setup_marks = function()
-  require("marks").setup {
+  require("marks").setup({
     -- whether to map keybinds or not. default true
     default_mappings = true,
     -- which builtin marks to show. default {}
@@ -140,6 +144,6 @@ M.setup_marks = function()
       virt_text = "hello world",
     },
     mappings = {},
-  }
+  })
 end
 return M

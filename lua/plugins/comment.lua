@@ -52,7 +52,7 @@ M.config = {
   ---Pre-hook, called before commenting the line
   ---@type function|nil
   pre_hook = function(_ctx)
-    if require "plugins.treesitter" then
+    if require("plugins.treesitter") then
       return require("ts_context_commentstring.internal").calculate_commentstring()
     end
   end,
@@ -63,16 +63,18 @@ M.config = {
 }
 
 M.setup = function()
-  local nvim_comment = require "Comment"
+  local nvim_comment = require("Comment")
   nvim_comment.setup(M.config)
 
-  local wk = require "plugins.which_key"
-  wk.add_desc("gc", "Line Comment", "n", true)
-  wk.add_desc("gcc", "Line Comment", "n")
-  wk.add_desc("gc", "Line Comment", "v")
-  wk.add_desc("gb", "Block Comment", "n", true)
-  wk.add_desc("gbc", "Block Comment", "n")
-  wk.add_desc("gb", "Block Comment", "v")
+  local Key = require("utils.key").Key
+  require("utils.key").load({
+    Key("n", "gc"):group("Line Comment"),
+    Key("n", "gcc"):desc("Line Comment"),
+    Key("v", "gc"):desc("Line Comment"),
+    Key("n", "gb"):group("Block Comment"),
+    Key("n", "gbc"):desc("Block Comment"),
+    Key("v", "gb"):desc("Block Comment"),
+  })
 end
 
 return M

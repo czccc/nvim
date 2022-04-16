@@ -1,5 +1,5 @@
 local M = {}
-local Log = require "core.log"
+local Log = require("core.log")
 
 M.packer = {
   "akinsho/toggleterm.nvim",
@@ -66,13 +66,12 @@ M.config = {
 M.setup = function()
   local status_ok, terminal = pcall(require, "toggleterm")
   if not status_ok then
-    Log:warn "toggleterm not loaded"
+    Log:warn("toggleterm not loaded")
     return
   end
   local config = M.config
 
   terminal.setup(config.setup)
-  require("plugins.which_key").add_desc("<C-\\>", "Terminal", "n")
 
   local c = 0
   for _, exec in pairs(config.execs) do
@@ -87,11 +86,11 @@ M.setup = function()
     }
     M.add_exec(opts)
   end
-  require("core.autocmds").define_augroups {
+  require("core.autocmds").define_augroups({
     term_open = {
       { "TermOpen", "term://*", "lua require('plugins.toggleterm').set_terminal_keymaps()" },
     },
-  }
+  })
 end
 
 M.set_terminal_keymaps = function()
@@ -109,7 +108,7 @@ M.set_terminal_keymaps = function()
 end
 
 M.add_exec = function(opts)
-  local binary = opts.cmd:match "(%S+)"
+  local binary = opts.cmd:match("(%S+)")
   if vim.fn.executable(binary) ~= 1 then
     Log:debug("Skipping configuring executable " .. binary .. ". Please make sure it is installed properly.")
     return
@@ -122,27 +121,20 @@ M.add_exec = function(opts)
     opts.direction
   )
 
-  require("core.keymap").load {
-    ["n"] = { [opts.keymap] = exec_func },
-    ["t"] = { [opts.keymap] = exec_func },
-  }
-
-  local wk_status_ok, wk = pcall(require, "which-key")
-  if not wk_status_ok then
-    return
-  end
-  wk.register({ [opts.keymap] = { opts.label } }, { mode = "n" })
-  -- wk.register({ [opts.keymap] = { opts.label } }, { mode = "t" })
+  local Key = require("utils.key").Key
+  require("utils.key").load({
+    Key("n", opts.keymap, exec_func):desc(opts.label),
+  })
 end
 
 M._exec_toggle = function(opts)
   local Terminal = require("toggleterm.terminal").Terminal
-  local term = Terminal:new {
+  local term = Terminal:new({
     cmd = opts.cmd,
     hidden = true,
     count = opts.count,
     direction = opts.direction,
-  }
+  })
   term:toggle()
 end
 

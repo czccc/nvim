@@ -4,7 +4,7 @@ local executor = {}
 
 executor.latest_buf_id = nil
 executor.execute_command = function(command, args, cwd)
-  local utils = require "rust-tools.utils.utils"
+  local utils = require("rust-tools.utils.utils")
   -- local full_command = utils.chain_commands {
   --   utils.make_command_from_args("cd", { cwd }),
   --   utils.make_command_from_args(command, args),
@@ -31,7 +31,7 @@ end
 -- executor.execute_command = require("plugins.async").exector_with_args
 
 M.get_lldb_command = function()
-  local path = require "utils.path"
+  local path = require("utils.path")
   local extension_path = path.join(vim.env.HOME, ".vscode-server", "extensions", "vadimcn.vscode-lldb-1.6.10")
   local codelldb_path = path.join(extension_path, "adapter", "codelldb")
   local liblldb_path = path.join(extension_path, "lldb", "lib", "liblldb.so")
@@ -47,8 +47,8 @@ M.setup = function()
     return
   end
 
-  local lsp_installer_servers = require "nvim-lsp-installer.servers"
-  local _, requested_server = lsp_installer_servers.get_server "rust_analyzer"
+  local lsp_installer_servers = require("nvim-lsp-installer.servers")
+  local _, requested_server = lsp_installer_servers.get_server("rust_analyzer")
 
   local opts = {
     tools = {
@@ -103,25 +103,24 @@ M.setup = function()
       cmd_env = requested_server._default_options.cmd_env,
       on_attach = function(client, bufnr)
         require("plugins.lsp").common_on_attach(client, bufnr)
-        require("plugins.which_key").register({
-          ["m"] = {
-            t = { "<cmd>RustToggleInlayHints<cr>", "Toggle Inlay Hints" },
-            r = { "<cmd>RustRunnables<cr>", "Runnables" },
-            d = { "<cmd>RustDebuggables<cr>", "Debuggables" },
-            e = { "<cmd>RustExpandMacro<cr>", "Expand Macro" },
-            c = { "<cmd>RustOpenCargo<cr>", "Open Cargo" },
-            R = { "<cmd>RustReloadWorkspace<cr>", "Reload" },
-            a = { "<cmd>RustHoverActions<cr>", "Hover Actions" },
-            A = { "<cmd>RustHoverRange<cr>", "Hover Range" },
-            l = { "<cmd>RustJoinLines<cr>", "Join Lines" },
-            j = { "<cmd>RustMoveItemDown<cr>", "Move Item Down" },
-            k = { "<cmd>RustMoveItemUp<cr>", "Move Item Up" },
-            p = { "<cmd>RustParentModule<cr>", "Parent Module" },
-            s = { "<cmd>RustSSR<cr>", "Structural Search Replace" },
-            g = { "<cmd>RustViewCrateGraph<cr>", "View Crate Graph" },
-            S = { "<cmd>RustStartStandaloneServerForBuffer <cr>", "Standalone Server" },
-          },
-        }, { mode = "n", buffer = bufnr, prefix = "<Leader>" })
+        local Key = require("utils.key").Key
+        require("utils.key").load({
+          Key("n", "<Leader>mt", "<cmd>RustToggleInlayHints<cr>"):buffer(bufnr):desc("Toggle Inlay Hints"),
+          Key("n", "<Leader>mr", "<cmd>RustRunnables<cr>"):buffer(bufnr):desc("Runnables"),
+          Key("n", "<Leader>md", "<cmd>RustDebuggables<cr>"):buffer(bufnr):desc("Debuggables"),
+          Key("n", "<Leader>me", "<cmd>RustExpandMacro<cr>"):buffer(bufnr):desc("Expand Macro"),
+          Key("n", "<Leader>mc", "<cmd>RustOpenCargo<cr>"):buffer(bufnr):desc("Open Cargo"),
+          Key("n", "<Leader>mR", "<cmd>RustReloadWorkspace<cr>"):buffer(bufnr):desc("Reload"),
+          Key("n", "<Leader>ma", "<cmd>RustHoverActions<cr>"):buffer(bufnr):desc("Hover Actions"),
+          Key("n", "<Leader>mA", "<cmd>RustHoverRange<cr>"):buffer(bufnr):desc("Hover Range"),
+          Key("n", "<Leader>ml", "<cmd>RustJoinLines<cr>"):buffer(bufnr):desc("Join Lines"),
+          Key("n", "<Leader>mj", "<cmd>RustMoveItemDown<cr>"):buffer(bufnr):desc("Move Item Down"),
+          Key("n", "<Leader>mk", "<cmd>RustMoveItemUp<cr>"):buffer(bufnr):desc("Move Item Up"),
+          Key("n", "<Leader>mp", "<cmd>RustParentModule<cr>"):buffer(bufnr):desc("Parent Module"),
+          Key("n", "<Leader>ms", "<cmd>RustSSR<cr>"):buffer(bufnr):desc("Structural Search Replace"),
+          Key("n", "<Leader>mg", "<cmd>RustViewCrateGraph<cr>"):buffer(bufnr):desc("View Crate Graph"),
+          Key("n", "<Leader>mS", "<cmd>RustStartStandaloneServerForBuffer<cr>"):buffer(bufnr):desc("Standalone Server"),
+        })
       end,
       on_init = require("plugins.lsp").common_on_init,
     },

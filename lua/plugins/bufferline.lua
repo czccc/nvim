@@ -14,10 +14,10 @@ M.packers = {
     event = "BufWinEnter",
     disable = false,
     config = function()
-      require("bufdel").setup {
+      require("bufdel").setup({
         next = "alternate", -- or 'alternate'
         quit = false,
-      }
+      })
     end,
   },
 }
@@ -46,7 +46,7 @@ local function custom_filter(buf, buf_nums)
     return true
   end
   local tab_num = vim.fn.tabpagenr()
-  local last_tab = vim.fn.tabpagenr "$"
+  local last_tab = vim.fn.tabpagenr("$")
   local is_log = is_ft(buf, "log")
   if last_tab == 1 then
     return true
@@ -94,7 +94,7 @@ M.config = {
     --- some limitations that will *NOT* be fixed.
     name_formatter = function(buf) -- buf contains a "name", "path" and "bufnr"
       -- remove extension from markdown files for example
-      if buf.name:match "%.md" then
+      if buf.name:match("%.md") then
         return vim.fn.fnamemodify(buf.name, ":t:r")
       end
     end,
@@ -172,42 +172,40 @@ M.config = {
 M.setup = function()
   require("core.keymap").load(M.config.keymap)
   ---@diagnostic disable-next-line: different-requires
-  require("bufferline").setup {
+  require("bufferline").setup({
     options = M.config.options,
     highlights = M.config.highlights,
-  }
+  })
 
-  local which_key = require "plugins.which_key"
-  which_key.register {
-    ["c"] = { "<cmd>BufDel<CR>", "Close Buffer" },
-    ["b"] = {
-      name = "Buffers",
-      b = { "<cmd>lua require('plugins.telescope').find_buffers()<cr>", "Find Buffers" },
-      c = { "<cmd>BufDel<cr>", "Close Current" },
-      f = { "<cmd>b#<cr>", "Previous" },
-      h = { "<cmd>BufferLineCloseLeft<cr>", "Close to Left" },
-      l = { "<cmd>BufferLineCloseRight<cr>", "Close to Right" },
-      j = { "<cmd>BufferLineMovePrev<cr>", "Move Previous" },
-      k = { "<cmd>BufferLineMoveNext<cr>", "Move Next" },
-      p = { "<cmd>BufferLinePick<cr>", "Buffer Pick" },
-      d = { "<cmd>BufferLineSortByDirectory<cr>", "Sort by Directory" },
-      L = { "<cmd>BufferLineSortByExtension<cr>", "Sort by Extension" },
-      n = { "<cmd>BufferLineSortByTabs<cr>", "Sort by Tabs" },
+  local LeaderKey = require("utils.key").PrefixModeKey("<Leader>", "n")
+  local LeaderbKey = require("utils.key").PrefixModeKey("<Leader>b", "n")
+  require("utils.key").load({
+    LeaderKey("c", "<cmd>BufDel<cr>"):desc("Close Buffer"),
 
-      ["g"] = {
-        name = "Buffer Goto",
-        ["1"] = { "<cmd>BufferLineGoToBuffer 1<cr>", "BufferGoto 1" },
-        ["2"] = { "<cmd>BufferLineGoToBuffer 2<cr>", "BufferGoto 2" },
-        ["3"] = { "<cmd>BufferLineGoToBuffer 3<cr>", "BufferGoto 3" },
-        ["4"] = { "<cmd>BufferLineGoToBuffer 4<cr>", "BufferGoto 4" },
-        ["5"] = { "<cmd>BufferLineGoToBuffer 5<cr>", "BufferGoto 5" },
-        ["6"] = { "<cmd>BufferLineGoToBuffer 6<cr>", "BufferGoto 6" },
-        ["7"] = { "<cmd>BufferLineGoToBuffer 7<cr>", "BufferGoto 7" },
-        ["8"] = { "<cmd>BufferLineGoToBuffer 8<cr>", "BufferGoto 8" },
-        ["9"] = { "<cmd>BufferLineGoToBuffer 9<cr>", "BufferGoto 9" },
-      },
-    },
-  }
+    LeaderbKey(""):group("Buffers"),
+    LeaderbKey("b", require("plugins.telescope").find_buffers):desc("Find Buffer"),
+    LeaderbKey("c", "<cmd>BufDel<cr>"):desc("Close Current"),
+    LeaderbKey("f", "<cmd>b#<cr>"):desc("Previous"),
+    LeaderbKey("h", "<cmd>BufferLineCloseLeft<cr>"):desc("Close To Left"),
+    LeaderbKey("l", "<cmd>BufferLineCloseRight<cr>"):desc("Close To Right"),
+    LeaderbKey("j", "<cmd>BufferLineMovePrev<cr>"):desc("Move To Left"),
+    LeaderbKey("k", "<cmd>BufferLineMoveNext<cr>"):desc("Move To Right"),
+    LeaderbKey("p", "<cmd>BufferLinePick<cr>"):desc("Buffer Pick"),
+    LeaderbKey("d", "<cmd>BufferLineSortByDirectory<cr>"):desc("Sort By Directory"),
+    LeaderbKey("L", "<cmd>BufferLineSortByExtension<cr>"):desc("Sort By Extension"),
+    LeaderbKey("n", "<cmd>BufferLineSortByTabs<cr>"):desc("Sort By Tab"),
+
+    LeaderbKey("g"):group("Buffer Goto"),
+    LeaderbKey("g1", "<cmd>BufferLineGoToBuffer 1<cr>"):desc("Buffer Goto 1"),
+    LeaderbKey("g2", "<cmd>BufferLineGoToBuffer 2<cr>"):desc("Buffer Goto 2"),
+    LeaderbKey("g3", "<cmd>BufferLineGoToBuffer 3<cr>"):desc("Buffer Goto 3"),
+    LeaderbKey("g4", "<cmd>BufferLineGoToBuffer 4<cr>"):desc("Buffer Goto 4"),
+    LeaderbKey("g5", "<cmd>BufferLineGoToBuffer 5<cr>"):desc("Buffer Goto 5"),
+    LeaderbKey("g6", "<cmd>BufferLineGoToBuffer 6<cr>"):desc("Buffer Goto 6"),
+    LeaderbKey("g7", "<cmd>BufferLineGoToBuffer 7<cr>"):desc("Buffer Goto 7"),
+    LeaderbKey("g8", "<cmd>BufferLineGoToBuffer 8<cr>"):desc("Buffer Goto 8"),
+    LeaderbKey("g9", "<cmd>BufferLineGoToBuffer 9<cr>"):desc("Buffer Goto 9"),
+  })
 end
 
 return M

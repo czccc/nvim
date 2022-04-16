@@ -17,7 +17,7 @@ M.packers = {
     "L3MON4D3/LuaSnip",
     config = function()
       require("luasnip/loaders/from_vscode").lazy_load()
-      require("luasnip/loaders/from_vscode").lazy_load { paths = { "./snippets" } }
+      require("luasnip/loaders/from_vscode").lazy_load({ paths = { "./snippets" } })
     end,
   },
   {
@@ -38,7 +38,7 @@ M.packers = {
   {
     "danymat/neogen",
     config = function()
-      require("neogen").setup { snippet_engine = "luasnip" }
+      require("neogen").setup({ snippet_engine = "luasnip" })
     end,
     requires = "nvim-treesitter/nvim-treesitter",
   },
@@ -82,8 +82,8 @@ M.methods = {}
 ---checks if the character preceding the cursor is a space character
 ---@return boolean true if it is a space character, false otherwise
 local check_backspace = function()
-  local col = vim.fn.col "." - 1
-  return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
+  local col = vim.fn.col(".") - 1
+  return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
 end
 M.methods.check_backspace = check_backspace
 
@@ -227,12 +227,12 @@ M.methods.jumpable = jumpable
 M.setup_cmp = function()
   local status_cmp_ok, cmp = pcall(require, "cmp")
   if not status_cmp_ok then
-    vim.cmd [[ packadd cmp ]]
+    vim.cmd([[ packadd cmp ]])
     return
   end
   local status_luasnip_ok, luasnip = pcall(require, "luasnip")
   if not status_luasnip_ok then
-    vim.cmd [[ packadd luasnip ]]
+    vim.cmd([[ packadd luasnip ]])
     return
   end
 
@@ -437,7 +437,7 @@ M.setup_copilot = function()
     typescriptreact = true,
     terraform = true,
   }
-  require("core.keymap").load {
+  require("core.keymap").load({
     ["i"] = {
       ["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } },
       ["<c-l>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } },
@@ -445,11 +445,11 @@ M.setup_copilot = function()
       ["<M-[>"] = { "<Plug>(copilot-previous)", { silent = true } },
       ["<M-\\>"] = { "<Cmd>vertical Copilot panel<CR>", { silent = true } },
     },
-  }
+  })
 end
 
 M.setup_tabout = function()
-  require("tabout").setup {
+  require("tabout").setup({
     tabkey = "<Tab>", -- key to trigger tabout, set to an empty string to disable
     backwards_tabkey = "<S-Tab>", -- key to trigger backwards tabout, set to an empty string to disable
     act_as_tab = true, -- shift content if tab out is not possible
@@ -466,7 +466,7 @@ M.setup_tabout = function()
     },
     ignore_beginning = true, --[[ if the cursor is at the beginning of a filled element it will rather tab out than shift the content ]]
     exclude = {}, -- tabout will ignore these filetypes
-  }
+  })
 end
 
 return M

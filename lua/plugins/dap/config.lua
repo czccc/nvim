@@ -19,14 +19,14 @@ M.setup = function()
       request = "attach",
       name = "Neovim attach",
       host = function()
-        local value = vim.fn.input "Host [127.0.0.1]: "
+        local value = vim.fn.input("Host [127.0.0.1]: ")
         if value ~= "" then
           return value
         end
         return "127.0.0.1"
       end,
       port = function()
-        local val = tonumber(vim.fn.input "Port: ")
+        local val = tonumber(vim.fn.input("Port: "))
         assert(val, "Please provide a port number")
         return val
       end,
@@ -40,7 +40,7 @@ M.setup = function()
       request = "launch",
       showLog = false,
       program = "${file}",
-      dlvToolPath = vim.fn.exepath "dlv", -- Adjust to where delve is installed
+      dlvToolPath = vim.fn.exepath("dlv"), -- Adjust to where delve is installed
     },
   }
 
@@ -49,9 +49,9 @@ M.setup = function()
       type = "dart",
       request = "launch",
       name = "Launch flutter",
-      dartSdkPath = sep_os_replacer(os.getenv "HOME" .. "/flutter/bin/cache/dart-sdk/"),
-      flutterSdkPath = sep_os_replacer(os.getenv "HOME" .. "/flutter"),
-      program = sep_os_replacer "${workspaceFolder}/lib/main.dart",
+      dartSdkPath = sep_os_replacer(os.getenv("HOME") .. "/flutter/bin/cache/dart-sdk/"),
+      flutterSdkPath = sep_os_replacer(os.getenv("HOME") .. "/flutter"),
+      program = sep_os_replacer("${workspaceFolder}/lib/main.dart"),
       cwd = "${workspaceFolder}",
     },
   }
@@ -164,7 +164,7 @@ M.setup = function()
     local stdout = vim.loop.new_pipe(false)
     local stderr = vim.loop.new_pipe(false)
 
-    local path = require "utils.path"
+    local path = require("utils.path")
     local cmd = path.join(path.runtime_dir, "dapinstall", "codelldb", "extension", "adapter", "codelldb")
 
     local handle, pid_or_err
@@ -184,14 +184,14 @@ M.setup = function()
     stdout:read_start(function(err, chunk)
       assert(not err, err)
       if chunk then
-        local port = chunk:match "Listening on port (%d+)"
+        local port = chunk:match("Listening on port (%d+)")
         if port then
           vim.schedule(function()
-            on_adapter {
+            on_adapter({
               type = "server",
               host = "127.0.0.1",
               port = port,
-            }
+            })
           end)
         else
           vim.schedule(function()

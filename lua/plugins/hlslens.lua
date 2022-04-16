@@ -19,50 +19,19 @@ M.packer = {
 }
 
 M.set_hlslens_keymaps = function()
-  local wk = require "plugins.which_key"
-  wk.register({
-    ["n"] = {
-      "<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>",
-      "Search Next",
-    },
-    ["N"] = {
-      "<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>",
-      "Search Previous",
-    },
-    ["*"] = {
-      "*<Cmd>lua require('hlslens').start()<CR>",
-      "Search Cursor Word Forward",
-    },
-    ["#"] = {
-      "#<Cmd>lua require('hlslens').start()<CR>",
-      "Search Cursor Word Backward",
-    },
-    ["g*"] = {
-      "g*<Cmd>lua require('hlslens').start()<CR>",
-      "Search Cursor Word Forward",
-    },
-    ["g#"] = {
-      "g#<Cmd>lua require('hlslens').start()<CR>",
-      "Search Cursor Word Backward",
-    },
-  }, wk.config.opts)
-  -- local opts = { noremap = true, silent = true }
-  -- vim.api.nvim_set_keymap(
-  --   "n",
-  --   "n",
-  --   "<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>",
-  --   opts
-  -- )
-  -- vim.api.nvim_set_keymap(
-  --   "n",
-  --   "N",
-  --   "<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>",
-  --   opts
-  -- )
-  -- vim.api.nvim_set_keymap("n", "*", "*<Cmd>lua require('hlslens').start()<CR>", opts)
-  -- vim.api.nvim_set_keymap("n", "#", "#<Cmd>lua require('hlslens').start()<CR>", opts)
-  -- vim.api.nvim_set_keymap("n", "g*", "g*<Cmd>lua require('hlslens').start()<CR>", opts)
-  -- vim.api.nvim_set_keymap("n", "g#", "g#<Cmd>lua require('hlslens').start()<CR>", opts)
+  local Key = require("utils.key").Key
+  require("utils.key").load({
+    Key("n", "n", "<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>"):desc(
+      "Search Next"
+    ),
+    Key("n", "N", "<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>"):desc(
+      "Search Previous"
+    ),
+    Key("n", "*", "*<Cmd>lua require('hlslens').start()<CR>"):desc("Search CurWord Forward"),
+    Key("n", "#", "#<Cmd>lua require('hlslens').start()<CR>"):desc("Search CurWord Backward"),
+    Key("n", "g*", "g*<Cmd>lua require('hlslens').start()<CR>"):desc("Fuzzy CurWord Forward"),
+    Key("n", "g#", "g#<Cmd>lua require('hlslens').start()<CR>"):desc("Fuzzy CurWord Backward"),
+  })
 end
 
 M.setup_hlslens = function()
@@ -130,7 +99,7 @@ M.setup_scrollbar = function()
     return
   end
 
-  scrollbar.setup {
+  scrollbar.setup({
     show = true,
     set_highlights = true,
     handle = {
@@ -207,7 +176,7 @@ M.setup_scrollbar = function()
       diagnostic = true,
       search = false, -- Requires hlslens to be loaded, will run require("scrollbar.handlers.search").setup() for you
     },
-  }
+  })
 end
 
 return M

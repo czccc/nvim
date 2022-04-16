@@ -8,7 +8,8 @@ M.packer = {
 }
 
 M.setup = function()
-  require("spectre").setup {
+  local spectre = require("spectre")
+  spectre.setup({
     color_devicons = true,
     open_cmd = "vnew",
     live_update = true, -- auto excute search again when you write any file in vim
@@ -147,31 +148,24 @@ M.setup = function()
     replace_vim_cmd = "cdo",
     is_open_target_win = true, --open file on opener window
     is_insert_mode = false, -- start open panel on is_insert_mode
-  }
-  local wk = require "plugins.which_key"
-  wk.register {
-    ["S"] = {
-      name = "Spectre",
-      ["w"] = { "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", "Spectre Word" },
-      ["v"] = { "<cmd>lua require('spectre').open_visual()<CR>", "Spectre Visual" },
-      ["s"] = { "<cmd>lua require('spectre').open()<CR>", "Spectre Open" },
-      ["p"] = { "<cmd>lua require('spectre').open_file_search()<CR>", "Spectre File Search" },
-    },
-  }
-  wk.register({
-    ["S"] = {
-      ["v"] = { "<cmd>lua require('plugins.spectre').visual_selection()<CR>", "Spectre Visual" },
-    },
-  }, wk.config.vopts)
+  })
+  local Key = require("utils.key").Key
+  require("utils.key").load({
+    Key("n", "<Leader>S"):group("Spectre"),
+    Key("n", "<Leader>Sw", spectre.open_visual):desc("Spectre Word"),
+    Key("n", "<Leader>Sf", spectre.open_file_search):desc("Spectre File Search"),
+    Key("n", "<Leader>So", spectre.open):desc("Spectre Open"),
+    Key("v", "<Leader>Sv", M.visual_selection):desc("Spectre Visual"),
+  })
 end
 
 M.visual_selection = function()
-  local save_previous = vim.fn.getreg "a"
-  vim.api.nvim_command 'silent! normal! "ay'
-  local selection = vim.fn.trim(vim.fn.getreg "a")
+  local save_previous = vim.fn.getreg("a")
+  vim.api.nvim_command('silent! normal! "ay')
+  local selection = vim.fn.trim(vim.fn.getreg("a"))
   vim.fn.setreg("a", save_previous)
   selection = vim.fn.substitute(selection, [[\n]], [[\\n]], "g")
-  require("spectre").open { search_text = selection }
+  require("spectre").open({ search_text = selection })
 end
 
 return M

@@ -55,7 +55,7 @@ M.config = {
 }
 
 M.setup = function()
-  local dap = require "dap"
+  local dap = require("dap")
 
   vim.fn.sign_define("DapBreakpoint", M.config.breakpoint)
   vim.fn.sign_define("DapBreakpointRejected", M.config.breakpoint_rejected)
@@ -63,32 +63,26 @@ M.setup = function()
 
   dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
   require("plugins.dap.config").setup()
-  require("plugins.which_key").register {
-    ["d"] = {
-      name = "Debug",
-      t = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
-      b = { "<cmd>lua require'dap'.step_back()<cr>", "Step Back" },
-      c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
-      C = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run To Cursor" },
-      d = { "<cmd>lua require'dap'.disconnect()<cr>", "Disconnect" },
-      e = { "<cmd>lua require('dapui').eval()<cr>", "Eval" },
-      g = { "<cmd>lua require'dap'.session()<cr>", "Get Session" },
-      i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
-      s = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
-      o = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
-      p = { "<cmd>lua require'dap'.pause.toggle()<cr>", "Pause" },
-      r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Toggle Repl" },
-      q = { "<cmd>lua require'dap'.close()<cr>", "Quit" },
-      u = {
-        name = "Utils",
-        u = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle Dap UI" },
-      },
-    },
-  }
+  local Key = require("utils.key").Key
+  require("utils.key").load({
+    Key("n", "<Leader>d"):group("Debug"),
+    Key("n", "<Leader>dt", dap.toggle_breakpoint):desc("Toggle Breakpoint"),
+    Key("n", "<Leader>db", dap.step_back):desc("Step Back"),
+    Key("n", "<Leader>dc", dap.continue):desc("Continue"),
+    Key("n", "<Leader>dC", dap.run_to_cursor):desc("Run To Cursor"),
+    Key("n", "<Leader>dd", dap.disconnect):desc("Disconnect"),
+    Key("n", "<Leader>dg", dap.session):desc("Get Session"),
+    Key("n", "<Leader>di", dap.step_into):desc("Step Into"),
+    Key("n", "<Leader>ds", dap.step_over):desc("Step Over"),
+    Key("n", "<Leader>do", dap.step_out):desc("Step Out"),
+    Key("n", "<Leader>dp", dap.pause):desc("Pause"),
+    Key("n", "<Leader>dr", dap.repl.toggle):desc("Toggle Repl"),
+    Key("n", "<Leader>dq", dap.close):desc("Quit"),
+  })
 end
 
 M.setup_dapui = function()
-  require("dapui").setup {
+  require("dapui").setup({
     icons = { expanded = "▾", collapsed = "▸" },
     mappings = {
       -- Use a table to apply multiple mappings
@@ -128,8 +122,14 @@ M.setup_dapui = function()
       },
     },
     windows = { indent = 1 },
-  }
-  local dap, dapui = require "dap", require "dapui"
+  })
+  local dap, dapui = require("dap"), require("dapui")
+  local Key = require("utils.key").Key
+  require("utils.key").load({
+    Key("n", "<Leader>d"):group("Debug"),
+    Key("n", "<Leader>de", dapui.eval):desc("Eval"),
+    Key("n", "<Leader>du", dapui.toggle):desc("Toggle Dap UI"),
+  })
   dap.listeners.after.event_initialized["dapui_config"] = function()
     dapui.open()
   end
@@ -142,11 +142,11 @@ M.setup_dapui = function()
 end
 
 M.setup_dap_install = function()
-  local dap_install = require "dap-install"
+  local dap_install = require("dap-install")
 
-  dap_install.setup {
-    installation_path = vim.fn.stdpath "data" .. "/dapinstall/",
-  }
+  dap_install.setup({
+    installation_path = vim.fn.stdpath("data") .. "/dapinstall/",
+  })
 end
 
 return M

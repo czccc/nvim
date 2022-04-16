@@ -13,8 +13,8 @@ M.config = function()
     return
   end
 
-  local mappings_utils = require "renamer.mappings.utils"
-  renamer.setup {
+  local mappings_utils = require("renamer.mappings.utils")
+  renamer.setup({
     -- The popup title, shown if `border` is true
     title = "Rename",
     -- The padding around the popup content
@@ -53,12 +53,9 @@ M.config = function()
     -- Custom handler to be run after successfully renaming the word. Receives
     -- the LSP 'textDocument/rename' raw response as its parameter.
     handler = nil,
-  }
-  require("plugins.which_key").register {
-    ["l"] = {
-      R = { "<cmd>lua require('renamer').rename()<cr>", "Rename" },
-    },
-  }
+  })
+  local Key = require("utils.key").Key
+  Key("n", "<Leader>lR", renamer.rename):desc("Rename"):set()
 end
 
 return M

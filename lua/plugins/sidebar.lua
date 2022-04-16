@@ -80,11 +80,15 @@ M.config_sidebar = {
 M.setup_symbol = function()
   -- require("symbols-outline")
   vim.g.symbols_outline = M.config_symbol
-  vim.cmd [[ highlight! link FocusedSymbol Visual ]]
+  vim.cmd([[ highlight! link FocusedSymbol Visual ]])
+  local Key = require("utils.key").Key
+  Key("n", "<Leader>vs", "<cmd>SymbolsOutline<cr>"):desc("Symbols Outline"):set()
 end
 
 M.setup_sidebar = function()
   require("sidebar-nvim").setup(M.config_sidebar)
+  local Key = require("utils.key").Key
+  Key("n", "<Leader>vS", "<cmd>SidebarNvimToggle<cr>"):desc("Sidebar"):set()
 end
 
 return M

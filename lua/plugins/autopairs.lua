@@ -52,21 +52,17 @@ M.config = {
 }
 
 M.setup = function()
-  local autopairs = require "nvim-autopairs"
-  local Rule = require "nvim-autopairs.rule"
-
+  local autopairs = require("nvim-autopairs")
   autopairs.setup(M.config)
 
-  require("nvim-treesitter.configs").setup { autopairs = { enable = true } }
+  require("nvim-treesitter.configs").setup({ autopairs = { enable = true } })
 
-  local ts_conds = require "nvim-autopairs.ts-conds"
-
-  -- TODO: can these rules be safely added from "config.lua" ?
-  -- press % => %% is only inside comment or string
-  autopairs.add_rules {
-    Rule("%", "%", "lua"):with_pair(ts_conds.is_ts_node { "string", "comment" }),
-    Rule("$", "$", "lua"):with_pair(ts_conds.is_not_ts_node { "function" }),
-  }
+  -- local ts_conds = require("nvim-autopairs.ts-conds")
+  -- local Rule = require("nvim-autopairs.rule")
+  -- autopairs.add_rules({
+  --   Rule("%", "%", "lua"):with_pair(ts_conds.is_ts_node({ "string", "comment" })),
+  --   Rule("$", "$", "lua"):with_pair(ts_conds.is_not_ts_node({ "function" })),
+  -- })
 end
 
 return M

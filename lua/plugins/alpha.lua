@@ -22,7 +22,7 @@ end
 local make_footer = function()
   return {
     type = "text",
-    val = require "alpha.fortune"(),
+    val = require("alpha.fortune")(),
     opts = {
       position = "center",
       hl = "Number",
@@ -35,8 +35,8 @@ local function make_infos()
   -- local datetime = os.date " %Y-%m-%d      %H:%M:%S"
   -- local infos = string.format("%s       v%d.%d.%d      %d", datetime, v.major, v.minor, v.patch, plugins)
   local infos = {}
-  table.insert(infos, os.date " %Y-%m-%d")
-  table.insert(infos, os.date " %H:%M:%S")
+  table.insert(infos, os.date(" %Y-%m-%d"))
+  table.insert(infos, os.date(" %H:%M:%S"))
   table.insert(infos, string.format(" v%d.%d.%d", v.major, v.minor, v.patch))
   table.insert(infos, string.format(" %d", plugins))
   infos = require("utils.text").format_table(infos, 50, "     ")
@@ -57,7 +57,7 @@ local function make_sessions()
     end
     return filename
   end
-  local dashboard = require "alpha.themes.dashboard"
+  local dashboard = require("alpha.themes.dashboard")
   local session_list = require("session_manager.utils").get_sessions()
   local last_session = require("session_manager.utils").get_last_session_filename()
 
@@ -91,8 +91,8 @@ end
 
 function M.setup()
   ---@diagnostic disable-next-line: different-requires
-  local alpha = require "alpha"
-  local dashboard = require "alpha.themes.dashboard"
+  local alpha = require("alpha")
+  local dashboard = require("alpha.themes.dashboard")
   local header = make_header()
   local footer = make_footer()
   local infos = make_infos()
@@ -140,7 +140,7 @@ function M.setup()
   }
 
   alpha.setup(config)
-  require("core.autocmds").define_augroups {
+  require("core.autocmds").define_augroups({
     alpha = {
       {
         "FileType",
@@ -148,7 +148,9 @@ function M.setup()
         "setlocal nofoldenable",
       },
     },
-  }
+  })
+  local Key = require("utils.key").Key
+  Key("n", "<Leader>ua", "<cmd>Alpha<cr>"):desc("Dashboard"):set()
 end
 
 return M

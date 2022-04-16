@@ -10,15 +10,15 @@ local M = {
 }
 
 local fmt = string.format
-local text = require "utils.text"
-local lsp_utils = require "plugins.lsp.utils"
+local text = require("utils.text")
+local lsp_utils = require("plugins.lsp.utils")
 
 local function str_list(list)
   return #list == 1 and list[1] or fmt("[%s]", table.concat(list, ", "))
 end
 
 local function make_formatters_info(ft)
-  local null_formatters = require "plugins.lsp.null-ls.formatters"
+  local null_formatters = require("plugins.lsp.null-ls.formatters")
   local registered_formatters = null_formatters.list_registered(ft)
   local supported_formatters = null_formatters.list_supported(ft)
   local section = {
@@ -35,7 +35,7 @@ local function make_formatters_info(ft)
 end
 
 local function make_code_actions_info(ft)
-  local null_actions = require "plugins.lsp.null-ls.code_actions"
+  local null_actions = require("plugins.lsp.null-ls.code_actions")
   local registered_actions = null_actions.list_registered(ft)
   local section = {
     "Code actions info",
@@ -50,7 +50,7 @@ local function make_code_actions_info(ft)
 end
 
 local function make_linters_info(ft)
-  local null_linters = require "plugins.lsp.null-ls.linters"
+  local null_linters = require("plugins.lsp.null-ls.linters")
   local supported_linters = null_linters.list_supported(ft)
   local registered_linters = null_linters.list_registered(ft)
   local section = {
@@ -164,7 +164,7 @@ function M.toggle_popup(ft)
   local content_provider = function(popup)
     local content = {}
 
-    for _, section in ipairs {
+    for _, section in ipairs({
       M.banner,
       { "" },
       { "" },
@@ -179,7 +179,7 @@ function M.toggle_popup(ft)
       linters_info,
       { "" },
       code_actions_info,
-    } do
+    }) do
       vim.list_extend(content, section)
     end
 
@@ -187,8 +187,8 @@ function M.toggle_popup(ft)
   end
 
   local function set_syntax_hl()
-    vim.cmd [[highlight LvimInfoIdentifier gui=bold]]
-    vim.cmd [[highlight link LvimInfoHeader Type]]
+    vim.cmd([[highlight LvimInfoIdentifier gui=bold]])
+    vim.cmd([[highlight link LvimInfoHeader Type]])
     vim.fn.matchadd("LvimInfoHeader", "Buffer info")
     vim.fn.matchadd("LvimInfoHeader", "Active client(s)")
     vim.fn.matchadd("LvimInfoHeader", fmt("Overridden %s server(s)", ft))
@@ -206,10 +206,10 @@ function M.toggle_popup(ft)
     tbl_set_highlight(require("plugins.lsp.null-ls.code_actions").list_registered(ft), "LvimInfoIdentifier")
   end
 
-  local Popup = require("utils.popup"):new {
+  local Popup = require("utils.popup"):new({
     win_opts = { number = false },
     buf_opts = { modifiable = false, filetype = "lspinfo" },
-  }
+  })
   Popup:display(content_provider)
   set_syntax_hl()
 

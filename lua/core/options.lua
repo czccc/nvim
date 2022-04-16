@@ -1,5 +1,5 @@
 local M = {}
-local path = require "utils.path"
+local path = require("utils.path")
 
 M.disabled_plugins = {
   "2html_plugin",
