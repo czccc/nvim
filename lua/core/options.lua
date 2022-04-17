@@ -76,8 +76,8 @@ M.opts = {
   spelllang = "en",
   spellfile = path.join(path.config_dir, "spell", "en.utf-8.add"),
   shadafile = path.join(path.cache_dir, "nvim.shada"),
-  scrolloff = 8, -- minimal number of screen lines to keep above and below the cursor.
-  sidescrolloff = 8, -- minimal number of screen lines to keep left and right of the cursor.
+  scrolloff = 1, -- minimal number of screen lines to keep above and below the cursor.
+  sidescrolloff = 1, -- minimal number of screen lines to keep left and right of the cursor.
 
   -- newly added
   wrapscan = true, -- Searches wrap around the end of the file

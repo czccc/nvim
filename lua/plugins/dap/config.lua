@@ -44,18 +44,6 @@ M.setup = function()
     },
   }
 
-  dap.configurations.dart = {
-    {
-      type = "dart",
-      request = "launch",
-      name = "Launch flutter",
-      dartSdkPath = sep_os_replacer(os.getenv("HOME") .. "/flutter/bin/cache/dart-sdk/"),
-      flutterSdkPath = sep_os_replacer(os.getenv("HOME") .. "/flutter"),
-      program = sep_os_replacer("${workspaceFolder}/lib/main.dart"),
-      cwd = "${workspaceFolder}",
-    },
-  }
-
   dap.configurations.typescript = {
     {
       type = "node2",
