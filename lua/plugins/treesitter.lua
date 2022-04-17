@@ -14,6 +14,9 @@ M.packers = {
     "nvim-treesitter/nvim-treesitter-textobjects",
   },
   {
+    "RRethy/nvim-treesitter-textsubjects",
+  },
+  {
     "nvim-treesitter/playground",
     -- cmd: TSHighlightCapturesUnderCursor  TSPlaygroundToggle
   },
@@ -73,6 +76,15 @@ M.opts = {
     enable = true, -- false will disable the whole extension
     additional_vim_regex_highlighting = true,
     disable = { "latex" },
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "<C-n>",
+      node_incremental = "<C-n>",
+      scope_incremental = "<C-s>",
+      node_decremental = "<C-r>",
+    },
   },
   context_commentstring = {
     enable = true,
@@ -150,8 +162,14 @@ M.opts = {
     },
   },
   textsubjects = {
-    enable = false,
-    keymaps = { ["."] = "textsubjects-smart", [";"] = "textsubjects-big" },
+    enable = true,
+    prev_selection = ",",
+    keymaps = {
+      ["."] = "textsubjects-smart",
+      -- [";"] = "textsubjects-big",
+      [";"] = "textsubjects-container-outer",
+      ["i;"] = "textsubjects-container-inner",
+    },
   },
   playground = {
     enable = false,
