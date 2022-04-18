@@ -407,12 +407,14 @@ M.setup_cmp = function()
   }
   require("cmp").setup(M.config)
   require("cmp").setup.cmdline(":", {
+    mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = "path" },
       { name = "cmdline" },
     },
   })
   require("cmp").setup.cmdline("/", {
+    mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = "buffer" },
     },
