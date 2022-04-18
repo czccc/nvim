@@ -150,7 +150,7 @@ function M.setup()
     },
   })
   local Key = require("utils.key").Key
-  Key("n", "<Leader>ua", "<cmd>Alpha<cr>"):desc("Dashboard"):set()
+  Key("n", "<Leader>ua", "<cmd>Alpha<cr>", "Dashboard"):set()
 end
 
 return M

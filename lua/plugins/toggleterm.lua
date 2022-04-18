@@ -123,7 +123,7 @@ M.add_exec = function(opts)
 
   local Key = require("utils.key").Key
   require("utils.key").load({
-    Key("n", opts.keymap, exec_func):desc(opts.label),
+    Key("n", opts.keymap, exec_func, opts.label),
   })
 end
 

@@ -69,7 +69,7 @@ M.setup = function()
   end
   zen_mode.setup(M.config)
   local Key = require("utils.key").Key
-  Key("n", "<Leader>uz", "<cmd>ZenMode<cr>"):desc("ZenMode"):set()
+  Key("n", "<Leader>uz", "<cmd>ZenMode<cr>", "ZenMode"):set()
 end
 
 return M

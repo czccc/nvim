@@ -19,8 +19,8 @@ M.packer = {
       },
     })
     local Key = require("utils.key").Key
-    Key("n", "<Leader>ud", "<cmd>DiffviewOpen<cr>"):desc("Diff View HEAD"):set()
-    Key("n", "<Leader>ud", "<cmd>DiffviewFileHistory<cr>"):desc("Diff View File"):set()
+    Key("n", "<Leader>ud", "<cmd>DiffviewOpen<cr>", "Diff View HEAD"):set()
+    Key("n", "<Leader>ud", "<cmd>DiffviewFileHistory<cr>", "Diff View File"):set()
   end,
   disable = false,
 }

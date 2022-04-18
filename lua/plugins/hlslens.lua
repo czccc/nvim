@@ -21,16 +21,16 @@ M.packer = {
 M.set_hlslens_keymaps = function()
   local Key = require("utils.key").Key
   require("utils.key").load({
-    Key("n", "n", "<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>"):desc(
+    Key("n", "n", "<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>", 
       "Search Next"
     ),
-    Key("n", "N", "<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>"):desc(
+    Key("n", "N", "<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>", 
       "Search Previous"
     ),
-    Key("n", "*", "*<Cmd>lua require('hlslens').start()<CR>"):desc("Search CurWord Forward"),
-    Key("n", "#", "#<Cmd>lua require('hlslens').start()<CR>"):desc("Search CurWord Backward"),
-    Key("n", "g*", "g*<Cmd>lua require('hlslens').start()<CR>"):desc("Fuzzy CurWord Forward"),
-    Key("n", "g#", "g#<Cmd>lua require('hlslens').start()<CR>"):desc("Fuzzy CurWord Backward"),
+    Key("n", "*", "*<Cmd>lua require('hlslens').start()<CR>", "Search CurWord Forward"),
+    Key("n", "#", "#<Cmd>lua require('hlslens').start()<CR>", "Search CurWord Backward"),
+    Key("n", "g*", "g*<Cmd>lua require('hlslens').start()<CR>", "Fuzzy CurWord Forward"),
+    Key("n", "g#", "g#<Cmd>lua require('hlslens').start()<CR>", "Fuzzy CurWord Backward"),
   })
 end
 

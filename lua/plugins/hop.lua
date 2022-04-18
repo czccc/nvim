@@ -22,46 +22,46 @@ M.setup = function()
         direction = hint.HintDirection.AFTER_CURSOR,
         current_line_only = true,
       })
-    end):desc("Forward"),
+    end, "Forward"),
     Key("n", "F", function()
       hop.hint_char1({
         direction = hint.HintDirection.BEFORE_CURSOR,
         current_line_only = true,
       })
-    end):desc("Backward"),
+    end, "Backward"),
     Key("o", "f", function()
       hop.hint_char1({
         direction = hint.HintDirection.AFTER_CURSOR,
         current_line_only = true,
         inclusive_jump = true,
       })
-    end):desc("Forward"),
+    end, "Forward"),
     Key("o", "F", function()
       hop.hint_char1({
         direction = hint.HintDirection.BEFORE_CURSOR,
         current_line_only = true,
         inclusive_jump = true,
       })
-    end):desc("Backward"),
+    end, "Backward"),
     Key("", "t", function()
       hop.hint_char1({
         direction = hint.HintDirection.AFTER_CURSOR,
         current_line_only = true,
       })
-    end):desc("Forward Till"),
+    end, "Forward Till"),
     Key("", "T", function()
       hop.hint_char1({
         direction = hint.HintDirection.BEFORE_CURSOR,
         current_line_only = true,
       })
-    end):desc("Backward Till"),
+    end, "Backward Till"),
     Key("n", "<Leader>j"):group("Hop"),
-    Key("n", "<Leader>jw", "<cmd>HopWord<cr>"):desc("HopWord"),
-    Key("n", "<Leader>jp", "<cmd>HopPattern<cr>"):desc("HopPattern"),
-    Key("n", "<Leader>jc", "<cmd>HopChar2<cr>"):desc("HopChar2"),
-    Key("n", "<Leader>jC", "<cmd>HopChar1<cr>"):desc("HopChar1"),
-    Key("n", "<Leader>jl", "<cmd>HopLine<cr>"):desc("HopLine"),
-    Key("n", "<Leader>jL", "<cmd>HopLineStart<cr>"):desc("HopLineStart"),
+    Key("n", "<Leader>jw", "<cmd>HopWord<cr>", "HopWord"),
+    Key("n", "<Leader>jp", "<cmd>HopPattern<cr>", "HopPattern"),
+    Key("n", "<Leader>jc", "<cmd>HopChar2<cr>", "HopChar2"),
+    Key("n", "<Leader>jC", "<cmd>HopChar1<cr>", "HopChar1"),
+    Key("n", "<Leader>jl", "<cmd>HopLine<cr>", "HopLine"),
+    Key("n", "<Leader>jL", "<cmd>HopLineStart<cr>", "HopLineStart"),
   })
   vim.cmd([[highlight HopNextKey gui=bold guifg=Orange]])
 end

@@ -152,10 +152,10 @@ M.setup = function()
   local Key = require("utils.key").Key
   require("utils.key").load({
     Key("n", "<Leader>S"):group("Spectre"),
-    Key("n", "<Leader>Sw", spectre.open_visual):desc("Spectre Word"),
-    Key("n", "<Leader>Sf", spectre.open_file_search):desc("Spectre File Search"),
-    Key("n", "<Leader>So", spectre.open):desc("Spectre Open"),
-    Key("v", "<Leader>Sv", M.visual_selection):desc("Spectre Visual"),
+    Key("n", "<Leader>Sw", spectre.open_visual, "Spectre Word"),
+    Key("n", "<Leader>Sf", spectre.open_file_search, "Spectre File Search"),
+    Key("n", "<Leader>So", spectre.open, "Spectre Open"),
+    Key("v", "<Leader>Sv", M.visual_selection, "Spectre Visual"),
   })
 end
 

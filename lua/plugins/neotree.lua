@@ -246,12 +246,12 @@ M.setup = function()
 
   local Key = require("utils.key").Key
   require("utils.key").load({
-    Key("n", "<Leader>e", "<cmd>Neotree filesystem reveal<cr>"):desc("Explorer"),
-    Key("n", "<Leader>E", "<cmd>Neotree toggle<cr>"):desc("Explorer"),
-    Key("n", "<Leader>vg", "<cmd>Neotree git_status left<cr>"):desc("Git Status"),
-    Key("n", "<Leader>vG", "<cmd>Neotree git_status float<cr>"):desc("Git Status"),
-    Key("n", "<Leader>vb", "<cmd>Neotree buffers left<cr>"):desc("Opened Files"),
-    Key("n", "<Leader>vB", "<cmd>Neotree buffers float<cr>"):desc("Opened Files"),
+    Key("n", "<Leader>e", "<cmd>Neotree filesystem reveal<cr>", "Explorer"),
+    Key("n", "<Leader>E", "<cmd>Neotree toggle<cr>", "Explorer"),
+    Key("n", "<Leader>vg", "<cmd>Neotree git_status left<cr>", "Git Status"),
+    Key("n", "<Leader>vG", "<cmd>Neotree git_status float<cr>", "Git Status"),
+    Key("n", "<Leader>vb", "<cmd>Neotree buffers left<cr>", "Opened Files"),
+    Key("n", "<Leader>vB", "<cmd>Neotree buffers float<cr>", "Opened Files"),
   })
 
   -- require("core.colors").define_links("NeoTreeDirectoryIcon", "NvimTreeFolderIcon")

@@ -47,13 +47,13 @@ function M.init_packer()
   local LeaderpKey = require("utils.key").PrefixModeKey("<Leader>p", "n")
   require("utils.key").load({
     LeaderpKey(""):group("Packer"),
-    LeaderpKey("c", "<cmd>PackerSync<CR>"):desc("Sync"),
-    LeaderpKey("C", "<cmd>PackerClean<CR>"):desc("Clean"),
-    LeaderpKey("i", "<cmd>PackerInstall<CR>"):desc("Install"),
-    LeaderpKey("s", "<cmd>PackerSync<CR>"):desc("Sync"),
-    LeaderpKey("S", "<cmd>PackerStatus<CR>"):desc("Status"),
-    LeaderpKey("u", "<cmd>PackerUpdate<CR>"):desc("Update"),
-    LeaderpKey("r", require("core").reload):desc("Reload"),
+    LeaderpKey("c", "<cmd>PackerSync<CR>", "Sync"),
+    LeaderpKey("C", "<cmd>PackerClean<CR>", "Clean"),
+    LeaderpKey("i", "<cmd>PackerInstall<CR>", "Install"),
+    LeaderpKey("s", "<cmd>PackerSync<CR>", "Sync"),
+    LeaderpKey("S", "<cmd>PackerStatus<CR>", "Status"),
+    LeaderpKey("u", "<cmd>PackerUpdate<CR>", "Update"),
+    LeaderpKey("r", require("core").reload, "Reload"),
   })
 end
 

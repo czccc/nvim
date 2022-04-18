@@ -74,7 +74,7 @@ M.setup = function()
   end
   local Key = require("utils.key").Key
   require("utils.key").load({
-    Key("n", "<Leader>y", clip):desc("NeoClip"),
+    Key("n", "<Leader>y", clip, "NeoClip"),
   })
 end
 

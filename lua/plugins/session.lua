@@ -32,13 +32,13 @@ M.setup_session_manager = function()
   -- you can put this line in session manager's setup configuration, in your init.lua, or anywhere as long as it is called
   local Key = require("utils.key").Key
   require("utils.key").load({
-    Key("n", "<Leader>sp", "<cmd>SessionManager load_session<cr>"):desc("Projects"),
+    Key("n", "<Leader>sp", "<cmd>SessionManager load_session<cr>", "Projects"),
     Key("n", "<Leader>us"):group("Sessions"),
-    Key("n", "<Leader>uss", "<cmd>SessionManager save_current_session<cr>"):desc("Save"),
-    Key("n", "<Leader>usr", "<cmd>SessionManager load_current_dir_session<cr>"):desc("Restore CurDir"),
-    Key("n", "<Leader>usR", "<cmd>SessionManager load_last_session<cr>"):desc("Restore Last"),
-    Key("n", "<Leader>usd", "<cmd>SessionManager delete_session<cr>"):desc("Delete"),
-    Key("n", "<Leader>usl", "<cmd>SessionManager load_session<cr>"):desc("List"),
+    Key("n", "<Leader>uss", "<cmd>SessionManager save_current_session<cr>", "Save"),
+    Key("n", "<Leader>usr", "<cmd>SessionManager load_current_dir_session<cr>", "Restore CurDir"),
+    Key("n", "<Leader>usR", "<cmd>SessionManager load_last_session<cr>", "Restore Last"),
+    Key("n", "<Leader>usd", "<cmd>SessionManager delete_session<cr>", "Delete"),
+    Key("n", "<Leader>usl", "<cmd>SessionManager load_session<cr>", "List"),
   })
   -- TODO: autocmds
   require("core.autocmds").define_augroups({

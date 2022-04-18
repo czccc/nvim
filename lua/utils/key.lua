@@ -136,7 +136,10 @@ M.Key = function(mode, lhs, rhs, opts)
   if rhs then
     key:rhs(rhs)
   end
-  if opts then
+  if opts and type(opts) == "string" then
+    key:desc(opts)
+  end
+  if opts and type(opts) == "table" then
     if opts.noremap then
       key:noremap()
     end

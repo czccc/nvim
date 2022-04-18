@@ -110,7 +110,7 @@ M.setup_undotree = function()
   vim.cmd([[ let g:undotree_WindowLayout = 3 ]])
   vim.cmd([[ let g:undotree_SetFocusWhenToggle = 1 ]])
   local Key = require("utils.key").Key
-  Key("n", "<Leader>uu", "<cmd>UndotreeToggle<cr>"):desc("Undo Tree"):set()
+  Key("n", "<Leader>uu", "<cmd>UndotreeToggle<cr>", "Undo Tree"):set()
 end
 
 M.setup_marks = function()

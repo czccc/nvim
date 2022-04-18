@@ -55,7 +55,7 @@ M.config = function()
     handler = nil,
   })
   local Key = require("utils.key").Key
-  Key("n", "<Leader>lR", renamer.rename):desc("Rename"):set()
+  Key("n", "<Leader>lR", renamer.rename, "Rename"):set()
 end
 
 return M
