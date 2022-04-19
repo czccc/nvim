@@ -101,7 +101,10 @@ M.opts = {
   },
   -- indent = {enable = true, disable = {"python", "html", "javascript"}},
   -- TODO seems to be broken
-  indent = { enable = true, disable = { "yaml", "python" } },
+  indent = {
+    enable = true,
+    disable = { "yaml" },
+  },
   autotag = { enable = false },
   textobjects = {
     select = {
