@@ -2,7 +2,6 @@ local M = {}
 local path = require("utils.path")
 local Log = require("core.log")
 local Key = require("utils.key").Key
-local LeaderKey = require("utils.key").LeaderKey
 
 M.keys = {
   -- insert mode
@@ -64,25 +63,25 @@ M.keys = {
   Key("n", "<C-f>"):desc("Scroll Down Page"),
   Key("n", "<C-\\>"):desc("Terminal"),
 
-  LeaderKey("n", "=", "<C-w>=", "Resize Windows"),
-  LeaderKey("n", "w", ":w!<CR>", "Save"),
-  LeaderKey("n", "q", ":q!<CR>", "Force Quit"),
-  LeaderKey("n", "Q", ":wqa<CR>", "Quit"),
-  LeaderKey("n", "h", ":nohlsearch<CR>", "No Highlight"),
-  LeaderKey("n", "v"):group("View"),
-  LeaderKey("n", "t"):group("Terminal"),
-  LeaderKey("n", "v"):group("Module"),
-  LeaderKey("n", "u"):group("Utils"),
-  LeaderKey("n", "ui", function()
+  Key("n", "<Leader>=", "<C-w>=", "Resize Windows"),
+  Key("n", "<Leader>w", ":w!<CR>", "Save"),
+  Key("n", "<Leader>q", ":q!<CR>", "Force Quit"),
+  Key("n", "<Leader>Q", ":wqa<CR>", "Quit"),
+  Key("n", "<Leader>h", ":nohlsearch<CR>", "No Highlight"),
+  Key("n", "<Leader>v"):group("View"),
+  Key("n", "<Leader>t"):group("Terminal"),
+  Key("n", "<Leader>m"):group("Module"),
+  Key("n", "<Leader>u"):group("Utils"),
+  Key("n", "<Leader>ui", function()
     require("core.info").toggle_popup(vim.bo.filetype)
   end, "Infos"),
-  LeaderKey("n", "up", function()
+  Key("n", "<Leader>up", function()
     require("utils.startup").setup({ print = true })
   end, "Startup Time"),
-  LeaderKey("n", "vh", ":checkhealth<CR>", "Check Health"),
-  LeaderKey("n", "vH", ":checktime<CR>", "Check Time"),
-  LeaderKey("n", "vm", ":messages<CR>", "Messages"),
-  LeaderKey("n", "vn", ":Notifications<CR>", "Notifications"),
+  Key("n", "<Leader>vh", ":checkhealth<CR>", "Check Health"),
+  Key("n", "<Leader>vH", ":checktime<CR>", "Check Time"),
+  Key("n", "<Leader>vm", ":messages<CR>", "Messages"),
+  Key("n", "<Leader>vn", ":Notifications<CR>", "Notifications"),
 
   -- visual mode
   Key("v", "<", "<gv", "Indent Left"),

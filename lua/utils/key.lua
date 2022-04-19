@@ -1,3 +1,4 @@
+local M = {}
 local Key = {}
 function Key.new()
   local inner = {
@@ -58,6 +59,34 @@ function Key:rhs(rhs)
   self.inner.rhs = rhs
   return self
 end
+function Key:opts(opts)
+  if opts and type(opts) == "table" then
+    if opts.noremap then
+      self:noremap()
+    end
+    if opts.remap then
+      self:remap()
+    end
+    if opts.nosilent then
+      self:nosilent()
+    end
+    if opts.silent then
+      self:silent()
+    end
+    if opts.expr then
+      self:expr()
+    end
+    if opts.nowait then
+      self:nowait()
+    end
+    if opts.buffer then
+      self:buffer()
+    end
+    if opts.desc then
+      self:desc(opts.desc)
+    end
+  end
+end
 function Key:group(group)
   self.inner.group = group
   return self
@@ -98,6 +127,15 @@ end
 
 function Key:set()
   local key = self.inner
+  if M.keys[key.mode] and M.keys[key.mode][key.lhs] then
+    vim.notify(
+      "Key already exists!\n\tOld: " .. tostring(self) .. "\n\tNew: " .. tostring(M.keys[key.mode][key.lhs]),
+      "WARN"
+    )
+  elseif not key.opts.buffer and not key.group then
+    M.keys[key.mode] = M.keys[key.mode] or {}
+    M.keys[key.mode][key.lhs] = self
+  end
   if key.group then
     local status_ok, wk = pcall(require, "which-key")
     if not status_ok then
@@ -123,7 +161,7 @@ function Key:set()
   end
 end
 
-local M = {}
+M.keys = {}
 
 M.Key = function(mode, lhs, rhs, opts)
   local key = Key.new()
@@ -138,34 +176,21 @@ M.Key = function(mode, lhs, rhs, opts)
   end
   if opts and type(opts) == "string" then
     key:desc(opts)
-  end
-  if opts and type(opts) == "table" then
-    if opts.noremap then
-      key:noremap()
-    end
-    if opts.remap then
-      key:remap()
-    end
-    if opts.nosilent then
-      key:nosilent()
-    end
-    if opts.silent then
-      key:silent()
-    end
-    if opts.expr then
-      key:expr()
-    end
-    if opts.nowait then
-      key:nowait()
-    end
-    if opts.buffer then
-      key:buffer()
-    end
-    if opts.desc then
-      key:desc(opts.desc)
-    end
+  else
+    key:opts(opts)
   end
   return key
+end
+
+M.ScoopKey = function(mode, prefix, oopts)
+  mode = mode or "n"
+  prefix = prefix or ""
+  oopts = oopts or {}
+  local prefix_func = function(lhs, rhs, opts)
+    lhs = string.format("%s%s", prefix, lhs)
+    return M.Key(mode, lhs, rhs, opts):opts(oopts)
+  end
+  return prefix_func
 end
 
 M.PrefixKey = function(prefix)
@@ -183,11 +208,6 @@ M.PrefixModeKey = function(prefix, mode)
     return M.Key(mode, lhs, rhs, opts)
   end
   return prefix_func
-end
-
-M.LeaderKey = function(mode, lhs, rhs, opts)
-  lhs = string.format("<leader>%s", lhs)
-  return M.Key(mode, lhs, rhs, opts)
 end
 
 M.load = function(keymaps)

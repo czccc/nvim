@@ -171,7 +171,7 @@ function M.set_keys()
     LeaderfKey("f", builtin.find_files, "History"),
     LeaderfKey("g", M.git_files, "Git Files"),
     LeaderfKey("j", builtin.jumplist, "Jump List"),
-    LeadersKey("l", builtin.resume, "Resume"),
+    LeaderfKey("l", builtin.resume, "Resume"),
     LeaderfKey("m", builtin.marks, "Marks"),
     LeaderfKey("p", M.project_search, "Project Files"),
     LeaderfKey("r", M.workspace_frequency, "Frequency"),
