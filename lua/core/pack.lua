@@ -69,7 +69,7 @@ end
 -- packer expects a space separated list
 local function pcall_packer_command(cmd, kwargs)
   local status_ok, msg = pcall(function()
-    require("packer")[cmd](unpack(kwargs or {}))
+    require("packer")[cmd](table.unpack(kwargs or {}))
   end)
   if not status_ok then
     Log:warn(cmd .. " failed with: " .. vim.inspect(msg))

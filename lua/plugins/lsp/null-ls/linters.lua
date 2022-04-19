@@ -26,7 +26,7 @@ function M.setup(linter_configs)
   local registered = services.register_sources(linter_configs, method)
 
   if #registered > 0 then
-    Log:debug("Registered the following linters: " .. unpack(registered))
+    Log:debug("Registered the following linters: " .. table.unpack(registered))
   end
 end
 

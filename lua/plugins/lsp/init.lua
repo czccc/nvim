@@ -78,15 +78,11 @@ local function add_lsp_buffer_keybindings(bufnr)
     Key("n", "<leader>lW", "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostic"):buffer(bufnr),
 
     Key("n", "<Leader>lp"):group("Peek"),
-    Key("n", "<leader>lpd", function()
-      require("plugins.lsp.peek").Peek("definition")
-    end, "Peek Definition"):buffer(bufnr),
-    Key("n", "<leader>lpt", function()
-      require("plugins.lsp.peek").Peek("typeDefinition")
-    end, "Peek Type Definition"):buffer(bufnr),
-    Key("n", "<leader>lpi", function()
-      require("plugins.lsp.peek").Peek("implementation")
-    end, "Peek Implementations"):buffer(bufnr),
+    Key("n", "<leader>lpd", wrap(require("plugins.lsp.peek").Peek, "definition"), "Definition"):buffer(bufnr),
+    Key("n", "<leader>lpr", wrap(require("plugins.lsp.peek").Peek, "references"), "References"):buffer(bufnr),
+    Key("n", "<leader>lpi", wrap(require("plugins.lsp.peek").Peek, "implementation"), "Implementation"):buffer(bufnr),
+    Key("n", "<leader>lps", wrap(require("plugins.lsp.peek").Peek, "signature_help"), "Signature Help"):buffer(bufnr),
+    Key("n", "<leader>lpt", wrap(require("plugins.lsp.peek").Peek, "type_definition"), "Type Definition"):buffer(bufnr),
 
     Key("n", "<Leader>lu"):group("Utils"),
     Key("n", "<Leader>lui", "<cmd>LspInfo<cr>", "Lsp Info"):buffer(bufnr),

@@ -25,7 +25,7 @@ M.setup = function()
     server = {
       -- options to pass to nvim-lspconfig
       -- i.e. the arguments to require("lspconfig").clangd.setup({})
-      cmd = { "clangd", unpack(clangd_flags) },
+      cmd = { "clangd", table.unpack(clangd_flags) },
       on_attach = function(client, bufnr)
         require("plugins.lsp").common_on_attach(client, bufnr)
         local Key = require("utils.key").Key

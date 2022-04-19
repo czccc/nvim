@@ -21,9 +21,10 @@ stds.nvim = {
     "packer_plugins",
     "join_paths",
     "require_clean",
+    "wrap",
   },
 }
-std = "lua51+nvim"
+std = "lua54+nvim"
 
 files["tests/*_spec.lua"].std = "lua51+nvim+busted"
 
