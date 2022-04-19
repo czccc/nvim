@@ -22,6 +22,7 @@ function Key.new()
     __tostring = function(x)
       local t = x.inner
       local mode_str = type(t.mode) == "string" and t.mode or table.concat(t.mode, ",")
+      local rhs_str = type(t.rhs) == "string" and t.rhs or type(t.rhs) == "function" and "<function>" or "nil"
       local opts_str = {}
       for k, v in pairs(t.opts) do
         if type(v) == "boolean" then
@@ -35,13 +36,7 @@ function Key.new()
       if t.group then
         table.insert(opts_str, string.format('group="%s"', t.group))
       end
-      local s = string.format(
-        'Key("%s", "%s", "%s", { %s })',
-        mode_str,
-        t.lhs,
-        t.rhs or "nil",
-        table.concat(opts_str, ", ")
-      )
+      local s = string.format('Key("%s", "%s", "%s", { %s })', mode_str, t.lhs, rhs_str, table.concat(opts_str, ", "))
       return s
     end,
   })
@@ -127,7 +122,7 @@ end
 
 function Key:set()
   local key = self.inner
-  if M.keys[key.mode] and M.keys[key.mode][key.lhs] then
+  if M.keys[key.mode] and M.keys[key.mode][key.lhs] and tostring(self) ~= tostring(M.keys[key.mode][key.lhs]) then
     vim.notify(
       "Key already exists!\n\tOld: " .. tostring(self) .. "\n\tNew: " .. tostring(M.keys[key.mode][key.lhs]),
       "WARN"

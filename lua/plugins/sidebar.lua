@@ -16,7 +16,7 @@ M.packers = {
     end,
     -- event = "BufRead",
     cmd = { "SidebarNvimToggle", "SidebarNvimClose" },
-    disable = false,
+    disable = true,
   },
 }
 

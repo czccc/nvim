@@ -83,6 +83,7 @@ M.setup_onedark = function()
       TSField = { fg = "$red" },
       TSOperator = { fg = "$purple" },
       TSVariable = { fg = "$red" },
+      TSVariableBuiltin = { fg = "$yellow" },
       TSProperty = { fg = "$red" },
       TSFuncMacro = { fg = "$orange" },
       TSFuncBuiltin = { fg = "$orange" },

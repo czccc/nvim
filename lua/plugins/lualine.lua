@@ -245,7 +245,7 @@ local components = {
         if not conditions.large_window() then
           return "T: " .. vim.api.nvim_buf_get_option(0, "tabstop")
         end
-        return "Tab size: " .. vim.api.nvim_buf_get_option(0, "tabstop")
+        return "Tab: " .. vim.api.nvim_buf_get_option(0, "tabstop")
       end
       local size = vim.api.nvim_buf_get_option(0, "shiftwidth")
       if size == 0 then

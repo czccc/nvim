@@ -10,17 +10,23 @@ M.packers = {
     end,
     disable = false,
   },
+  -- {
+  --   "Pocco81/dap-buddy.nvim",
+  --   config = function()
+  --     require("plugins.dap").setup_dap_buddy()
+  --   end,
+  -- },
 
   -- Debugger management
-  {
-    "Pocco81/DAPInstall.nvim",
-    -- event = "BufWinEnter",
-    -- event = "BufRead",
-    config = function()
-      require("plugins.dap").setup_dap_install()
-    end,
-    disable = false,
-  },
+  -- {
+  --   "Pocco81/DAPInstall.nvim",
+  --   -- event = "BufWinEnter",
+  --   -- event = "BufRead",
+  --   config = function()
+  --     require("plugins.dap").setup_dap_install()
+  --   end,
+  --   disable = false,
+  -- },
   {
     "rcarriga/nvim-dap-ui",
     config = function()

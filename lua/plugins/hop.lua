@@ -63,7 +63,13 @@ M.setup = function()
     Key("n", "<Leader>jl", "<cmd>HopLine<cr>", "HopLine"),
     Key("n", "<Leader>jL", "<cmd>HopLineStart<cr>", "HopLineStart"),
   })
-  vim.cmd([[highlight HopNextKey gui=bold guifg=Orange]])
+  -- vim.cmd([[highlight HopNextKey gui=bold guifg=Orange]])
+  local cl = require("core.colors")
+  cl.define_links("HopNextKey", "WildMenu")
+  cl.define_links("HopNextKey1", "IncSearch")
+  cl.define_links("HopNextKey2", "IncSearch")
+  -- cl.define_styles("HopNextKey", { gui = "bold", guibg = "Orange", guifg = "Black" })
+  -- cl.define_styles("HopNextKey1", { gui = "bold", guibg = "Blue", guifg = "Black" })
 end
 
 return M

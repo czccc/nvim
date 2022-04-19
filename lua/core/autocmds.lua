@@ -18,6 +18,7 @@ M.autocommands = {
   },
   file_setting = {
     { "FileType", "markdown,gitcommit", "setlocal spell wrap" },
+    { "FileType", "go", "setlocal noexpandtab copyindent preserveindent shiftwidth=2 tabstop=2 softtabstop=0 wrap" },
   },
   buffer_quit = {
     { "FileType", "alpha,floaterm", "nnoremap <silent> <buffer> q :q<CR>" },
