@@ -36,6 +36,9 @@ M.packers = {
     "hrsh7th/cmp-cmdline",
   },
   {
+    "f3fora/cmp-spell",
+  },
+  {
     "danymat/neogen",
     config = function()
       require("neogen").setup({ snippet_engine = "luasnip" })
@@ -249,25 +252,34 @@ M.setup_cmp = function()
       end),
     }),
   }
-  require("cmp").setup(M.config)
-  require("cmp").setup.cmdline(":", {
+  cmp.setup(M.config)
+  cmp.setup.cmdline(":", {
     mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = "path" },
       { name = "cmdline" },
+      { name = "nvim_lua" },
     },
   })
-  require("cmp").setup.cmdline("/", {
+  cmp.setup.cmdline("/", {
     mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = "buffer" },
     },
   })
-  require("cmp").setup.cmdline("?", {
+  cmp.setup.cmdline("?", {
     mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = "buffer" },
     },
+  })
+  cmp.setup.filetype("markdown", {
+    sources = cmp.config.sources({
+      { name = "copilot", group_index = 2 },
+      { name = "nvim_lsp" },
+      { name = "buffer", max_item_count = 5 },
+      { name = "spell" },
+    }),
   })
 end
 

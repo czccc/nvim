@@ -18,6 +18,8 @@ function M:setup()
     return
   end
   M.config.setup.sources = {
+    null_ls.builtins.completion.spell,
+
     null_ls.builtins.formatting.prettierd,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.black,
@@ -28,6 +30,9 @@ function M:setup()
     null_ls.builtins.diagnostics.vint,
     null_ls.builtins.diagnostics.markdownlint.with({
       extra_args = { "--config", path.join(path.config_dir, "markdownlint.json") },
+      filetypes = { "markdown" },
+    }),
+    null_ls.builtins.diagnostics.codespell:with({
       filetypes = { "markdown" },
     }),
 

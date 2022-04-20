@@ -17,6 +17,7 @@ My fine-tuned neovim config. Written with pure lua.
     * [Arch](#arch)
   * [Screenshots](#screenshots)
   * [Key mapping](#key-mapping)
+    * [General](#general)
   * [Plugins](#plugins)
 
 <!-- vim-markdown-toc -->
@@ -30,5 +31,17 @@ My fine-tuned neovim config. Written with pure lua.
 ## Screenshots
 
 ## Key mapping
+
+### General
+
+| Key       | Mode | Action                  | Plugin or Mapping  |
+| --------- | :--: | ----------------------- | ------------------ |
+| `f`       |  n   | find next character     | Line Forward Find  |
+| `F`       |  n   | find previous character | Line Backward Find |
+| `s`       |  n   | find character          | aaa                |
+| `S`       |  n   | find word               | aaa                |
+| `Alt`+`a` |  i   | select all              | ss                 |
+| `Alt`+`a` |  n   | increment number        | ss                 |
+| `Alt`+`x` |  n   | decrement number        | ss                 |
 
 ## Plugins
