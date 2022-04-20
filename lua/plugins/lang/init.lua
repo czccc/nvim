@@ -20,6 +20,9 @@ M.packers = {
     "iamcco/markdown-preview.nvim",
     run = "cd app && npm install",
     ft = "markdown",
+    config = function()
+      require("plugins.lang").setup_markdown_preview()
+    end,
   },
   -- {
   --   "preservim/vim-markdown",
@@ -36,6 +39,16 @@ M.packers = {
     end,
   },
 }
+M.setup_markdown_preview = function()
+  local utils = require("utils")
+  utils.Group("UserMarkdownPreview")
+    :cmd("FileType")
+    :pattern("markdown")
+    :callback(function()
+      utils.Key("n", "<Leader>mp", "<cmd>MarkdownPreview<cr>", "Preview"):buffer():set()
+    end)
+    :set()
+end
 
 M.setup_vim_markdown = function()
   vim.g.vim_markdown_folding_disabled = 1
