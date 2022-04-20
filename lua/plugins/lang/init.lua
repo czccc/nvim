@@ -42,14 +42,17 @@ M.setup_vim_markdown = function()
   vim.g.vim_markdown_no_default_key_mappings = 1
   vim.g.vim_markdown_toc_autofit = 1
   vim.g.vim_markdown_frontmatter = 1
-  require("core.autocmds").define_augroups({
-    add_vim_markdown_mapping = {
-      { "FileType", "markdown", "nnoremap <silent> <buffer> <Leader>mh :HeaderDecrease<CR>" },
-      { "FileType", "markdown", "nnoremap <silent> <buffer> <Leader>ml :HeaderIncrease<CR>" },
-      { "FileType", "markdown", "nnoremap <silent> <buffer> <Leader>mf :TableFormat<CR>" },
-      { "FileType", "markdown", "nnoremap <silent> <buffer> <Leader>mt :Toc<CR>" },
-    },
-  })
+  local utils = require("utils")
+  utils.Group("UserVimMarkdown")
+    :cmd("FileType")
+    :pattern("markdown")
+    :callback(function()
+      utils.Key("n", "<Leader>mh", "<cmd>HeaderDecrease<cr>", "Header Decrease"):buffer():set()
+      utils.Key("n", "<Leader>ml", "<cmd>HeaderIncrease<cr>", "Header Increase"):buffer():set()
+      utils.Key("n", "<Leader>mf", "<cmd>TableFormat<cr>", "Table Format"):buffer():set()
+      utils.Key("n", "<Leader>mt", "<cmd>Toc<cr>", "Toc"):buffer():set()
+    end)
+    :set()
 end
 
 M.setup_vim_markdown_toc = function()
@@ -57,12 +60,15 @@ M.setup_vim_markdown_toc = function()
   -- vim.g.vmt_dont_insert_fence = 1
   -- vim.g.vmt_cycle_list_item_markers = 1
   vim.g.vmt_include_headings_before = 1
-  require("core.autocmds").define_augroups({
-    add_update_toc_mapping = {
-      { "FileType", "markdown", "nnoremap <silent> <buffer> <Leader>mg :GenTocGFM<CR>" },
-      { "FileType", "markdown", "nnoremap <silent> <buffer> <Leader>mu :UpdateToc<CR>" },
-    },
-  })
+  local utils = require("utils")
+  utils.Group("UserVimMarkdown")
+    :cmd("FileType")
+    :pattern("markdown")
+    :callback(function()
+      utils.Key("n", "<Leader>mg", "<cmd>GenTocGFM<cr>", "Gen Toc GFM"):buffer():set()
+      utils.Key("n", "<Leader>mu", "<cmd>UpdateToc<cr>", "Update Toc"):buffer():set()
+    end)
+    :set()
 end
 
 M.add_md_toc_mapping = function()

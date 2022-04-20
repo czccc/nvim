@@ -86,11 +86,12 @@ M.setup = function()
     }
     M.add_exec(opts)
   end
-  require("core.autocmds").define_augroups({
-    term_open = {
-      { "TermOpen", "term://*", "lua require('plugins.toggleterm').set_terminal_keymaps()" },
-    },
-  })
+  local utils = require("utils")
+  utils.Group("UserToggleTermKeymap")
+    :cmd("TermOpen")
+    :pattern("term://*")
+    :callback(require("plugins.toggleterm").set_terminal_keymaps)
+    :set()
 end
 
 M.set_terminal_keymaps = function()
@@ -137,27 +138,5 @@ M._exec_toggle = function(opts)
   })
   term:toggle()
 end
-
--- ---Toggles a log viewer according to log.viewer.layout_config
--- ---@param logfile string the fullpath to the logfile
--- M.toggle_log_view = function(logfile)
--- 	local log_viewer = lvim.log.viewer.cmd
--- 	if vim.fn.executable(log_viewer) ~= 1 then
--- 		log_viewer = "less +F"
--- 	end
--- 	log_viewer = log_viewer .. " " .. logfile
--- 	local term_opts = vim.tbl_deep_extend("force", M.config.setup, {
--- 		cmd = log_viewer,
--- 		open_mapping = lvim.log.viewer.layout_config.open_mapping,
--- 		direction = lvim.log.viewer.layout_config.direction,
--- 		-- TODO: this might not be working as expected
--- 		size = lvim.log.viewer.layout_config.size,
--- 		float_opts = lvim.log.viewer.layout_config.float_opts,
--- 	})
-
--- 	local Terminal = require("toggleterm.terminal").Terminal
--- 	local log_view = Terminal:new(term_opts)
--- 	log_view:toggle()
--- end
 
 return M

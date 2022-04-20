@@ -244,6 +244,15 @@ M.setup = function()
 
   require("neo-tree").setup(M.config)
 
+  local utils = require("utils")
+  utils.Group("UserNeoTreeTabKey")
+    :cmd("FileType")
+    :pattern("neo-tree")
+    :callback(function()
+      utils.Key("n", "<Tab>", "<C-w>l"):buffer():set()
+    end)
+    :set()
+
   local Key = require("utils.key").Key
   require("utils.key").load({
     Key("n", "<Leader>e", "<cmd>Neotree filesystem reveal<cr>", "Explorer"),
@@ -266,12 +275,6 @@ M.setup = function()
   -- require("core.colors").define_styles("NeoTreeGitAdded", { guifg = "#109868" })
   -- require("core.colors").define_styles("NeoTreeDirectoryName", { guifg = "#51afef" })
   -- require("core.colors").define_styles("NeoTreeCursorLine", { guibg = "#323842" })
-
-  require("core.autocmds").define_augroups({
-    neotree_tab_key = {
-      { "FileType", "neo-tree", "nnoremap <silent> <buffer> <Tab> <C-w>l" },
-    },
-  })
 end
 
 return M

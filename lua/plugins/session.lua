@@ -40,16 +40,12 @@ M.setup_session_manager = function()
     Key("n", "<Leader>usd", "<cmd>SessionManager delete_session<cr>", "Delete"),
     Key("n", "<Leader>usl", "<cmd>SessionManager load_session<cr>", "List"),
   })
-  -- TODO: autocmds
-  require("core.autocmds").define_augroups({
-    user_session_manager = {
-      {
-        "User",
-        "SessionLoadPost",
-        "lua require('plugins.session').restore_explorer()",
-      },
-    },
-  })
+  local utils = require("utils")
+  utils.Group("UserSessionRestoreExplorer")
+    :cmd("User")
+    :pattern("SessionLoadPost")
+    :callback(require("plugins.session").restore_explorer)
+    :set()
 end
 
 function M.close_explorer()

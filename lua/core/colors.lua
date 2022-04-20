@@ -1,4 +1,5 @@
 local M = {}
+local Group = require("utils.autocmd").Group
 
 M.colorscheme = "default"
 
@@ -71,15 +72,7 @@ M.setup_highlights = function()
 end
 
 M.setup = function()
-  require("core.autocmds").define_augroups({
-    add_user_highlight = {
-      {
-        "ColorScheme",
-        "*",
-        "lua require('core.colors').setup_highlights()",
-      },
-    },
-  })
+  Group("UserAddHighlight"):cmd("ColorScheme"):pattern("*"):callback(M.setup_highlights):set()
   M.setup_colorscheme()
   M.setup_highlights()
 end

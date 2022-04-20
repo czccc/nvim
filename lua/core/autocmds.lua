@@ -1,167 +1,50 @@
 local M = {}
-local Log = require("core.log")
+-- local Log = require("core.log")
+local Cmd = require("utils.autocmd").Cmd
+local Group = require("utils.autocmd").Group
 
 M.autocommands = {
-  general_settings = {
-    { "VimResized", "*", "tabdo wincmd =" },
-    { "WinEnter", "*", "checktime" },
-    {
-      "TextYankPost",
-      "*",
-      "lua require('vim.highlight').on_yank({higroup = 'Search', timeout = 200})",
-    },
-    {
-      "BufWinEnter,BufRead,BufNewFile",
-      "*",
-      "setlocal formatoptions-=c formatoptions-=r formatoptions-=o",
-    },
-  },
-  file_setting = {
-    { "FileType", "markdown,gitcommit", "setlocal spell wrap" },
-    { "FileType", "go", "setlocal noexpandtab copyindent preserveindent shiftwidth=2 tabstop=2 softtabstop=0 wrap" },
-  },
-  buffer_quit = {
-    { "FileType", "alpha,floaterm", "nnoremap <silent> <buffer> q :q<CR>" },
-    { "FileType", "qf,help,man", "nnoremap <silent> <buffer> q :close<CR>" },
-    { "FileType", "lspinfo,lsp-installer,null-ls-info", "nnoremap <silent> <buffer> q :close<CR>" },
-    { "FileType", "lspinfo", "nnoremap <silent> <buffer> <Esc> :close<CR>" },
-  },
-  buffer_setting = {
-    { "TermOpen", "*", "setlocal nonumber norelativenumber" },
-    { "FileType", "qf", "set nobuflisted" },
-    { "FileType", "Outline", "setlocal signcolumn=no nowrap" },
-    { "user", "TelescopePreviewerLoaded", "setlocal number relativenumber wrap list" },
-    {
-      "BufWinEnter",
-      "dashboard",
-      "setlocal cursorline signcolumn=yes cursorcolumn number",
-    },
-  },
-}
-
-M.format_on_save = {
-  pattern = "*",
-  timeout = 1000,
+  Group("UserGeneralSetting"):extend({
+    Cmd("VimResized"):pattern("*"):command("tabdo wincmd ="),
+    Cmd("WinEnter"):pattern("*"):command("checktime"),
+    Cmd("TextYankPost")
+      :pattern("*")
+      :callback(wrap(require("vim.highlight").on_yank, { higroup = "Search", timeout = 200 })),
+    Cmd({ "BufWinEnter", "BufRead", "BufNewFile" })
+      :pattern("*")
+      :command("setlocal formatoptions-=c formatoptions-=r formatoptions-=o"),
+  }),
+  Group("UserFileTypeSetting"):extend({
+    Cmd("FileType"):pattern({ "markdown", "gitcommit" }):command("setlocal spell wrap"),
+    Cmd("FileType")
+      :pattern({ "go" })
+      :command("setlocal noexpandtab copyindent preserveindent shiftwidth=2 tabstop=2 softtabstop=0 wrap"),
+  }),
+  Group("UserBufferQuit"):extend({
+    Cmd("FileType"):pattern({ "alpha", "floaterm" }):command("nnoremap <silent> <buffer> q :q<CR>"),
+    Cmd("FileType")
+      :pattern({ "qf", "help", "man", "lspinfo", "lsp-installer", "null-ls-info" })
+      :command("nnoremap <silent> <buffer> q :close<CR>"),
+  }),
+  Group("UserBufferSetting"):extend({
+    Cmd("TermOpen"):pattern("*"):command("setlocal nonumber norelativenumber"),
+    Cmd("FileType"):pattern("qf"):command("setlocal nobuflisted"),
+    Cmd("FileType"):pattern("Outline"):command("setlocal signcolumn=no nowrap"),
+    Cmd("user"):pattern("TelescopePreviewerLoaded"):command("setlocal number relativenumber wrap list"),
+    Cmd("BufWinEnter"):pattern("dashboard"):command("setlocal cursorline signcolumn=yes cursorcolumn number"),
+  }),
+  Group("UserFormatOnSave"):extend({
+    Cmd("BufWritePre"):pattern("*"):callback(wrap(vim.lsp.buf.formatting_sync, {}, 1000)),
+  }),
+  Group("UserAddHighlight"):extend({
+    Cmd("ColorScheme"):pattern("*"):callback(wrap(require("core.colors").setup_highlights)),
+  }),
 }
 
 M.setup = function()
-  M.define_augroups(M.autocommands)
-  M.configure_format_on_save()
-end
-
-function M.disable_augroup(name)
-  vim.schedule(function()
-    if vim.fn.exists("#" .. name) == 1 then
-      vim.cmd("augroup " .. name)
-      vim.cmd("autocmd!")
-      vim.cmd("augroup END")
-    end
-  end)
-end
-
-function M.define_augroups(definitions, buffer)
-  for group_name, definition in pairs(definitions) do
-    vim.cmd("augroup " .. group_name)
-    if buffer then
-      vim.cmd([[autocmd! * <buffer>]])
-    else
-      vim.cmd([[autocmd!]])
-    end
-
-    for _, def in pairs(definition) do
-      local command = table.concat(vim.tbl_flatten({ "autocmd", def }), " ")
-      vim.cmd(command)
-    end
-
-    vim.cmd("augroup END")
+  for _, group in ipairs(M.autocommands) do
+    group:set()
   end
-end
-
-local get_format_on_save_opts = function()
-  local defaults = {
-    pattern = "*",
-    timeout = 1000,
-  }
-  if type(M.format_on_save) ~= "table" then
-    return defaults
-  end
-  return {
-    pattern = M.format_on_save.pattern or defaults.pattern,
-    timeout = M.format_on_save.timeout or defaults.timeout,
-  }
-end
-
-function M.enable_format_on_save(opts)
-  local fmd_cmd = string.format(":silent lua vim.lsp.buf.formatting_sync({}, %s)", opts.timeout)
-  M.define_augroups({
-    format_on_save = { { "BufWritePre", opts.pattern, fmd_cmd } },
-  })
-  Log:debug("enabled format-on-save")
-end
-
-function M.disable_format_on_save()
-  M.disable_augroup("format_on_save")
-  Log:debug("disabled format-on-save")
-end
-
-function M.configure_format_on_save()
-  if M.format_on_save then
-    local opts = get_format_on_save_opts()
-    M.enable_format_on_save(opts)
-  else
-    M.disable_format_on_save()
-  end
-end
-
-function M.toggle_format_on_save()
-  if vim.fn.exists("#format_on_save#BufWritePre") == 0 then
-    local opts = get_format_on_save_opts()
-    M.enable_format_on_save(opts)
-  else
-    M.disable_format_on_save()
-  end
-end
-
-function M.enable_lsp_document_highlight(client_id)
-  M.define_augroups({
-    lsp_document_highlight = {
-      {
-        "CursorHold",
-        "<buffer>",
-        string.format("lua require('plugins.lsp.utils').conditional_document_highlight(%d)", client_id),
-      },
-      {
-        "CursorMoved",
-        "<buffer>",
-        "lua vim.lsp.buf.clear_references()",
-      },
-    },
-  }, true)
-end
-
-function M.disable_lsp_document_highlight()
-  M.disable_augroup("lsp_document_highlight")
-end
-
-function M.enable_code_lens_refresh()
-  M.define_augroups({
-    lsp_code_lens_refresh = {
-      {
-        "InsertLeave ",
-        "<buffer>",
-        "lua vim.lsp.codelens.refresh()",
-      },
-      {
-        "InsertLeave ",
-        "<buffer>",
-        "lua vim.lsp.codelens.display()",
-      },
-    },
-  }, true)
-end
-
-function M.disable_code_lens_refresh()
-  M.disable_augroup("lsp_code_lens_refresh")
 end
 
 return M

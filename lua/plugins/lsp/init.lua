@@ -1,6 +1,8 @@
 local M = {}
 local Log = require("core.log")
 local autocmds = require("core.autocmds")
+local Cmd = require("utils.autocmd").Cmd
+local Group = require("utils.autocmd").Group
 
 M.packers = {
   {
@@ -136,8 +138,8 @@ local function select_default_formater(client)
 end
 
 function M.common_on_exit(_, _)
-  autocmds.disable_lsp_document_highlight()
-  autocmds.disable_code_lens_refresh()
+  Group("UserLSPDocumentHighlight"):unset()
+  Group("UserLSPCodeLensRefresh"):unset()
 end
 
 function M.common_on_init(client, _)
@@ -145,9 +147,21 @@ function M.common_on_init(client, _)
 end
 
 function M.common_on_attach(client, bufnr)
-  autocmds.enable_lsp_document_highlight(client.id)
+  Group("UserLSPDocumentHighlight")
+    :extend({
+      Cmd("CursorHold")
+        :buffer(bufnr)
+        :callback(wrap(require("plugins.lsp.utils").conditional_document_highlight, client.id)),
+      Cmd("CursorMoved"):buffer(bufnr):callback(vim.lsp.buf.clear_references),
+    })
+    :set()
   if client.resolved_capabilities.code_lens then
-    autocmds.enable_code_lens_refresh()
+    Group("UserLSPCodeLensRefresh")
+      :extend({
+        Cmd("InsertLeave"):buffer(bufnr):callback(wrap(vim.lsp.codelens.refresh)),
+        Cmd("InsertLeave"):buffer(bufnr):callback(wrap(vim.lsp.codelens.display)),
+      })
+      :set()
   end
   add_lsp_buffer_keybindings(bufnr)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
@@ -180,8 +194,6 @@ function M.setup()
   vim.diagnostic.config(M.config.diagnostics)
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, M.config.float)
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, M.config.float)
-
-  require("core.autocmds").configure_format_on_save()
 end
 
 return M

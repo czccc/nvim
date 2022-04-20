@@ -140,17 +140,9 @@ function M.setup()
   }
 
   alpha.setup(config)
-  require("core.autocmds").define_augroups({
-    alpha = {
-      {
-        "FileType",
-        "alpha",
-        "setlocal nofoldenable",
-      },
-    },
-  })
-  local Key = require("utils.key").Key
-  Key("n", "<Leader>ua", "<cmd>Alpha<cr>", "Dashboard"):set()
+  local utils = require("utils")
+  utils.Group("UserAlphaSetting"):cmd("FileType"):pattern("alpha"):command("setlocal nofoldenable"):set()
+  utils.Key("n", "<Leader>ua", "<cmd>Alpha<cr>", "Dashboard"):set()
 end
 
 return M

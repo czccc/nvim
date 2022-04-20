@@ -81,6 +81,7 @@ function Key:opts(opts)
       self:desc(opts.desc)
     end
   end
+  return self
 end
 function Key:group(group)
   self.inner.group = group

@@ -230,9 +230,14 @@ function M.setup()
   -- require("telescope").load_extension "file_browser"
   -- require("telescope").load_extension "ui-select"
 
-  require("core.autocmds").define_augroups({
-    telescope_fold_fix = { { "BufRead", "*", "autocmd BufWinEnter * ++once normal! zx" } },
-  })
+  local utils = require("utils")
+  utils.Group("UserTelescopeFoldFix")
+    :cmd("BufRead")
+    :pattern("*")
+    :callback(function()
+      utils.Cmd("BufWinEnter"):pattern("*"):once():command("normal! zx"):set()
+    end)
+    :set()
   M.set_keys()
 end
 
