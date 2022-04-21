@@ -308,7 +308,8 @@ local components = {
   },
   clock = {
     function()
-      return " " .. os.date("%H:%M")
+      -- return " " .. os.date("%H:%M")
+      return require("utils.tomato").get_time()
     end,
     color = { fg = colors.purple },
     cond = conditions.large_window,

@@ -1,69 +1,52 @@
 local M = {}
 
-local default_config = {
-  work_time = 25,
-  rest_time = 5,
-}
-
-M.config = default_config
-
 M.status = {
   in_process = false,
-  work = true,
+  round = 1,
   time = 0,
   count = 0,
 }
 
-M.setup = function(opts)
-  opts = opts or {}
-  M.config = vim.tbl_deep_extend("force", opts, default_config)
+local cal_remain = function(time, count)
+  local remain = time * 60 - count
+  local r_min = math.floor(remain / 60)
+  local r_sec = remain % 60
+  return string.format("%02d:%02d", r_min, r_sec)
 end
 
-M.start_work = function()
-  M.status.in_process = true
-  M.status.work = true
-  M.status.time = M.config.work_time
-  M.status.count = 0
-end
-
-M.start_rest = function()
-  M.status.in_process = true
-  M.status.work = false
-  M.status.time = M.config.rest_time
-  M.status.count = 0
-end
-
-M.switch_status = function()
-  if M.status.work then
-    M.start_rest()
+M.get_time = function()
+  if M.status.in_process then
+    local spinners = { " ", " ", " ", " ", " ", " ", " ", " ", " " }
+    local icon = spinners[M.status.count % #spinners + 1]
+    return icon .. cal_remain(M.status.time, M.status.count)
   else
-    M.start_work()
+    return " " .. os.date("%H:%M")
   end
 end
 
-M.start = function()
-  if M.status.in_process then
-    vim.notify(
-      string.format("Already started! Continue %s for %d minutes!", M.status.work and "work" or "rest", M.status.time),
-      "Info"
-    )
+local function update_status(round)
+  if round < M.status.round or not M.status.in_process then
     return
   end
-  vim.notify("Starting Tomato Clock", "Info")
-  local timer = vim.loop.new_timer()
-  timer:start(
-    1000,
-    1000,
-    vim.schedule_wrap(function()
-      M.status.count = M.status.count + 1
-      if M.status.time * 60 <= M.status.count then
-        timer:close()
-        M.stop()
-        return
-      end
-      vim.notify("Starting Pomodoro", "Info")
-    end)
-  )
+  M.status.count = M.status.count + 1
+  if M.status.count >= M.status.time * 60 then
+    M.status.in_process = false
+    M.status.count = 0
+    vim.notify("Tomato Clock Finished!", "Info")
+  else
+    vim.defer_fn(wrap(update_status, round), 1000)
+  end
+end
+
+M.start = function(opts)
+  opts = opts or {}
+  opts.time = opts.time or 30
+  vim.notify(string.format("Starting Tomato Clock for %d minutes", opts.time), "Info")
+  M.status.in_process = true
+  M.status.time = opts.time
+  M.status.count = 0
+  M.status.round = M.status.round + 1
+  update_status(M.status.round)
 end
 
 return M
