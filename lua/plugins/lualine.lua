@@ -30,6 +30,9 @@ local conditions = {
   large_window = function()
     return winwidth(0) > 150
   end,
+  super_window = function()
+    return winwidth(0) > 200
+  end,
   check_git_workspace = function()
     -- local filepath = vim.fn.expand "%:p:h"
     local filepath = vim.fn.getcwd()
@@ -104,7 +107,7 @@ local components = {
     function()
       return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
     end,
-    cond = conditions.large_window,
+    cond = conditions.super_window,
     color = { gui = "bold" },
     padding = { left = 1, right = 1 },
   },
@@ -163,38 +166,40 @@ local components = {
   },
   lsp = {
     function(msg)
-      msg = msg or "LS Inactive"
+      msg = msg or "ﳠ"
       local buf_clients = vim.lsp.buf_get_clients()
       if next(buf_clients) == nil then
-        -- TODO: clean up this if statement
-        if type(msg) == "boolean" or #msg == 0 then
-          return "LS Inactive"
-        end
         return msg
       end
       local buf_ft = vim.bo.filetype
       local buf_client_names = {}
 
+      local b = vim.api.nvim_get_current_buf()
+      if next(vim.treesitter.highlighter.active[b]) then
+        table.insert(buf_client_names, "")
+      end
       -- add client
-      for _, client in pairs(buf_clients) do
-        if client.name ~= "null-ls" then
-          table.insert(buf_client_names, client.name)
-        end
+      if #buf_clients > 0 then
+        table.insert(buf_client_names, "ﲀ")
       end
 
       -- add formatter
       local formatters = require("plugins.lsp.null-ls.formatters")
       local supported_formatters = formatters.list_registered(buf_ft)
-      vim.list_extend(buf_client_names, supported_formatters)
+      if #supported_formatters > 0 then
+        table.insert(buf_client_names, "")
+      end
 
       -- add linter
       local linters = require("plugins.lsp.null-ls.linters")
       local supported_linters = linters.list_registered(buf_ft)
-      vim.list_extend(buf_client_names, supported_linters)
+      if #supported_linters > 0 then
+        table.insert(buf_client_names, "")
+      end
 
-      return "[" .. table.concat(buf_client_names, ", ") .. "]"
+      return table.concat(buf_client_names, " ")
     end,
-    color = { gui = "bold" },
+    color = { gui = "bold", fg = colors.orange },
     cond = conditions.large_window,
   },
   lsp_progress = {
