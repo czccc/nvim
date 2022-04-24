@@ -43,6 +43,7 @@ local plugin_files = {
   -- "plugins.bqf",
   "plugins.diffview",
   "plugins.hlslens",
+  "plugins.harpoon",
   "plugins.indent_blankline",
   "plugins.lsp_signature",
   "plugins.neoclip",

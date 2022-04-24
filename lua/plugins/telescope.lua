@@ -173,7 +173,7 @@ function M.set_keys()
     LeaderfKey("j", builtin.jumplist, "Jump List"),
     LeaderfKey("l", builtin.resume, "Resume"),
     LeaderfKey("m", builtin.marks, "Marks"),
-    LeaderfKey("p", M.project_search, "Project Files"),
+    LeaderfKey("P", M.project_search, "Project Files"),
     LeaderfKey("r", M.workspace_frequency, "Frequency"),
     LeaderfKey("s", M.git_status, "Git Status"),
     LeaderfKey("t", "<cmd>TodoTelescope<cr>", "Todo"),

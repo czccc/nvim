@@ -59,7 +59,7 @@ M.config = {
     ["<leader>tG"] = { "gitui", "<leader>tG", "Git UI", "float" },
     ["<leader>tp"] = { "python", "<leader>tp", "Python", "float" },
     ["<leader>tj"] = { "htop", "<leader>tj", "htop", "float" },
-    ["<leader>tn"] = { "ncdu", "<leader>tn", "ncdu", "float" },
+    ["<leader>tN"] = { "ncdu", "<leader>tN", "ncdu", "float" },
   },
 }
 
