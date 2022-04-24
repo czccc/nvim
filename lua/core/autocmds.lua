@@ -19,6 +19,7 @@ M.autocommands = {
     Cmd("FileType")
       :pattern({ "go" })
       :command("setlocal noexpandtab copyindent preserveindent shiftwidth=2 tabstop=2 softtabstop=0 wrap"),
+    Cmd("FileType"):pattern({ "go" }):command([[setlocal listchars=tab:\ \ ,nbsp:+,trail:·,extends:→,precedes:←]]),
   }),
   Group("UserBufferQuit"):extend({
     Cmd("FileType"):pattern({ "alpha", "floaterm" }):command("nnoremap <silent> <buffer> q :q<CR>"),
