@@ -17,6 +17,17 @@ M.packers = {
     ft = { "c", "cpp", "objc", "objcpp" },
   },
   {
+    "ray-x/go.nvim",
+    requires = {
+      "ray-x/guihua.lua",
+      "theHamsta/nvim-dap-virtual-text",
+    },
+    config = function()
+      require("plugins.lang.go").setup()
+    end,
+    ft = { "go" },
+  },
+  {
     "iamcco/markdown-preview.nvim",
     run = "cd app && npm install",
     ft = "markdown",

@@ -30,12 +30,12 @@ M.setup = function()
         require("plugins.lsp").common_on_attach(client, bufnr)
         local Key = require("utils.key").Key
         require("utils.key").load({
-          Key("n", "<Leader>ms", "<cmd>ClangdSwitchSourceHeader<cr>"):buffer(bufnr, "Switch Source Header"),
-          Key("n", "<Leader>mi", "<cmd>ClangdSymbolInfo<cr>"):buffer(bufnr, "Symbol Info"),
-          Key("n", "<Leader>mt", "<cmd>ClangdTypeHierarchy<cr>"):buffer(bufnr, "Type Hierarchy"),
-          Key("n", "<Leader>mT", "<cmd>ClangdToggleInlayHints<cr>"):buffer(bufnr, "Toggle Inlay Hints"),
-          Key("n", "<Leader>mm", "<cmd>ClangdMemoryUsage<cr>"):buffer(bufnr, "Memory Usage"),
-          Key("n", "<Leader>ma", "<cmd>ClangdAST<cr>"):buffer(bufnr, "AST"),
+          Key("n", "<Leader>ms", "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source Header"):buffer(bufnr),
+          Key("n", "<Leader>mi", "<cmd>ClangdSymbolInfo<cr>", "Symbol Info"):buffer(bufnr),
+          Key("n", "<Leader>mt", "<cmd>ClangdTypeHierarchy<cr>", "Type Hierarchy"):buffer(bufnr),
+          Key("n", "<Leader>mT", "<cmd>ClangdToggleInlayHints<cr>", "Toggle Inlay Hints"):buffer(bufnr),
+          Key("n", "<Leader>mm", "<cmd>ClangdMemoryUsage<cr>", "Memory Usage"):buffer(bufnr),
+          Key("n", "<Leader>ma", "<cmd>ClangdAST<cr>", "AST"):buffer(bufnr),
         })
       end,
       on_init = require("plugins.lsp").common_on_init,
