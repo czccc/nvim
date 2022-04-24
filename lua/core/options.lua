@@ -121,8 +121,9 @@ M.wopts = {
   foldexpr = "nvim_treesitter#foldexpr()",
   foldmethod = "expr",
   foldlevel = 4,
-  foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']],
-  foldnestmax = 3,
+  -- foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']],
+  -- fillchars = "fold:\\",
+  -- foldnestmax = 5,
   foldminlines = 1,
 }
 
@@ -141,6 +142,10 @@ function M.setup()
   for k, v in pairs(M.opts) do
     vim.opt[k] = v
   end
+  -- TODO: fix unknown fold issue when using tab as indent
+  vim.cmd(
+    [[set foldtext=substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend))]]
+  )
   for k, v in pairs(M.wopts) do
     vim.wo[k] = v
   end

@@ -25,7 +25,6 @@ function M:setup()
     null_ls.builtins.formatting.prettierd,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.black,
-    -- null_ls.builtins.formatting.isort.with { extra_args = { "--profile", "black" }, filetypes = { "python" } },
 
     null_ls.builtins.diagnostics.shellcheck,
     null_ls.builtins.diagnostics.luacheck,
@@ -34,12 +33,9 @@ function M:setup()
       extra_args = { "--config", path.join(path.config_dir, "markdownlint.json") },
       filetypes = { "markdown" },
     }),
-    null_ls.builtins.diagnostics.codespell:with({
-      filetypes = { "markdown" },
-    }),
 
     null_ls.builtins.code_actions.shellcheck,
-    null_ls.builtins.code_actions.gitsigns,
+    -- null_ls.builtins.code_actions.gitsigns,
   }
 
   local default_opts = require("plugins.lsp").get_common_opts()
