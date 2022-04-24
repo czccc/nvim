@@ -144,7 +144,7 @@ function M.setup()
   end
   -- TODO: fix unknown fold issue when using tab as indent
   vim.cmd(
-    [[set foldtext=substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend))]]
+    [[set foldtext=substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)).'\ ('.(v:foldend-v:foldstart+1).'\ lines)']]
   )
   for k, v in pairs(M.wopts) do
     vim.wo[k] = v
