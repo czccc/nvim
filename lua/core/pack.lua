@@ -47,7 +47,7 @@ function M.init_packer()
   local LeaderpKey = require("utils.key").PrefixModeKey("<Leader>p", "n")
   require("utils.key").load({
     LeaderpKey(""):group("Packer"),
-    LeaderpKey("c", "<cmd>PackerSync<CR>", "Sync"),
+    LeaderpKey("c", "<cmd>PackerCompile<CR>", "Compile"),
     LeaderpKey("C", "<cmd>PackerClean<CR>", "Clean"),
     LeaderpKey("i", "<cmd>PackerInstall<CR>", "Install"),
     LeaderpKey("s", "<cmd>PackerSync<CR>", "Sync"),

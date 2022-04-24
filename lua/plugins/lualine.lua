@@ -164,6 +164,44 @@ local components = {
     color = { fg = colors.green },
     cond = conditions.large_window,
   },
+  testing = {
+    function()
+      if vim.fn["ultest#is_test_file"]() == 1 then
+        local t = ""
+        local s = vim.fn["ultest#status"]()
+        if s.tests > 0 then
+          t = t .. "  " .. s.tests
+        end
+        if s.passed > 0 then
+          t = t .. "  " .. s.passed
+        end
+        if s.failed > 0 then
+          t = t .. "  " .. s.failed
+        end
+        if s.running > 0 then
+          t = t .. "  " .. s.running
+        end
+        return t
+      end
+      return ""
+    end,
+    color = { gui = "bold", fg = colors.green },
+    cond = conditions.large_window,
+  },
+  testing1 = {
+    "diff",
+    source = function()
+      local s = vim.fn["ultest#status"]()
+      return { added = s.tests, modified = s.passed, removed = s.failed }
+    end,
+    symbols = { added = " ", modified = " ", removed = " " },
+    diff_color = {
+      added = { fg = colors.green },
+      modified = { fg = colors.yellow },
+      removed = { fg = colors.red },
+    },
+    cond = vim.fn["ultest#is_test_file"],
+  },
   lsp = {
     function(msg)
       msg = msg or "ﳠ"
@@ -199,7 +237,7 @@ local components = {
 
       return table.concat(buf_client_names, " ")
     end,
-    color = { gui = "bold", fg = colors.orange },
+    color = { gui = "bold", fg = colors.green },
     cond = conditions.large_window,
   },
   lsp_progress = {
@@ -380,6 +418,8 @@ M.config = {
     },
     lualine_x = {
       components.diagnostics,
+      components.testing,
+      -- components.testing1,
       components.lsp,
       -- components.treesitter,
       components.filesize,

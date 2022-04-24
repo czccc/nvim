@@ -154,6 +154,12 @@ M.config = {
         highlight = "PanelHeading",
         padding = 1,
       },
+      {
+        filetype = "UltestSummary",
+        text = "Test Summary",
+        highlight = "PanelHeading",
+        padding = 1,
+      },
     },
     show_buffer_icons = true, -- disable filetype icons for buffers
     show_buffer_close_icons = true,

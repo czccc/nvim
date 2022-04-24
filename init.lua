@@ -1,5 +1,7 @@
 -- require("core").config()
 -- require("core").setup()
 
-require("core").load_core()
-require("core").load_plugins()
+if not vim.g.vscode then
+  require("core").load_core()
+  require("core").load_plugins()
+end
