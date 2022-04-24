@@ -9,7 +9,7 @@ M.packer = {
     require("plugins.wilder").setup()
   end,
   -- run = ":UpdateRemotePlugins",
-  disable = true,
+  -- disable = true,
 }
 
 M.setup = function()

@@ -32,9 +32,9 @@ M.packers = {
   {
     "hrsh7th/cmp-path",
   },
-  {
-    "hrsh7th/cmp-cmdline",
-  },
+  -- {
+  --   "hrsh7th/cmp-cmdline",
+  -- },
   {
     "f3fora/cmp-spell",
   },
@@ -253,26 +253,26 @@ M.setup_cmp = function()
     }),
   }
   cmp.setup(M.config)
-  cmp.setup.cmdline(":", {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = "path" },
-      { name = "cmdline" },
-      { name = "nvim_lua" },
-    },
-  })
-  cmp.setup.cmdline("/", {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = "buffer" },
-    },
-  })
-  cmp.setup.cmdline("?", {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = "buffer" },
-    },
-  })
+  -- cmp.setup.cmdline(":", {
+  --   mapping = cmp.mapping.preset.cmdline(),
+  --   sources = {
+  --     { name = "path" },
+  --     { name = "cmdline" },
+  --     { name = "nvim_lua" },
+  --   },
+  -- })
+  -- cmp.setup.cmdline("/", {
+  --   mapping = cmp.mapping.preset.cmdline(),
+  --   sources = {
+  --     { name = "buffer" },
+  --   },
+  -- })
+  -- cmp.setup.cmdline("?", {
+  --   mapping = cmp.mapping.preset.cmdline(),
+  --   sources = {
+  --     { name = "buffer" },
+  --   },
+  -- })
   cmp.setup.filetype("markdown", {
     sources = cmp.config.sources({
       { name = "copilot", group_index = 2 },
