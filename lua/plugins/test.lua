@@ -8,23 +8,27 @@ M.packer = {
     config = function()
       require("plugins.test").setup_test()
     end,
-    event = "BufRead",
   },
   run = ":UpdateRemotePlugins",
-  config = function()
+  setup = function()
     require("plugins.test").setup_ultest()
   end,
   event = "BufRead",
+  -- disable = true,
 }
 
 M.setup_test = function()
   vim.g["test#strategy"] = "asyncrun"
 end
 
+vim.g.ultest_use_pty = 1
+vim.g.ultest_output_on_line = 0
+vim.g.ultest_summary_width = 30
+
 M.setup_ultest = function()
-  vim.g.ultest_use_pty = 1
-  vim.g.ultest_output_on_line = 0
-  vim.g.ultest_summary_width = 20
+  -- vim.g.ultest_use_pty = 1
+  -- vim.g.ultest_output_on_line = 0
+  -- vim.g.ultest_summary_width = 30
   utils.Key("n", "]t", "<Plug>(ultest-next-fail)", "Next Failed Test"):set()
   utils.Key("n", "[t", "<Plug>(ultest-prev-fail)", "Previous Failed Test"):set()
   utils.Key("n", "<leader>tu", "<cmd>UltestSummary<cr>", "Ultest Summary"):set()

@@ -96,6 +96,77 @@ M.setup_cmp = function()
     vim.cmd([[ packadd luasnip ]])
     return
   end
+  local types = require("luasnip.util.types")
+  local util = require("luasnip.util.util")
+
+  luasnip.config.setup({
+    history = "false",
+    region_check_events = "CursorMoved",
+    delete_check_events = "TextChanged",
+    ext_opts = {
+      [types.choiceNode] = {
+        active = {
+          virt_text = { { "●", "GruvboxOrange" } },
+        },
+      },
+      [types.insertNode] = {
+        active = {
+          virt_text = { { "●", "GruvboxBlue" } },
+        },
+      },
+    },
+    parser_nested_assembler = function(_, snippet)
+      local select = function(snip, no_move)
+        snip.parent:enter_node(snip.indx)
+        -- upon deletion, extmarks of inner nodes should shift to end of
+        -- placeholder-text.
+        for _, node in ipairs(snip.nodes) do
+          node:set_mark_rgrav(true, true)
+        end
+
+        -- SELECT all text inside the snippet.
+        if not no_move then
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+          local pos_begin, pos_end = snip.mark:pos_begin_end()
+          util.normal_move_on(pos_begin)
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("v", true, false, true), "n", true)
+          util.normal_move_before(pos_end)
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("o<C-G>", true, false, true), "n", true)
+        end
+      end
+      function snippet:jump_into(dir, no_move)
+        if self.active then
+          -- inside snippet, but not selected.
+          if dir == 1 then
+            self:input_leave()
+            return self.next:jump_into(dir, no_move)
+          else
+            select(self, no_move)
+            return self
+          end
+        else
+          -- jumping in from outside snippet.
+          self:input_enter()
+          if dir == 1 then
+            select(self, no_move)
+            return self
+          else
+            return self.inner_last:jump_into(dir, no_move)
+          end
+        end
+      end
+      -- this is called only if the snippet is currently selected.
+      function snippet:jump_from(dir, no_move)
+        if dir == 1 then
+          return self.inner_first:jump_into(dir, no_move)
+        else
+          self:input_leave()
+          return self.prev:jump_into(dir, no_move)
+        end
+      end
+      return snippet
+    end,
+  })
 
   M.config = {
     confirm_opts = {
@@ -106,13 +177,16 @@ M.setup_cmp = function()
       ---@usage The minimum length of a word to complete on.
       keyword_length = 1,
     },
+    view = {
+      entries = { name = "custom", selection_order = "near_cursor" },
+    },
     experimental = {
       ghost_text = true,
       native_menu = false,
       custom_menu = true,
     },
     formatting = {
-      fields = { "kind", "abbr", "menu" },
+      fields = { "abbr", "kind", "menu" },
       kind_icons = {
         Class = " ",
         Color = " ",
@@ -159,7 +233,8 @@ M.setup_cmp = function()
       },
       duplicates_default = 0,
       format = function(entry, vim_item)
-        vim_item.kind = M.config.formatting.kind_icons[vim_item.kind]
+        vim_item.kind = string.format("%s %s", M.config.formatting.kind_icons[vim_item.kind], vim_item.kind)
+        -- vim_item.kind = M.config.formatting.kind_icons[vim_item.kind]
         vim_item.menu = M.config.formatting.source_names[entry.source.name]
         vim_item.dup = M.config.formatting.duplicates[entry.source.name] or M.config.formatting.duplicates_default
         return vim_item
@@ -202,7 +277,7 @@ M.setup_cmp = function()
         elseif copilot_keys ~= "" then -- prioritise copilot over snippets
           -- Copilot keys do not need to be wrapped in termcodes
           vim.api.nvim_feedkeys(copilot_keys, "i", true)
-        elseif luasnip.expand_or_jumpable() then
+        elseif luasnip.expand_or_locally_jumpable() then
           luasnip.expand_or_jump()
         elseif has_words_before() then
           cmp.complete()
@@ -235,21 +310,22 @@ M.setup_cmp = function()
           fallback()
         end
       end),
-      ["<CR>"] = cmp.mapping(function(fallback)
-        if cmp.visible() and cmp.confirm(M.config.confirm_opts) then
-          if luasnip.expand_or_jumpable() then
-            luasnip.expand_or_jump()
-          end
-          return
-        end
-        if luasnip.expand_or_jumpable() then
-          if not luasnip.jump(1) then
-            fallback()
-          end
-        else
-          fallback()
-        end
-      end),
+      ["<CR>"] = cmp.mapping.confirm({ select = true }),
+      -- ["<CR>"] = cmp.mapping(function(fallback)
+      --   if cmp.visible() and cmp.confirm(M.config.confirm_opts) then
+      --     if luasnip.expand_or_locally_jumpable() then
+      --       luasnip.expand_or_jump()
+      --     end
+      --     return
+      --   end
+      --   if luasnip.expand_or_locally_jumpable() then
+      --     if not luasnip.jump(1) then
+      --       fallback()
+      --     end
+      --   else
+      --     fallback()
+      --   end
+      -- end),
     }),
   }
   cmp.setup(M.config)
@@ -281,6 +357,18 @@ M.setup_cmp = function()
       { name = "spell" },
     }),
   })
+  local cl = require("core.colors")
+  cl.define_styles("CmpItemAbbrDeprecated", { gui = "strikethrough", guifg = "#808080" })
+  cl.define_styles("CmpItemAbbrMatch", { guifg = "#97ca72" })
+  cl.define_styles("CmpItemAbbrMatchFuzzy", { guifg = "#97ca72" })
+  cl.define_styles("CmpItemKindVariable", { guifg = "#9CDCFE" })
+  cl.define_styles("CmpItemKindInterface", { guifg = "#9CDCFE" })
+  cl.define_styles("CmpItemKindText", { guifg = "#9CDCFE" })
+  cl.define_styles("CmpItemKindFunction", { guifg = "#C586C0" })
+  cl.define_styles("CmpItemKindMethod", { guifg = "#C586C0" })
+  cl.define_styles("CmpItemKindKeyword", { guifg = "#D4D4D4" })
+  cl.define_styles("CmpItemKindProperty", { guifg = "#D4D4D4" })
+  cl.define_styles("CmpItemKindUnit", { guifg = "#D4D4D4" })
 end
 
 M.setup_copilot = function()
