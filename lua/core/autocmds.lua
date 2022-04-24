@@ -1,44 +1,48 @@
 local M = {}
 -- local Log = require("core.log")
-local Cmd = require("utils.autocmd").Cmd
-local Group = require("utils.autocmd").Group
+local AuCmd = require("utils").AuCmd
+local Group = require("utils").Group
 
 M.autocommands = {
   Group("UserGeneralSetting"):extend({
-    Cmd("VimResized"):pattern("*"):command("tabdo wincmd ="),
-    Cmd("WinEnter"):pattern("*"):command("checktime"),
-    Cmd("TextYankPost")
-      :pattern("*")
-      :callback(wrap(require("vim.highlight").on_yank, { higroup = "Search", timeout = 200 })),
-    Cmd({ "BufWinEnter", "BufRead", "BufNewFile" })
-      :pattern("*")
-      :command("setlocal formatoptions-=c formatoptions-=r formatoptions-=o"),
+    AuCmd("VimResized", "*", "tabdo wincmd ="),
+    AuCmd("WinEnter", "*", "checktime"),
+    AuCmd("TextYankPost", "*", wrap(require("vim.highlight").on_yank, { higroup = "Search", timeout = 200 })),
+    AuCmd(
+      { "BufWinEnter", "BufRead", "BufNewFile" },
+      "*",
+      "setlocal formatoptions-=c formatoptions-=r formatoptions-=o"
+    ),
   }),
   Group("UserFileTypeSetting"):extend({
-    Cmd("FileType"):pattern({ "markdown", "gitcommit" }):command("setlocal spell wrap"),
-    Cmd("FileType")
-      :pattern({ "go" })
-      :command("setlocal noexpandtab copyindent preserveindent shiftwidth=2 tabstop=2 softtabstop=0 wrap"),
-    Cmd("FileType"):pattern({ "go" }):command([[setlocal listchars=tab:\ \ ,nbsp:+,trail:·,extends:→,precedes:←]]),
+    AuCmd("FileType", { "markdown", "gitcommit" }, "setlocal spell wrap"),
+    AuCmd(
+      "FileType",
+      { "go" },
+      "setlocal noexpandtab copyindent preserveindent shiftwidth=2 tabstop=2 softtabstop=0 wrap"
+    ),
+    AuCmd("FileType", { "go" }, [[setlocal listchars=tab:\ \ ,nbsp:+,trail:·,extends:→,precedes:←]]),
   }),
   Group("UserBufferQuit"):extend({
-    Cmd("FileType"):pattern({ "alpha", "floaterm" }):command("nnoremap <silent> <buffer> q :q<CR>"),
-    Cmd("FileType")
-      :pattern({ "qf", "help", "man", "lspinfo", "lsp-installer", "null-ls-info" })
-      :command("nnoremap <silent> <buffer> q :close<CR>"),
+    AuCmd("FileType", { "alpha", "floaterm" }, "nnoremap <silent> <buffer> q :q<CR>"),
+    AuCmd(
+      "FileType",
+      { "qf", "help", "man", "lspinfo", "lsp-installer", "null-ls-info" },
+      "nnoremap <silent> <buffer> q :close<CR>"
+    ),
   }),
   Group("UserBufferSetting"):extend({
-    Cmd("TermOpen"):pattern("*"):command("setlocal nonumber norelativenumber"),
-    Cmd("FileType"):pattern("qf"):command("setlocal nobuflisted"),
-    Cmd("FileType"):pattern("Outline"):command("setlocal signcolumn=no nowrap"),
-    Cmd("user"):pattern("TelescopePreviewerLoaded"):command("setlocal number relativenumber wrap list"),
-    Cmd("BufWinEnter"):pattern("dashboard"):command("setlocal cursorline signcolumn=yes cursorcolumn number"),
+    AuCmd("TermOpen", "*", "setlocal nonumber norelativenumber"),
+    AuCmd("FileType", "qf", "setlocal nobuflisted"),
+    AuCmd("FileType", "Outline", "setlocal signcolumn=no nowrap"),
+    AuCmd("user", "TelescopePreviewerLoaded", "setlocal number relativenumber wrap list"),
+    AuCmd("BufWinEnter", "dashboard", "setlocal cursorline signcolumn=yes cursorcolumn number"),
   }),
   Group("UserFormatOnSave"):extend({
-    Cmd("BufWritePre"):pattern("*"):callback(wrap(vim.lsp.buf.formatting_sync, {}, 1000)),
+    AuCmd("BufWritePre", "*", wrap(vim.lsp.buf.formatting_sync, {}, 1000)),
   }),
   Group("UserAddHighlight"):extend({
-    Cmd("ColorScheme"):pattern("*"):callback(wrap(require("core.colors").setup_highlights)),
+    AuCmd("ColorScheme", "*", wrap(require("core.colors").setup_highlights)),
   }),
 }
 

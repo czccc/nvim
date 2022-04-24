@@ -1,12 +1,12 @@
 local M = {}
 local path = require("utils.path")
 local Log = require("core.log")
-local Key = require("utils.key").Key
+local Key = require("utils").Key
 
 M.keys = {
   -- insert mode
   Key("i", "<C-a>", "<Esc>ggVG", "Select All"),
-  Key("i", "<C-s>", "<Esc>:w<CR>", "Write"),
+  Key("i", "<C-s>", "<Esc><cmd>w<CR>", "Write"),
   -- Key("i", "<C-z>", "<C-G>u<C-o>u", "Undo"),
   Key("i", "<C-u>", "<C-G>u<C-u>", "Delete Before"),
   Key("i", "<C-w>", "<C-G>u<C-w>", "Delete Word"),

@@ -1,10 +1,8 @@
 local M = {}
-local Log = require("core.log")
 
 M.packer = {
   "xiyaowong/which-key.nvim",
   -- "folke/which-key.nvim",
-  -- commit = "28d2bd129575b5e9ebddd88506601290bb2bb221",
   -- event = "BufWinEnter",
   disable = false,
   config = function()
@@ -52,54 +50,14 @@ M.config = {
     hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- hide mapping boilerplate
     show_help = true, -- show help message on the command line when the popup is visible
   },
-  opts = {
-    mode = "n", -- NORMAL mode
-    prefix = "",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
-    noremap = true, -- use `noremap` when creating keymaps
-    nowait = true, -- use `nowait` when creating keymaps
-  },
-  nopts = {
-    mode = "n", -- NORMAL mode
-    prefix = "<leader>",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
-    noremap = true, -- use `noremap` when creating keymaps
-    nowait = true, -- use `nowait` when creating keymaps
-  },
-  vopts = {
-    mode = "v", -- VISUAL mode
-    prefix = "<leader>",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
-    noremap = true, -- use `noremap` when creating keymaps
-    nowait = true, -- use `nowait` when creating keymaps
-  },
-  -- NOTE: Prefer using : over <cmd> as the latter avoids going back in normal-mode.
-  -- see https://neovim.io/doc/user/map.html#:map-cmd
 }
 
-M.which_key = nil
-
-function M:load()
-  if not self.which_key then
-    local status_ok, which_key = pcall(require, "which-key")
-    if not status_ok then
-      print("which-key not found")
-      return nil
-    end
-    self.which_key = which_key
-  end
-  return self.which_key
-end
-
 function M.setup()
-  if not M:load() then
-    Log:error("which-key not found")
-    return
+  local status_ok, which_key = pcall(require, "which-key")
+  if not status_ok then
+    vim.notify("which-key not found", "WARN")
+    return nil
   end
-  local which_key = M.which_key
   local config = M.config
   which_key.setup(config.setup)
 end

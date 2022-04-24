@@ -186,10 +186,10 @@ function AuGroup:noclear()
   return self
 end
 
-function AuGroup:cmd(event, opts)
+function AuGroup:cmd(event, pattern, command, opts)
   local t = self.inner
   local group = vim.api.nvim_create_augroup(t.name, { clear = t.clear })
-  local cmd = M.Cmd(event, opts):group(group)
+  local cmd = M.AuCmd(event, pattern, command, opts):group(group)
   return cmd
 end
 
@@ -218,10 +218,20 @@ function AuGroup:unset()
   vim.api.nvim_del_augroup_by_name(t.name)
 end
 
-M.Cmd = function(event, opts)
+M.AuCmd = function(event, pattern, command, opts)
   local cmd = AuCmd.new()
   if event then
     cmd:event(event)
+  end
+  if pattern then
+    cmd:pattern(pattern)
+  end
+  if command then
+    if type(command) == "function" then
+      cmd:callback(command)
+    else
+      cmd:command(command)
+    end
   end
   if opts then
     cmd:opts(opts)

@@ -1,8 +1,7 @@
 local M = {}
 local Log = require("core.log")
-local autocmds = require("core.autocmds")
-local Cmd = require("utils.autocmd").Cmd
-local Group = require("utils.autocmd").Group
+local AuCmd = require("utils").AuCmd
+local Group = require("utils").Group
 
 M.packers = {
   {
@@ -147,19 +146,27 @@ function M.common_on_init(client, _)
 end
 
 function M.common_on_attach(client, bufnr)
+  local function conditional_document_highlight(id)
+    local client_ok, method_supported = pcall(function()
+      return vim.lsp.get_client_by_id(id).resolved_capabilities.document_highlight
+    end)
+    if not client_ok or not method_supported then
+      return
+    end
+    vim.lsp.buf.document_highlight()
+  end
+
   Group("UserLSPDocumentHighlight")
     :extend({
-      Cmd("CursorHold")
-        :buffer(bufnr)
-        :callback(wrap(require("plugins.lsp.utils").conditional_document_highlight, client.id)),
-      Cmd("CursorMoved"):buffer(bufnr):callback(vim.lsp.buf.clear_references),
+      AuCmd("CursorHold"):buffer(bufnr):callback(wrap(conditional_document_highlight, client.id)),
+      AuCmd("CursorMoved"):buffer(bufnr):callback(vim.lsp.buf.clear_references),
     })
     :set()
   if client.resolved_capabilities.code_lens then
     Group("UserLSPCodeLensRefresh")
       :extend({
-        Cmd("InsertLeave"):buffer(bufnr):callback(wrap(vim.lsp.codelens.refresh)),
-        Cmd("InsertLeave"):buffer(bufnr):callback(wrap(vim.lsp.codelens.display)),
+        AuCmd("InsertLeave"):buffer(bufnr):callback(wrap(vim.lsp.codelens.refresh)),
+        AuCmd("InsertLeave"):buffer(bufnr):callback(wrap(vim.lsp.codelens.display)),
       })
       :set()
   end

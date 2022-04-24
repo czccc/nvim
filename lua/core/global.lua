@@ -25,6 +25,4 @@ function _G.require_clean(module)
   return requested
 end
 
-M.conf = {}
-
 return M

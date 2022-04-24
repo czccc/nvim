@@ -155,7 +155,7 @@ M.setup = function()
     Key("n", "<Leader>Sw", spectre.open_visual, "Spectre Word"),
     Key("n", "<Leader>Sf", spectre.open_file_search, "Spectre File Search"),
     Key("n", "<Leader>So", spectre.open, "Spectre Open"),
-    Key("v", "<Leader>Sv", M.visual_selection, "Spectre Visual"),
+    Key("v", "<Leader>S", M.visual_selection, "Spectre Visual"),
   })
 end
 

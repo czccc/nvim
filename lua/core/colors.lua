@@ -1,5 +1,5 @@
 local M = {}
-local Group = require("utils.autocmd").Group
+local Group = require("utils").Group
 
 M.colorscheme = "default"
 
@@ -72,7 +72,7 @@ M.setup_highlights = function()
 end
 
 M.setup = function()
-  Group("UserAddHighlight"):cmd("ColorScheme"):pattern("*"):callback(M.setup_highlights):set()
+  Group("UserAddHighlight"):cmd("ColorScheme", "*", M.setup_highlights):set()
   M.setup_colorscheme()
   M.setup_highlights()
 end

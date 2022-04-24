@@ -211,6 +211,8 @@ function M.setup()
     ---@usage Mappings are fully customizable. Many familiar mapping patterns are setup as defaults.
     mappings = {
       i = {
+        ["<C-n>"] = actions.move_selection_next,
+        ["<C-p>"] = actions.move_selection_previous,
         ["<C-j>"] = actions.cycle_history_next,
         ["<C-k>"] = actions.cycle_history_prev,
       },
@@ -232,10 +234,8 @@ function M.setup()
 
   local utils = require("utils")
   utils.Group("UserTelescopeFoldFix")
-    :cmd("BufRead")
-    :pattern("*")
-    :callback(function()
-      utils.Cmd("BufWinEnter"):pattern("*"):once():command("normal! zx"):set()
+    :cmd("BufRead", "*", function()
+      utils.AuCmd("BufWinEnter", "*", "normal! zx"):once():set()
     end)
     :set()
   M.set_keys()
