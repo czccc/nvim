@@ -47,6 +47,7 @@ local plugin_files = {
   "plugins.indent_blankline",
   "plugins.lsp_signature",
   "plugins.neoclip",
+  "plugins.neorg",
   "plugins.sidebar",
   "plugins.spectre",
   "plugins.todo",

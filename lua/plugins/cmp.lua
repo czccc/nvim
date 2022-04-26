@@ -233,9 +233,9 @@ M.setup_cmp = function()
       },
       duplicates_default = 0,
       format = function(entry, vim_item)
-        vim_item.kind = string.format("%s %s", M.config.formatting.kind_icons[vim_item.kind], vim_item.kind)
+        vim_item.kind = string.format("    %s %s", M.config.formatting.kind_icons[vim_item.kind], vim_item.kind)
         -- vim_item.kind = M.config.formatting.kind_icons[vim_item.kind]
-        vim_item.menu = M.config.formatting.source_names[entry.source.name]
+        -- vim_item.menu = M.config.formatting.source_names[entry.source.name]
         vim_item.dup = M.config.formatting.duplicates[entry.source.name] or M.config.formatting.duplicates_default
         return vim_item
       end,
@@ -357,18 +357,6 @@ M.setup_cmp = function()
       { name = "spell" },
     }),
   })
-  local cl = require("core.colors")
-  cl.define_styles("CmpItemAbbrDeprecated", { gui = "strikethrough", guifg = "#808080" })
-  cl.define_styles("CmpItemAbbrMatch", { guifg = "#97ca72" })
-  cl.define_styles("CmpItemAbbrMatchFuzzy", { guifg = "#97ca72" })
-  cl.define_styles("CmpItemKindVariable", { guifg = "#9CDCFE" })
-  cl.define_styles("CmpItemKindInterface", { guifg = "#9CDCFE" })
-  cl.define_styles("CmpItemKindText", { guifg = "#9CDCFE" })
-  cl.define_styles("CmpItemKindFunction", { guifg = "#C586C0" })
-  cl.define_styles("CmpItemKindMethod", { guifg = "#C586C0" })
-  cl.define_styles("CmpItemKindKeyword", { guifg = "#D4D4D4" })
-  cl.define_styles("CmpItemKindProperty", { guifg = "#D4D4D4" })
-  cl.define_styles("CmpItemKindUnit", { guifg = "#D4D4D4" })
 end
 
 M.setup_copilot = function()

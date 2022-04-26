@@ -307,16 +307,6 @@ local function ivy_opts()
 end
 M.ivy_opts = ivy_opts
 
-function M.code_actions()
-  local opts = dropdown_opts()
-  require("telescope.builtin").lsp_code_actions(opts)
-end
-
-function M.codelens_actions()
-  local opts = dropdown_opts()
-  require("telescope.builtin").lsp_codelens_actions(opts)
-end
-
 function M.lsp_definitions()
   local opts = ivy_opts()
   require("telescope.builtin").lsp_definitions(opts)

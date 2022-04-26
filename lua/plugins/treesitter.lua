@@ -63,6 +63,8 @@ M.opts = {
     "java",
     "yaml",
     "query",
+    "markdown",
+    "norg",
   }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   ignore_install = {},
   matchup = {

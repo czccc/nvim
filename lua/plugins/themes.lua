@@ -62,8 +62,9 @@ M.setup_onedark = function()
     -- Main options --
     style = "cool", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
     transparent = false, -- Show/hide background
-    term_colors = true, -- Change terminal color as per the selected theme style
+    term_colors = false, -- Change terminal color as per the selected theme style
     ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
+    cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
     -- toggle theme style ---
     toggle_style_key = "<NOP>", -- Default keybinding to toggle
     -- toggle_style_list = { "dark", "darker", "cool", "deep", "warm", "warmer", "light" }, -- List of styles to toggle between
@@ -85,10 +86,10 @@ M.setup_onedark = function()
       bg0 = "#282c34",
     }, -- Override default colors
     highlights = {
-      StatusLine = { bg = "$bg1" },
+      -- StatusLine = { bg = "$bg1" },
       SignColumn = { bg = "none" },
       -- StatusLineNC = { bg = "#2d3343" },
-      Visual = { bg = "#404859" },
+      -- Visual = { bg = "#404859" },
       -- Visual = { bg = "$bg3" },
       TSField = { fg = "$red" },
       TSOperator = { fg = "$purple" },
@@ -99,6 +100,14 @@ M.setup_onedark = function()
       TSFuncBuiltin = { fg = "$orange" },
       TSConstant = { fg = "$orange" },
       packerStatusSuccess = { fg = "$green" },
+      CmpItemAbbrMatch = { fg = "$green" },
+      CmpItemAbbrMatchFuzzy = { fg = "$green" },
+      OperatorSandwichChange = { fg = "$bg0", bg = "$orange" },
+      OperatorSandwichDelete = { fg = "$bg0", bg = "$orange" },
+      OperatorSandwichAdd = { fg = "$bg0", bg = "$orange" },
+      HlSearchLens = { bg = "$bg3" },
+      NeoTreeGitModified = { fg = "$yellow" },
+      -- Search = { fg = "none", bg = "$bg3" },
     }, -- Override highlight groups
 
     -- Plugins Config --
@@ -110,15 +119,7 @@ M.setup_onedark = function()
   })
   -- require("onedark").load()
   local cl = require("core.colors")
-  vim.g.terminal_color_8 = cl.colors.cool.grey
-  cl.define_links("LspReferenceText", "Visual")
-  cl.define_links("LspReferenceRead", "Visual")
-  cl.define_links("LspReferenceWrite", "Visual")
-  cl.define_links("FocusedSymbol", "Visual")
-  cl.define_links("Search", "Visual")
-  cl.define_links("OperatorSandwichChange", "IncSearch")
-  cl.define_links("OperatorSandwichDelete", "IncSearch")
-  cl.define_links("OperatorSandwichAdd", "IncSearch")
+  -- cl.define_links("Search", "Visual")
   cl.setup_colorscheme()
 end
 

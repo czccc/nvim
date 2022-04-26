@@ -18,26 +18,6 @@ M.config = {
   popup_border_style = "rounded",
   enable_git_status = true,
   enable_diagnostics = true,
-  event_handlers = {
-    -- {
-    --   event = "neo_tree_buffer_enter",
-    --   handler = function()
-    --     pcall(vim.cmd, vim.api.nvim_replace_termcodes("normal <C-w>=", true, true, true))
-    --   end,
-    -- },
-    {
-      event = "neo_tree_buffer_enter",
-      handler = function()
-        vim.cmd("highlight! Cursor blend=100")
-      end,
-    },
-    {
-      event = "neo_tree_buffer_leave",
-      handler = function()
-        vim.cmd("highlight! Cursor guibg=#5f87af blend=0")
-      end,
-    },
-  },
   default_component_configs = {
     indent = {
       indent_size = 2,
@@ -99,7 +79,13 @@ M.config = {
       ["s"] = "open_vsplit",
       ["C"] = "close_node",
       ["R"] = "refresh",
-      ["a"] = "add",
+      ["a"] = {
+        "add",
+        -- some commands may take optional config options, see `:h neo-tree-mappings` for details
+        config = {
+          show_path = "none", -- "none", "relative", "absolute"
+        },
+      },
       ["A"] = "add_directory",
       ["d"] = "delete",
       ["r"] = "rename",
@@ -246,9 +232,7 @@ M.setup = function()
 
   local utils = require("utils")
   utils.Group("UserNeoTreeTabKey")
-    :cmd("FileType")
-    :pattern("neo-tree")
-    :callback(function()
+    :cmd("FileType", "neo-tree", function()
       utils.Key("n", "<Tab>", "<C-w>l"):buffer():set()
     end)
     :set()
@@ -262,19 +246,6 @@ M.setup = function()
     Key("n", "<Leader>vb", "<cmd>Neotree buffers left<cr>", "Opened Files"),
     Key("n", "<Leader>vB", "<cmd>Neotree buffers float<cr>", "Opened Files"),
   })
-
-  -- require("core.colors").define_links("NeoTreeDirectoryIcon", "NvimTreeFolderIcon")
-  -- require("core.colors").define_links("NeoTreeDirectoryName", "NvimTreeFolderName")
-  -- require("core.colors").define_links("NeoTreeSymbolicLinkTarget", "NvimTreeSymlink")
-  -- require("core.colors").define_links("NeoTreeRootName", "NvimTreeRootFolder")
-  -- require("core.colors").define_links("NeoTreeDirectoryName", "NvimTreeFolderName")
-  -- require("core.colors").define_links("NeoTreeFileNameOpened", "NvimTreeOpenedFile")
-
-  require("core.colors").define_styles("NeoTreeFileNameOpened", { gui = "italic" })
-  require("core.colors").define_styles("NeoTreeGitModified", { guifg = "Orange" })
-  -- require("core.colors").define_styles("NeoTreeGitAdded", { guifg = "#109868" })
-  -- require("core.colors").define_styles("NeoTreeDirectoryName", { guifg = "#51afef" })
-  -- require("core.colors").define_styles("NeoTreeCursorLine", { guibg = "#323842" })
 end
 
 return M
