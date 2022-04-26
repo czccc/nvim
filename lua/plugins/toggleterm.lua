@@ -86,26 +86,6 @@ M.setup = function()
     }
     M.add_exec(opts)
   end
-  local utils = require("utils")
-  utils.Group("UserToggleTermKeymap")
-    :cmd("TermOpen")
-    :pattern("term://*")
-    :callback(require("plugins.toggleterm").set_terminal_keymaps)
-    :set()
-end
-
-M.set_terminal_keymaps = function()
-  local opts = { noremap = true }
-  vim.api.nvim_buf_set_keymap(0, "t", "<C-q>", "<cmd>bdelete!<CR>", opts)
-  -- vim.api.nvim_buf_set_keymap(0, "n", "<esc>", [[<C-W>w]], opts)
-  vim.api.nvim_buf_set_keymap(0, "n", "<esc>", "<cmd>:q<cr>", opts)
-  vim.api.nvim_buf_set_keymap(0, "n", "q", "<cmd>:q<cr>", opts)
-  vim.api.nvim_buf_set_keymap(0, "t", "jk", [[<C-\><C-n>]], opts)
-  vim.api.nvim_buf_set_keymap(0, "n", "jk", [[<C-W>w]], opts)
-  vim.api.nvim_buf_set_keymap(0, "t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
-  vim.api.nvim_buf_set_keymap(0, "t", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
-  vim.api.nvim_buf_set_keymap(0, "t", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
-  vim.api.nvim_buf_set_keymap(0, "t", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
 end
 
 M.add_exec = function(opts)

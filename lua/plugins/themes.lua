@@ -91,6 +91,7 @@ M.setup_onedark = function()
       -- StatusLineNC = { bg = "#2d3343" },
       -- Visual = { bg = "#404859" },
       -- Visual = { bg = "$bg3" },
+      -- Search = { fg = "none", bg = "$bg3" },
       TSField = { fg = "$red" },
       TSOperator = { fg = "$purple" },
       TSVariable = { fg = "$red" },
@@ -107,7 +108,11 @@ M.setup_onedark = function()
       OperatorSandwichAdd = { fg = "$bg0", bg = "$orange" },
       HlSearchLens = { bg = "$bg3" },
       NeoTreeGitModified = { fg = "$yellow" },
-      -- Search = { fg = "none", bg = "$bg3" },
+      rainbowcol1 = { fg = "$purple" },
+      HopNextKey = { fg = "$bg0", bg = "$orange", fmt = "none" },
+      HopNextKey1 = { fg = "$bg0", bg = "$blue", fmt = "none" },
+      HopNextKey2 = { fg = "$yellow", fmt = "bold" },
+      HopUnmatched = { fg = "$grey" },
     }, -- Override highlight groups
 
     -- Plugins Config --

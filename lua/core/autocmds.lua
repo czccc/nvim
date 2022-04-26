@@ -33,6 +33,7 @@ M.autocommands = {
   }),
   Group("UserBufferSetting"):extend({
     AuCmd("TermOpen", "*", "setlocal nonumber norelativenumber"),
+    AuCmd("TermOpen", "term://*", "nnoremap <silent> <buffer> q :q<CR>"),
     AuCmd("FileType", "qf", "setlocal nobuflisted"),
     AuCmd("FileType", "Outline", "setlocal signcolumn=no nowrap"),
     AuCmd("user", "TelescopePreviewerLoaded", "setlocal number relativenumber wrap list"),

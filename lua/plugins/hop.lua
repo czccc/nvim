@@ -79,15 +79,6 @@ M.setup = function()
     Key({ "v", "x" }, "<Leader>c", "<cmd>HopChar1<cr>", "HopChar1"),
     Key({ "v", "x" }, "<Leader>C", "<cmd>HopChar2<cr>", "HopChar2"),
   })
-  -- vim.cmd([[highlight HopNextKey gui=bold guifg=Orange]])
-  local cl = require("core.colors")
-  cl.define_links("HopNextKey", "IncSearch")
-  cl.define_links("HopNextKey1", "WildMenu")
-  cl.define_links("HopNextKey2", "WarningMsg")
-  cl.define_links("HopUnmatched", "NonText")
-  cl.define_links("HopCursor", "Cursor")
-  -- cl.define_styles("HopNextKey", { gui = "bold", guibg = "Orange", guifg = "Black" })
-  -- cl.define_styles("HopNextKey1", { gui = "bold", guibg = "Blue", guifg = "Black" })
 end
 
 return M

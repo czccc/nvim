@@ -96,6 +96,8 @@ M.keys = {
   Key("t", "<C-j>", "<C-\\><C-N><C-w>j", "Navigate Down"),
   Key("t", "<C-k>", "<C-\\><C-N><C-w>k", "Navigate Up"),
   Key("t", "<C-l>", "<C-\\><C-N><C-w>l", "Navigate Right"),
+  Key("t", "jk", "<C-\\><C-N>", "Normal Model"),
+  Key("t", "<C-q>", "<cmd>bdelete!<CR>", "Force Quit Terminal"),
   -- command mode
   Key("c", "<C-j>", 'pumvisible() ? "\\<C-n>" : "\\<C-j>"', "Select Next"):expr(),
   Key("c", "<C-k>", 'pumvisible() ? "\\<C-p>" : "\\<C-k>"', "Select Previous"):expr(),

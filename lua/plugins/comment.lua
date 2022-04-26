@@ -20,17 +20,6 @@ M.config = {
   ---@type string|function
   ignore = "^$",
 
-  ---Whether to create basic (operator-pending) and extra mappings for NORMAL/VISUAL mode
-  ---@type table
-  mappings = {
-    ---operator-pending mapping
-    ---Includes `gcc`, `gcb`, `gc[count]{motion}` and `gb[count]{motion}`
-    basic = true,
-    ---extended mapping
-    ---Includes `g>`, `g<`, `g>[count]{motion}` and `g<[count]{motion}`
-    extra = false,
-  },
-
   ---LHS of line and block comment toggle mapping in NORMAL/VISUAL mode
   ---@type table
   toggler = {
@@ -48,13 +37,53 @@ M.config = {
     ---block-comment opfunc mapping
     block = "gb",
   },
+  ---LHS of extra mappings
+  ---@type table
+  extra = {
+    ---Add comment on the line above
+    above = "gcO",
+    ---Add comment on the line below
+    below = "gco",
+    ---Add comment at the end of line
+    eol = "gcA",
+  },
+
+  ---Create basic (operator-pending) and extended mappings for NORMAL + VISUAL mode
+  ---NOTE: If `mappings = false` then the plugin won't create any mappings
+  ---@type boolean|table
+  mappings = {
+    ---Operator-pending mapping
+    ---Includes `gcc`, `gbc`, `gc[count]{motion}` and `gb[count]{motion}`
+    ---NOTE: These mappings can be changed individually by `opleader` and `toggler` config
+    basic = true,
+    ---Extra mapping
+    ---Includes `gco`, `gcO`, `gcA`
+    extra = true,
+    ---Extended mapping
+    ---Includes `g>`, `g<`, `g>[count]{motion}` and `g<[count]{motion}`
+    extended = false,
+  },
 
   ---Pre-hook, called before commenting the line
   ---@type function|nil
-  pre_hook = function(_ctx)
-    if require("plugins.treesitter") then
-      return require("ts_context_commentstring.internal").calculate_commentstring()
+  pre_hook = function(ctx)
+    local U = require("Comment.utils")
+
+    -- Determine whether to use linewise or blockwise commentstring
+    local type = ctx.ctype == U.ctype.line and "__default" or "__multiline"
+
+    -- Determine the location where to calculate commentstring from
+    local location = nil
+    if ctx.ctype == U.ctype.block then
+      location = require("ts_context_commentstring.utils").get_cursor_location()
+    elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
+      location = require("ts_context_commentstring.utils").get_visual_start_location()
     end
+
+    return require("ts_context_commentstring.internal").calculate_commentstring({
+      key = type,
+      location = location,
+    })
   end,
 
   ---Post-hook, called after commenting is done
@@ -66,14 +95,19 @@ M.setup = function()
   local nvim_comment = require("Comment")
   nvim_comment.setup(M.config)
 
+  local api = require("Comment.api")
   local Key = require("utils.key").Key
   require("utils.key").load({
     Key("n", "gc"):group("Line Comment"),
     Key("n", "gcc"):desc("Line Comment"),
-    Key("v", "gc"):desc("Line Comment"),
+    Key("n", "gca"):desc("Line Comment (at EOL)"),
+    Key("n", "gco"):desc("Add Comment Line Below"),
+    Key("n", "gcO"):desc("Add Comment Line Above"),
+    Key("x", "gc"):desc("Line Comment"),
     Key("n", "gb"):group("Block Comment"),
     Key("n", "gbc"):desc("Block Comment"),
-    Key("v", "gb"):desc("Block Comment"),
+    Key("x", "gb"):desc("Block Comment"),
+    Key({ "n", "i" }, "<C-_>", api.toggle_current_linewise, "Line Comment"),
   })
 end
 
