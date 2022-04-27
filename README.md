@@ -26,6 +26,10 @@ My fine-tuned neovim config. Written with pure lua.
 
 ## Preliminary
 
+```bash
+sudo pacman -S neovim python-pynvim fd ripgrep sqlite
+```
+
 ### Arch
 
 ## Screenshots

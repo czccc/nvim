@@ -123,7 +123,12 @@ end
 
 function Key:set()
   local key = self.inner
-  if M.keys[key.mode] and M.keys[key.mode][key.lhs] and tostring(self) ~= tostring(M.keys[key.mode][key.lhs]) then
+  if
+    not key.opts.buffer
+    and M.keys[key.mode]
+    and M.keys[key.mode][key.lhs]
+    and tostring(self) ~= tostring(M.keys[key.mode][key.lhs])
+  then
     vim.notify(
       "Key already exists!\n\tOld: " .. tostring(self) .. "\n\tNew: " .. tostring(M.keys[key.mode][key.lhs]),
       "WARN"

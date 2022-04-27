@@ -171,46 +171,74 @@ M.config = {
     separator_style = "thin",
     enforce_regular_tabs = false,
     always_show_bufferline = true,
-    sort_by = "id",
+    sort_by = "insert_after_current",
+    -- custom_areas = {
+    --   right = function()
+    --     local result = {}
+    --     local seve = vim.diagnostic.severity
+    --     local error = #vim.diagnostic.get(0, { severity = seve.ERROR })
+    --     local warning = #vim.diagnostic.get(0, { severity = seve.WARN })
+    --     local info = #vim.diagnostic.get(0, { severity = seve.INFO })
+    --     local hint = #vim.diagnostic.get(0, { severity = seve.HINT })
+
+    --     if error ~= 0 then
+    --       table.insert(result, { text = "  " .. error, guifg = "#EC5241" })
+    --     end
+
+    --     if warning ~= 0 then
+    --       table.insert(result, { text = "  " .. warning, guifg = "#EFB839" })
+    --     end
+
+    --     if hint ~= 0 then
+    --       table.insert(result, { text = "  " .. hint, guifg = "#A3BA5E" })
+    --     end
+
+    --     if info ~= 0 then
+    --       table.insert(result, { text = "  " .. info, guifg = "#7EA9A7" })
+    --     end
+    --     return result
+    --   end,
+    -- },
   },
 }
 
 M.setup = function()
-  require("core.keymap").load(M.config.keymap)
-  ---@diagnostic disable-next-line: different-requires
   require("bufferline").setup({
     options = M.config.options,
     highlights = M.config.highlights,
   })
 
-  local LeaderKey = require("utils.key").PrefixModeKey("<Leader>", "n")
-  local LeaderbKey = require("utils.key").PrefixModeKey("<Leader>b", "n")
+  local Key = require("utils").Key
   require("utils.key").load({
-    LeaderKey("c", "<cmd>BufDel<cr>", "Close Buffer"),
+    Key("n", "<S-x>", "<cmd>BufDel<cr>", "BufDel"),
+    Key("n", "<Tab>", "<cmd>BufferLineCycleNext<cr>", "BufferLineCycleNext"),
+    Key("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<cr>", "BufferLineCyclePrev"),
+    Key("n", "<Leader>c", "<cmd>BufDel<cr>", "Close Buffer"),
 
-    LeaderbKey(""):group("Buffers"),
-    LeaderbKey("b", require("plugins.telescope").find_buffers, "Find Buffer"),
-    LeaderbKey("c", "<cmd>BufDel<cr>", "Close Current"),
-    LeaderbKey("f", "<cmd>b#<cr>", "Previous"),
-    LeaderbKey("h", "<cmd>BufferLineCloseLeft<cr>", "Close To Left"),
-    LeaderbKey("l", "<cmd>BufferLineCloseRight<cr>", "Close To Right"),
-    LeaderbKey("j", "<cmd>BufferLineMovePrev<cr>", "Move To Left"),
-    LeaderbKey("k", "<cmd>BufferLineMoveNext<cr>", "Move To Right"),
-    LeaderbKey("p", "<cmd>BufferLinePick<cr>", "Buffer Pick"),
-    LeaderbKey("d", "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory"),
-    LeaderbKey("L", "<cmd>BufferLineSortByExtension<cr>", "Sort By Extension"),
-    LeaderbKey("n", "<cmd>BufferLineSortByTabs<cr>", "Sort By Tab"),
+    Key("n", "<Leader>b"):group("Buffers"),
+    Key("n", "<Leader>bb", require("plugins.telescope").find_buffers, "Find Buffer"),
+    Key("n", "<Leader>bc", "<cmd>BufDel<cr>", "Close Current"),
+    Key("n", "<Leader>bf", "<cmd>b#<cr>", "Previous"),
+    Key("n", "<Leader>bh", "<cmd>BufferLineCloseLeft<cr>", "Close To Left"),
+    Key("n", "<Leader>bl", "<cmd>BufferLineCloseRight<cr>", "Close To Right"),
+    Key("n", "<Leader>bj", "<cmd>BufferLineMovePrev<cr>", "Move To Left"),
+    Key("n", "<Leader>bk", "<cmd>BufferLineMoveNext<cr>", "Move To Right"),
+    Key("n", "<Leader>bP", "<cmd>BufferLinePick<cr>", "Buffer Pick"),
+    Key("n", "<Leader>bp", "<cmd>BufferLineTogglePin<cr>", "Buffer Pin"),
+    Key("n", "<Leader>bd", "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory"),
+    Key("n", "<Leader>bL", "<cmd>BufferLineSortByExtension<cr>", "Sort By Extension"),
+    Key("n", "<Leader>bn", "<cmd>BufferLineSortByTabs<cr>", "Sort By Tab"),
 
-    LeaderbKey("g"):group("Buffer Goto"),
-    LeaderbKey("g1", "<cmd>BufferLineGoToBuffer 1<cr>", "Buffer Goto 1"),
-    LeaderbKey("g2", "<cmd>BufferLineGoToBuffer 2<cr>", "Buffer Goto 2"),
-    LeaderbKey("g3", "<cmd>BufferLineGoToBuffer 3<cr>", "Buffer Goto 3"),
-    LeaderbKey("g4", "<cmd>BufferLineGoToBuffer 4<cr>", "Buffer Goto 4"),
-    LeaderbKey("g5", "<cmd>BufferLineGoToBuffer 5<cr>", "Buffer Goto 5"),
-    LeaderbKey("g6", "<cmd>BufferLineGoToBuffer 6<cr>", "Buffer Goto 6"),
-    LeaderbKey("g7", "<cmd>BufferLineGoToBuffer 7<cr>", "Buffer Goto 7"),
-    LeaderbKey("g8", "<cmd>BufferLineGoToBuffer 8<cr>", "Buffer Goto 8"),
-    LeaderbKey("g9", "<cmd>BufferLineGoToBuffer 9<cr>", "Buffer Goto 9"),
+    Key("n", "<Leader>bg"):group("Buffer Goto"),
+    Key("n", "<Leader>bg1", "<cmd>BufferLineGoToBuffer 1<cr>", "Buffer Goto 1"),
+    Key("n", "<Leader>bg2", "<cmd>BufferLineGoToBuffer 2<cr>", "Buffer Goto 2"),
+    Key("n", "<Leader>bg3", "<cmd>BufferLineGoToBuffer 3<cr>", "Buffer Goto 3"),
+    Key("n", "<Leader>bg4", "<cmd>BufferLineGoToBuffer 4<cr>", "Buffer Goto 4"),
+    Key("n", "<Leader>bg5", "<cmd>BufferLineGoToBuffer 5<cr>", "Buffer Goto 5"),
+    Key("n", "<Leader>bg6", "<cmd>BufferLineGoToBuffer 6<cr>", "Buffer Goto 6"),
+    Key("n", "<Leader>bg7", "<cmd>BufferLineGoToBuffer 7<cr>", "Buffer Goto 7"),
+    Key("n", "<Leader>bg8", "<cmd>BufferLineGoToBuffer 8<cr>", "Buffer Goto 8"),
+    Key("n", "<Leader>bg9", "<cmd>BufferLineGoToBuffer 9<cr>", "Buffer Goto 9"),
   })
 end
 

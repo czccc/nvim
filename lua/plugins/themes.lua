@@ -90,7 +90,7 @@ M.setup_onedark = function()
       SignColumn = { bg = "none" },
       -- StatusLineNC = { bg = "#2d3343" },
       -- Visual = { bg = "#404859" },
-      -- Visual = { bg = "$bg3" },
+      Visual = { bg = "$bg3" },
       -- Search = { fg = "none", bg = "$bg3" },
       TSField = { fg = "$red" },
       TSOperator = { fg = "$purple" },

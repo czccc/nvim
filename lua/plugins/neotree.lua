@@ -233,7 +233,7 @@ M.setup = function()
   local utils = require("utils")
   utils.Group("UserNeoTreeTabKey")
     :cmd("FileType", "neo-tree", function()
-      utils.Key("n", "<Tab>", "<C-w>l"):buffer():set()
+      utils.Key("n", "<Tab>", "<C-w>l"):buffer(0):set()
     end)
     :set()
 
