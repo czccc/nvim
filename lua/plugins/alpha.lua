@@ -32,8 +32,6 @@ end
 local function make_infos()
   local plugins = #vim.tbl_keys(packer_plugins)
   local v = vim.version()
-  -- local datetime = os.date " %Y-%m-%d      %H:%M:%S"
-  -- local infos = string.format("%s       v%d.%d.%d      %d", datetime, v.major, v.minor, v.patch, plugins)
   local infos = {}
   table.insert(infos, os.date(" %Y-%m-%d"))
   table.insert(infos, os.date(" %H:%M:%S"))
@@ -71,6 +69,9 @@ local function make_sessions()
     },
   }
   for _, session in ipairs(session_list) do
+    if #buttons.val > 9 then
+      return buttons
+    end
     local desc = " "
     if session.dir.filename == vim.loop.cwd() then
       desc = desc .. "(s)"
@@ -90,7 +91,6 @@ local function make_sessions()
 end
 
 function M.setup()
-  ---@diagnostic disable-next-line: different-requires
   local alpha = require("alpha")
   local dashboard = require("alpha.themes.dashboard")
   local header = make_header()
@@ -140,7 +140,6 @@ function M.setup()
   }
 
   alpha.setup(config)
-  local utils = require("utils")
   utils.Group("UserAlphaSetting"):cmd("FileType"):pattern("alpha"):command("setlocal nofoldenable"):set()
   utils.Key("n", "<Leader>ua", "<cmd>Alpha<cr>", "Dashboard"):set()
 end

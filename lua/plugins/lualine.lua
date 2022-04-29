@@ -203,12 +203,7 @@ local components = {
     cond = vim.fn["ultest#is_test_file"],
   },
   lsp = {
-    function(msg)
-      msg = msg or "ﳠ"
-      local buf_clients = vim.lsp.buf_get_clients()
-      if next(buf_clients) == nil then
-        return msg
-      end
+    function()
       local buf_ft = vim.bo.filetype
       local buf_client_names = {}
 
@@ -217,6 +212,7 @@ local components = {
         table.insert(buf_client_names, "")
       end
       -- add client
+      local buf_clients = vim.lsp.buf_get_clients()
       if #buf_clients > 0 then
         table.insert(buf_client_names, "ﲀ")
       end

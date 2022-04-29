@@ -1,5 +1,4 @@
 local M = {}
-local Log = require("core.log")
 
 M.packer = {
   "rcarriga/nvim-notify",
@@ -47,7 +46,6 @@ M.config = {
 
 M.setup = function()
   if #vim.api.nvim_list_uis() == 0 then
-    -- no need to configure notifications in headless
     return
   end
 
@@ -59,7 +57,6 @@ M.setup = function()
 
   notify.setup(M.config.setup)
   vim.notify = notify
-  Log:configure_notifications(notify)
 end
 
 return M

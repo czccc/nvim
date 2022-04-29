@@ -208,8 +208,8 @@ M.setup = function()
     highlights = M.config.highlights,
   })
 
-  local Key = require("utils").Key
-  require("utils.key").load({
+  local Key = utils.Key
+  utils.load({
     Key("n", "<S-x>", "<cmd>BufDel<cr>", "BufDel"),
     Key("n", "<Tab>", "<cmd>BufferLineCycleNext<cr>", "BufferLineCycleNext"),
     Key("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<cr>", "BufferLineCyclePrev"),

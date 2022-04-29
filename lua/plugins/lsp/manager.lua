@@ -1,6 +1,5 @@
 local M = {}
 
-local Log = require("core.log")
 local lvim_lsp_utils = require("plugins.lsp.utils")
 
 ---Resolve the configuration for a server based on both common and user configuration
@@ -17,7 +16,6 @@ local function resolve_config(name, user_config)
 
   local has_custom_provider, custom_config = pcall(require, "plugins/lsp/providers/" .. name)
   if has_custom_provider then
-    Log:debug("Using custom configuration for requested server: " .. name)
     config = vim.tbl_deep_extend("force", config, custom_config)
   end
 
@@ -56,7 +54,7 @@ function M.setup(server_name, user_config)
   local lsp_config = require("plugins.lsp").config
 
   if lvim_lsp_utils.is_client_active(server_name) or client_is_configured(server_name) then
-    Log:debug(string.format("[%q] is already configured. Ignoring repeated setup call.", server_name))
+    vim.notify(string.format("[%q] is already configured. Ignoring repeated setup call.", server_name), "INFO")
     return
   end
 
@@ -79,11 +77,8 @@ function M.setup(server_name, user_config)
 
   if not requested_server:is_installed() then
     if lsp_config.automatic_servers_installation then
-      Log:debug("Automatic server installation detected")
       requested_server:install()
       install_notification = true
-    else
-      Log:debug(requested_server.name .. " is not managed by the automatic installer")
     end
   end
 

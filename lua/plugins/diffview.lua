@@ -18,9 +18,8 @@ M.packer = {
         file_history_panel = { q = "<Cmd>DiffviewClose<CR>" },
       },
     })
-    local Key = require("utils.key").Key
-    Key("n", "<Leader>ud", "<cmd>DiffviewOpen<cr>", "Diff View HEAD"):set()
-    Key("n", "<Leader>ud", "<cmd>DiffviewFileHistory<cr>", "Diff View File"):set()
+    utils.Key("n", "<Leader>ud", "<cmd>DiffviewOpen<cr>", "Diff View HEAD"):set()
+    utils.Key("n", "<Leader>ud", "<cmd>DiffviewFileHistory<cr>", "Diff View File"):set()
   end,
   disable = false,
 }

@@ -96,8 +96,8 @@ M.setup = function()
   nvim_comment.setup(M.config)
 
   local api = require("Comment.api")
-  local Key = require("utils.key").Key
-  require("utils.key").load({
+  local Key = utils.Key
+  utils.load({
     Key("n", "gc"):group("Line Comment"),
     Key("n", "gcc"):desc("Line Comment"),
     Key("n", "gca"):desc("Line Comment (at EOL)"),

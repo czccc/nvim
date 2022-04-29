@@ -232,7 +232,6 @@ function M.setup()
   -- require("telescope").load_extension "file_browser"
   -- require("telescope").load_extension "ui-select"
 
-  local utils = require("utils")
   utils.Group("UserTelescopeFoldFix")
     :cmd("BufRead", "*", function()
       utils.AuCmd("BufWinEnter", "*", "normal! zx"):once():set()

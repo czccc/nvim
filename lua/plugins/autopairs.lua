@@ -2,7 +2,7 @@ local M = {}
 
 M.packer = {
   "windwp/nvim-autopairs",
-  -- event = "InsertEnter",
+  event = "InsertEnter",
   config = function()
     require("plugins.autopairs").setup()
   end,
@@ -28,15 +28,15 @@ M.config = {
   ignored_next_char = string.gsub([[ [%w%%%'%[%"%.] ]], "%s+", ""),
   enable_moveright = true,
   ---@usage disable when recording or executing a macro
-  disable_in_macro = false,
+  disable_in_macro = true,
   ---@usage add bracket pairs after quote
   enable_afterquote = true,
   ---@usage map the <BS> key
   map_bs = true,
   ---@usage map <c-w> to delete a pair if possible
-  map_c_w = false,
+  map_c_w = true,
   ---@usage disable when insert after visual block mode
-  disable_in_visualblock = false,
+  disable_in_visualblock = true,
   ---@usage  change default fast_wrap
   fast_wrap = {
     map = "<M-e>",
@@ -56,13 +56,6 @@ M.setup = function()
   autopairs.setup(M.config)
 
   require("nvim-treesitter.configs").setup({ autopairs = { enable = true } })
-
-  -- local ts_conds = require("nvim-autopairs.ts-conds")
-  -- local Rule = require("nvim-autopairs.rule")
-  -- autopairs.add_rules({
-  --   Rule("%", "%", "lua"):with_pair(ts_conds.is_ts_node({ "string", "comment" })),
-  --   Rule("$", "$", "lua"):with_pair(ts_conds.is_not_ts_node({ "function" })),
-  -- })
 end
 
 return M

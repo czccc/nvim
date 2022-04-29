@@ -1,7 +1,6 @@
 local M = {}
--- local Log = require("core.log")
-local AuCmd = require("utils").AuCmd
-local Group = require("utils").Group
+local AuCmd = utils.AuCmd
+local Group = utils.Group
 
 M.autocommands = {
   Group("UserGeneralSetting"):extend({

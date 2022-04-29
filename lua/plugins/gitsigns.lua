@@ -85,8 +85,8 @@ M.setup = function()
   local gitsigns = require("gitsigns")
   gitsigns.setup(M.config)
 
-  local Key = require("utils.key").Key
-  require("utils.key").load({
+  local Key = utils.Key
+  utils.load({
     Key("n", "]g", gitsigns.next_hunk, "Next Git Hunk"),
     Key("n", "[g", gitsigns.prev_hunk, "Previous Git Hunk"),
 

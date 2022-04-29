@@ -1,5 +1,4 @@
 local M = {}
-local Log = require("core.log")
 
 M.packer = {
   "AckslD/nvim-neoclip.lua",
@@ -31,7 +30,6 @@ end
 M.setup = function()
   local status_ok, neoclip = pcall(require, "neoclip")
   if not status_ok then
-    Log:warn("neoclip: not found")
     return
   end
 

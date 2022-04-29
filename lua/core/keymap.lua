@@ -1,7 +1,5 @@
 local M = {}
-local path = require("utils.path")
-local Log = require("core.log")
-local Key = require("utils").Key
+local Key = utils.Key
 
 M.keys = {
   -- insert mode
@@ -103,39 +101,8 @@ M.keys = {
   Key("c", "<C-k>", 'pumvisible() ? "\\<C-p>" : "\\<C-k>"', "Select Previous"):expr(),
 }
 
-M.mac_keys = {
-  Key("n", "<A-Up>", ":resize -2<CR>", "Resize Up"),
-  Key("n", "<A-Down>", ":resize +2<CR>", "Resize Down"),
-  Key("n", "<A-Left>", ":vertical resize -2<CR>", "Resize Left"),
-  Key("n", "<A-Right>", ":vertical resize +2<CR>", "Resize Right"),
-}
-
 M.setup = function()
-  M.load_keys(M.keys)
-  if path.is_mac then
-    M.load_keys(M.mac_keys)
-    Log:debug("Activated mac keymappings")
-  end
-end
-
-M.load = function(keymaps)
-  keymaps = keymaps or {}
-  for mode, mapping in pairs(keymaps) do
-    local opts = { noremap = true, silent = true }
-    for key, val in pairs(mapping) do
-      if type(val) == "table" then
-        opts = val[2]
-        val = val[1]
-      end
-      vim.keymap.set(mode, key, val, opts)
-      -- vim.api.nvim_set_keymap(mode, key, val, opts)
-    end
-  end
-end
-
-M.load_keys = function(keymaps)
-  keymaps = keymaps or {}
-  for _, key in ipairs(keymaps) do
+  for _, key in ipairs(M.keys) do
     key:set()
   end
 end

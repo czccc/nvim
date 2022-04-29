@@ -1,5 +1,4 @@
 local M = {}
-local Log = require("core.log")
 
 M.packers = {
   {
@@ -215,13 +214,13 @@ M.opts = {
 function M.setup()
   -- avoid running in headless mode since it's harder to detect failures
   if #vim.api.nvim_list_uis() == 0 then
-    Log:debug("headless mode detected, skipping running setup for treesitter")
+    vim.notify("headless mode detected, skipping running setup for treesitter", "WARN")
     return
   end
 
   local status_ok, treesitter_configs = pcall(require, "nvim-treesitter.configs")
   if not status_ok then
-    Log:error("Failed to load nvim-treesitter.configs")
+    vim.notify("Failed to load nvim-treesitter.configs", "ERROR")
     return
   end
 

@@ -1,7 +1,6 @@
 local M = {}
-local Log = require("core.log")
-local AuCmd = require("utils").AuCmd
-local Group = require("utils").Group
+local AuCmd = utils.AuCmd
+local Group = utils.Group
 
 M.packers = {
   {
@@ -52,7 +51,7 @@ local function add_lsp_buffer_keybindings(bufnr)
     Key("n", "gI", require("plugins.telescope").lsp_implementations, "Goto Implementations"):buffer(bufnr),
     Key("n", "gs", vim.lsp.buf.signature_help, "Show Signature Help"):buffer(bufnr),
     Key("n", "gt", vim.lsp.buf.type_definition, "Goto Type Definition"):buffer(bufnr),
-    Key("n", "gl", require("plugins.lsp.utils").show_line_diagnostics, "Show Line Diagnostics"):buffer(bufnr),
+    Key("n", "gl", wrap(vim.diagnostic.open_float, 0, { scope = "line" }), "Show Line Diagnostics"):buffer(bufnr),
     Key("n", "gL", vim.lsp.codelens.run, "Code Lens"):buffer(bufnr),
     Key("n", "gr", require("plugins.telescope").lsp_references, "Goto References"):buffer(bufnr),
     Key("n", "gR", vim.lsp.buf.rename, "Rename Symbol"):buffer(bufnr),
@@ -125,12 +124,11 @@ local function select_default_formater(client)
   if client.name == "null-ls" or not client.resolved_capabilities.document_formatting then
     return
   end
-  Log:debug("Checking for formatter overriding for " .. client.name)
   local formatters = require("plugins.lsp.null-ls.formatters")
   local client_filetypes = client.config.filetypes or {}
   for _, filetype in ipairs(client_filetypes) do
     if #vim.tbl_keys(formatters.list_registered(filetype)) > 0 then
-      Log:debug("Formatter overriding detected. Disabling formatting capabilities for " .. client.name)
+      -- vim.notify("Formatter overriding detected. Disabling formatting capabilities for " .. client.name, "INFO")
       client.resolved_capabilities.document_formatting = false
       client.resolved_capabilities.document_range_formatting = false
     end
@@ -185,8 +183,6 @@ function M.get_common_opts()
 end
 
 function M.setup()
-  Log:debug("Setting up LSP support")
-
   local lsp_status_ok, lspconfig = pcall(require, "lspconfig")
   if not lsp_status_ok then
     return

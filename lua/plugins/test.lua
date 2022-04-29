@@ -1,5 +1,4 @@
 local M = {}
-local utils = require("utils")
 
 M.packer = {
   "rcarriga/vim-ultest",

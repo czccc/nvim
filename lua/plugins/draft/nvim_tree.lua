@@ -1,5 +1,4 @@
 local M = {}
-local Log = require("core.log")
 
 M.packer = {
   "kyazdani42/nvim-tree.lua",
@@ -127,13 +126,9 @@ M.config = {
   },
 }
 
-require("plugins.which_key").config.nmappings["e"] = { "<cmd>NvimTreeFocus<CR>", "Explorer" }
-require("plugins.which_key").config.nmappings["E"] = { "<cmd>NvimTreeToggle<CR>", "Explorer" }
-
 M.setup = function()
   local status_ok, nvim_tree_config = pcall(require, "nvim-tree.config")
   if not status_ok then
-    Log:error("Failed to load nvim-tree.config")
     return
   end
 
@@ -158,6 +153,11 @@ M.setup = function()
     }
   end
   require("nvim-tree").setup(M.config.setup)
+  local Key = utils.Key
+  utils.load({
+    Key("n", "<Leader>e", "<cmd>NvimTreeFocus<cr>", "Explorer"),
+    Key("n", "<Leader>E", "<cmd>NvimTreeToggle<cr>", "Explorer"),
+  })
 end
 
 return M

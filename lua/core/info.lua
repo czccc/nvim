@@ -1,13 +1,4 @@
-local M = {
-  banner = {
-    "",
-    [[    __                          _    ___         ]],
-    [[   / /   __  ______  ____ _____| |  / (_)___ ___ ]],
-    [[  / /   / / / / __ \/ __ `/ ___/ | / / / __ `__ \]],
-    [[ / /___/ /_/ / / / / /_/ / /   | |/ / / / / / / /]],
-    [[/_____/\__,_/_/ /_/\__,_/_/    |___/_/_/ /_/ /_/ ]],
-  },
-}
+local M = {}
 
 local fmt = string.format
 local text = require("utils.text")
@@ -100,28 +91,6 @@ local function make_client_info(client)
   return client_info
 end
 
-local function make_override_info(ft)
-  local available = lsp_utils.get_supported_servers_per_filetype(ft)
-  if not available then
-    return { "" }
-  end
-  local overridden = vim.tbl_filter(function(name)
-    return vim.tbl_contains(available, name)
-  end, require("plugins.lsp").config.override)
-
-  local info_lines = { "" }
-  if #overridden == 0 then
-    return info_lines
-  end
-
-  info_lines = {
-    fmt("Overridden %s server(s)", ft),
-    fmt("* list: %s", str_list(overridden)),
-  }
-
-  return info_lines
-end
-
 function M.toggle_popup(ft)
   local clients = vim.lsp.get_active_clients()
   local client_names = {}
@@ -153,8 +122,6 @@ function M.toggle_popup(ft)
     table.insert(client_names, client.name)
   end
 
-  local override_info = make_override_info(ft)
-
   local formatters_info = make_formatters_info(ft)
 
   local linters_info = make_linters_info(ft)
@@ -165,14 +132,11 @@ function M.toggle_popup(ft)
     local content = {}
 
     for _, section in ipairs({
-      M.banner,
       { "" },
       { "" },
       header,
       { "" },
       lsp_info,
-      { "" },
-      override_info,
       { "" },
       formatters_info,
       { "" },

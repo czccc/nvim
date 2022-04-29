@@ -25,4 +25,6 @@ function _G.require_clean(module)
   return requested
 end
 
+_G.utils = require("utils")
+
 return M

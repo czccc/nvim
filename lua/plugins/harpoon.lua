@@ -30,7 +30,6 @@ M.setup = function()
     },
   })
   require("telescope").load_extension("harpoon")
-  local utils = require("utils")
   -- utils.Key("n", "<leader>fm", require("harpoon.ui").toggle_quick_menu, "Harpoon"):set()
   utils.Key("n", "<leader>fh", "<cmd>Telescope harpoon marks theme=dropdown<cr>", "Harpoon"):set()
   utils.Key("n", "<leader>fH", require("harpoon.mark").add_file, "Harpoon Add"):set()

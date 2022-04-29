@@ -19,7 +19,6 @@ M.load_core = function()
 end
 
 M.load_plugins = function()
-  require("core.log"):init()
   require("core.pack").init()
   require("plugins").init()
   require("core.osconf").setup()

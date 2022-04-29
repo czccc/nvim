@@ -230,21 +230,18 @@ M.setup = function()
 
   require("neo-tree").setup(M.config)
 
-  local utils = require("utils")
-  utils.Group("UserNeoTreeTabKey")
-    :cmd("FileType", "neo-tree", function()
-      utils.Key("n", "<Tab>", "<C-w>l"):buffer(0):set()
-    end)
-    :set()
-
-  local Key = require("utils.key").Key
-  require("utils.key").load({
+  local Key = utils.Key
+  local Group = utils.Group
+  utils.load({
     Key("n", "<Leader>e", "<cmd>Neotree filesystem reveal<cr>", "Explorer"),
     Key("n", "<Leader>E", "<cmd>Neotree toggle<cr>", "Explorer"),
     Key("n", "<Leader>vg", "<cmd>Neotree git_status left<cr>", "Git Status"),
     Key("n", "<Leader>vG", "<cmd>Neotree git_status float<cr>", "Git Status"),
     Key("n", "<Leader>vb", "<cmd>Neotree buffers left<cr>", "Opened Files"),
     Key("n", "<Leader>vB", "<cmd>Neotree buffers float<cr>", "Opened Files"),
+    Group("UserNeoTreeTabKey"):cmd("FileType", "neo-tree", function()
+      Key("n", "<Tab>", "<C-w>l"):buffer(0):set()
+    end),
   })
 end
 

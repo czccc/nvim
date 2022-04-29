@@ -1,5 +1,5 @@
 local M = {}
-local Group = require("utils").Group
+local Group = utils.Group
 
 M.colorscheme = "default"
 

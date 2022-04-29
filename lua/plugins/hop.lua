@@ -19,8 +19,8 @@ M.setup = function()
     create_hl_autocmd = false,
   })
 
-  local Key = require("utils.key").Key
-  require("utils.key").load({
+  local Key = utils.Key
+  utils.load({
     Key({ "n", "v", "x" }, "f", function()
       hop.hint_char1({
         direction = hint.HintDirection.AFTER_CURSOR,

@@ -28,24 +28,19 @@ M.setup_session_manager = function()
     autosave_only_in_session = true, -- Always autosaves session. If true, only autosaves after a session is active.
     max_path_length = 80, -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
   })
-  -- open NvimTree without focusing the explorer
-  -- you can put this line in session manager's setup configuration, in your init.lua, or anywhere as long as it is called
-  local Key = require("utils.key").Key
-  require("utils.key").load({
+
+  local Key = utils.Key
+  local Group = utils.Group
+  utils.load({
     Key("n", "<Leader>sp", "<cmd>SessionManager load_session<cr>", "Projects"),
-    Key("n", "<Leader>us"):group("Sessions"),
-    Key("n", "<Leader>uss", "<cmd>SessionManager save_current_session<cr>", "Save"),
-    Key("n", "<Leader>usr", "<cmd>SessionManager load_current_dir_session<cr>", "Restore CurDir"),
-    Key("n", "<Leader>usR", "<cmd>SessionManager load_last_session<cr>", "Restore Last"),
-    Key("n", "<Leader>usd", "<cmd>SessionManager delete_session<cr>", "Delete"),
-    Key("n", "<Leader>usl", "<cmd>SessionManager load_session<cr>", "List"),
+    Key("n", "<Leader>uS"):group("Sessions"),
+    Key("n", "<Leader>uSs", "<cmd>SessionManager save_current_session<cr>", "Save"),
+    Key("n", "<Leader>uSr", "<cmd>SessionManager load_current_dir_session<cr>", "Restore CurDir"),
+    Key("n", "<Leader>uSR", "<cmd>SessionManager load_last_session<cr>", "Restore Last"),
+    Key("n", "<Leader>uSd", "<cmd>SessionManager delete_session<cr>", "Delete"),
+    Key("n", "<Leader>uSl", "<cmd>SessionManager load_session<cr>", "List"),
+    Group("UserSessionRestoreExplorer"):cmd("User", "SessionLoadPost", require("plugins.session").restore_explorer),
   })
-  local utils = require("utils")
-  utils.Group("UserSessionRestoreExplorer")
-    :cmd("User")
-    :pattern("SessionLoadPost")
-    :callback(require("plugins.session").restore_explorer)
-    :set()
 end
 
 function M.close_explorer()
@@ -65,7 +60,6 @@ function M.close_explorer()
 end
 
 function M.restore_explorer()
-  ---@diagnostic disable-next-line: unused-local
   local neotree_status_ok, _ = pcall(require, "neo-tree.command")
   if neotree_status_ok then
     -- pcall(neotree.execute, { action = "close" })

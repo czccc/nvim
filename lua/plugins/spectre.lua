@@ -149,8 +149,8 @@ M.setup = function()
     is_open_target_win = true, --open file on opener window
     is_insert_mode = false, -- start open panel on is_insert_mode
   })
-  local Key = require("utils.key").Key
-  require("utils.key").load({
+  local Key = utils.Key
+  utils.load({
     Key("n", "<Leader>S"):group("Spectre"),
     Key("n", "<Leader>Sw", spectre.open_visual, "Spectre Word"),
     Key("n", "<Leader>Sf", spectre.open_file_search, "Spectre File Search"),

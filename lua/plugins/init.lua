@@ -1,5 +1,4 @@
 local M = {}
-local Log = require("core.log")
 
 local plugin_files = {
   "plugins.which_key",
@@ -27,20 +26,12 @@ local plugin_files = {
   "plugins.toggleterm",
   "plugins.async",
   "plugins.test",
-
-  -- "plugins.project",
-  -- "plugins.workspaces",
   "plugins.session",
 
   "plugins.lsp",
-  "plugins.dap",
+  -- "plugins.dap",
   "plugins.lang",
 
-  -- "plugins.lsp.lang.clangd_extension",
-  -- "plugins.lsp.lang.rust_tools",
-
-  -- "plugins.alpha",
-  -- "plugins.bqf",
   "plugins.diffview",
   "plugins.hlslens",
   "plugins.harpoon",
@@ -61,8 +52,7 @@ M.init = function()
   for _, plugin_file in ipairs(plugin_files) do
     local status_ok, plugin = pcall(require, plugin_file)
     if not status_ok then
-      Log:error("Unable to require file " .. plugin)
-      print("Unable to require file " .. plugin)
+      vim.notify("Unable to require file " .. plugin, "ERROR")
     end
     if plugin.init then
       pcall(plugin.init)
@@ -83,8 +73,7 @@ M.reload = function()
   for _, plugin_file in ipairs(plugin_files) do
     local status_ok, plugin = pcall(require_clean, plugin_file)
     if not status_ok then
-      Log:error("Unable to require file " .. plugin)
-      print("Unable to require file " .. plugin)
+      vim.notify("Unable to require file " .. plugin, "ERROR")
     end
     if plugin.init then
       pcall(plugin.init)
@@ -98,16 +87,6 @@ M.reload = function()
       end
     end
   end
-end
-
-M.test = {}
-
-function M:register(x)
-  self.test[#self.test + 1] = x
-end
-
-function M:get()
-  return self.test
 end
 
 return M

@@ -22,6 +22,7 @@ stds.nvim = {
     "join_paths",
     "require_clean",
     "wrap",
+    "utils",
   },
 }
 std = "lua54+nvim"

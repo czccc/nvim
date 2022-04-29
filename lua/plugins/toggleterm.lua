@@ -1,5 +1,4 @@
 local M = {}
-local Log = require("core.log")
 
 M.packer = {
   "akinsho/toggleterm.nvim",
@@ -66,7 +65,6 @@ M.config = {
 M.setup = function()
   local status_ok, terminal = pcall(require, "toggleterm")
   if not status_ok then
-    Log:warn("toggleterm not loaded")
     return
   end
   local config = M.config
@@ -91,7 +89,7 @@ end
 M.add_exec = function(opts)
   local binary = opts.cmd:match("(%S+)")
   if vim.fn.executable(binary) ~= 1 then
-    Log:debug("Skipping configuring executable " .. binary .. ". Please make sure it is installed properly.")
+    vim.notify("Skipping configuring executable " .. binary .. ". Please make sure it is installed properly.", "INFO")
     return
   end
 

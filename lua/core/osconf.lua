@@ -1,6 +1,5 @@
 local M = {}
 local path = require("utils.path")
-local Log = require("core.log")
 
 M.setup = function()
   if path.is_windows then
@@ -8,7 +7,6 @@ M.setup = function()
     if not path.is_file(sqlite_path) then
       vim.notify("Sqlite dll not found! Download from https://www.sqlite.org/download.html")
     end
-    Log:debug("Set sqlite dll path in Windows: " .. sqlite_path)
     vim.g.sqlite_clib_path = sqlite_path
 
     local neotree = require("plugins.neotree")
@@ -31,6 +29,13 @@ M.setup = function()
               \   'cache_enabled': 0,
               \ }
     ]])
+  end
+  if path.is_mac then
+    local Key = utils.Key
+    Key("n", "<A-Up>", ":resize -2<CR>", "Resize Up"):set()
+    Key("n", "<A-Down>", ":resize +2<CR>", "Resize Down"):set()
+    Key("n", "<A-Left>", ":vertical resize -2<CR>", "Resize Left"):set()
+    Key("n", "<A-Right>", ":vertical resize +2<CR>", "Resize Right"):set()
   end
 end
 

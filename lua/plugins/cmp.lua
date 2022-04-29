@@ -310,7 +310,7 @@ M.setup_cmp = function()
           fallback()
         end
       end),
-      ["<CR>"] = cmp.mapping.confirm({ select = true }),
+      ["<CR>"] = cmp.mapping.confirm({ select = false }),
       -- ["<CR>"] = cmp.mapping(function(fallback)
       --   if cmp.visible() and cmp.confirm(M.config.confirm_opts) then
       --     if luasnip.expand_or_locally_jumpable() then
@@ -379,15 +379,12 @@ M.setup_copilot = function()
     typescriptreact = true,
     terraform = true,
   }
-  require("core.keymap").load({
-    ["i"] = {
-      ["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } },
-      ["<c-l>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } },
-      ["<M-]>"] = { "<Plug>(copilot-next)", { silent = true } },
-      ["<M-[>"] = { "<Plug>(copilot-previous)", { silent = true } },
-      ["<M-\\>"] = { "<Cmd>vertical Copilot panel<CR>", { silent = true } },
-    },
-  })
+  local Key = utils.Key
+  Key("i", "<C-h>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
+  Key("i", "<C-l>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
+  Key("i", "<M-]>", "<Plug>(copilot-next)", "Copilot Next"):set()
+  Key("i", "<M-[>", "<Plug>(copilot-previous)", "Copilot Previous"):set()
+  Key("i", "<M-\\>", "<Cmd>vertical Copilot panel<CR>", "Copilot Panel"):set()
 end
 
 M.setup_tabout = function()
