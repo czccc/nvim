@@ -23,54 +23,54 @@ M.setup = function()
     },
     mapping = {
       ["toggle_line"] = {
-        map = "<leader>Sd",
+        map = "<Leader>d",
         cmd = "<cmd>lua require('spectre').toggle_line()<CR>",
-        desc = "toggle current item",
+        desc = "Spectre Toggle Line",
       },
       ["enter_file"] = {
         map = "<cr>",
         cmd = "<cmd>lua require('spectre.actions').select_entry()<CR>",
-        desc = "goto current file",
+        desc = "Spectre Select File",
       },
       ["send_to_qf"] = {
-        map = "<leader>Sq",
+        map = "<leader>S",
         cmd = "<cmd>lua require('spectre.actions').send_to_qf()<CR>",
-        desc = "send all item to quickfix",
+        desc = "Spectre Send To QuickFix",
       },
       ["replace_cmd"] = {
-        map = "<leader>Sc",
+        map = "<leader>r",
         cmd = "<cmd>lua require('spectre.actions').replace_cmd()<CR>",
-        desc = "input replace vim command",
+        desc = "Spectre Replace Current",
       },
       ["show_option_menu"] = {
-        map = "<leader>So",
+        map = "<leader>o",
         cmd = "<cmd>lua require('spectre').show_options()<CR>",
-        desc = "show option",
+        desc = "Spectre Show Options",
       },
       ["run_replace"] = {
-        map = "<leader>SR",
+        map = "<leader>R",
         cmd = "<cmd>lua require('spectre.actions').run_replace()<CR>",
-        desc = "replace all",
+        desc = "Spectre Replace All",
       },
       ["change_view_mode"] = {
-        map = "<leader>Stv",
+        map = "yov",
         cmd = "<cmd>lua require('spectre').change_view()<CR>",
-        desc = "change result view mode",
+        desc = "Spectre Change View",
       },
       ["toggle_live_update"] = {
-        map = "<leader>Stu",
+        map = "you",
         cmd = "<cmd>lua require('spectre').toggle_live_update()<CR>",
-        desc = "update change when vim write file.",
+        desc = "Spectre Toggle Live Update",
       },
       ["toggle_ignore_case"] = {
-        map = "<leader>Sti",
+        map = "yoi",
         cmd = "<cmd>lua require('spectre').change_options('ignore-case')<CR>",
-        desc = "toggle ignore case",
+        desc = "Spectre Toggle Ignore Case",
       },
       ["toggle_ignore_hidden"] = {
-        map = "<leader>Sth",
+        map = "yoh",
         cmd = "<cmd>lua require('spectre').change_options('hidden')<CR>",
-        desc = "toggle search hidden",
+        desc = "Spectre Toggle Ignore Hidden",
       },
       -- you can put your mapping here it only use normal mode
     },
@@ -151,11 +151,9 @@ M.setup = function()
   })
   local Key = utils.Key
   utils.load({
-    Key("n", "<Leader>S"):group("Spectre"),
-    Key("n", "<Leader>Sw", spectre.open_visual, "Spectre Word"),
-    Key("n", "<Leader>Sf", spectre.open_file_search, "Spectre File Search"),
-    Key("n", "<Leader>So", spectre.open, "Spectre Open"),
-    Key("v", "<Leader>S", M.visual_selection, "Spectre Visual"),
+    Key("n", "<Leader>uR", spectre.open_file_search, "Spectre File Search"),
+    Key("n", "<Leader>ur", spectre.open, "Spectre Open"),
+    Key("v", "<Leader>ur", M.visual_selection, "Spectre Visual"),
   })
 end
 

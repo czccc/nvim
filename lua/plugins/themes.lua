@@ -113,6 +113,12 @@ M.setup_onedark = function()
       HopNextKey1 = { fg = "$bg0", bg = "$blue", fmt = "none" },
       HopNextKey2 = { fg = "$yellow", fmt = "bold" },
       HopUnmatched = { fg = "$grey" },
+      LightspeedLabel = { fg = "$yellow", fmt = "bold,underline" },
+      LightspeedShortcut = { fg = "$black", bg = "$blue", fmt = "bold" },
+      LightspeedLabelDistant = { fg = "$blue", fmt = "bold,underline" },
+      LightspeedUnlabeledMatch = { fg = "$black", bg = "$yellow", fmt = "bold" },
+      LightspeedMaskedChar = { fg = "$purple", fmt = "bold" },
+      LightspeedGreyWash = { fg = "$grey" },
     }, -- Override highlight groups
 
     -- Plugins Config --

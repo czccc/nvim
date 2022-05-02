@@ -5,12 +5,13 @@ local plugin_files = {
   "plugins.misc",
   "plugins.notify",
   "plugins.hop",
+  "plugins.lightspeed",
 
   "plugins.themes",
 
   "plugins.neotree",
   "plugins.bufferline",
-  "plugins.gitsigns",
+  "plugins.git",
   "plugins.lualine",
   "plugins.autopairs",
   "plugins.wilder",
@@ -18,7 +19,6 @@ local plugin_files = {
 
   "plugins.telescope",
   "plugins.treesitter",
-  "plugins.trouble",
   "plugins.cmp",
   "plugins.comment",
 
@@ -29,20 +29,17 @@ local plugin_files = {
   "plugins.session",
 
   "plugins.lsp",
-  -- "plugins.dap",
+  "plugins.dap",
   "plugins.lang",
 
-  "plugins.diffview",
   "plugins.hlslens",
   "plugins.harpoon",
   "plugins.indent_blankline",
   "plugins.lsp_signature",
-  "plugins.neoclip",
   "plugins.neorg",
   "plugins.sidebar",
   "plugins.spectre",
   "plugins.todo",
-  "plugins.zenmode",
 }
 
 M.packers = {}

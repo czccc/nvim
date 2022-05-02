@@ -56,15 +56,6 @@ local function custom_filter(buf, buf_nums)
 end
 
 M.config = {
-  keymap = {
-    ["n"] = {
-      ["<S-x>"] = ":BufDel<CR>",
-      ["<TAB>"] = ":BufferLineCycleNext<CR>",
-      ["<S-TAB>"] = ":BufferLineCyclePrev<CR>",
-      ["<A-<>"] = ":BufferLineMovePrev<CR>",
-      ["<A->>"] = ":BufferLineMoveNext<CR>",
-    },
-  },
   highlights = {
     background = {
       gui = "italic",
@@ -211,34 +202,36 @@ M.setup = function()
   local Key = utils.Key
   utils.load({
     Key("n", "<S-x>", "<cmd>BufDel<cr>", "BufDel"),
+    Key("n", "<Leader>c", "<cmd>BufDel<cr>", "Close Buffer"),
     Key("n", "<Tab>", "<cmd>BufferLineCycleNext<cr>", "BufferLineCycleNext"),
     Key("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<cr>", "BufferLineCyclePrev"),
-    Key("n", "<Leader>c", "<cmd>BufDel<cr>", "Close Buffer"),
+    Key("n", "]b", "<cmd>BufferLineCycleNext<cr>", "Next Buffer"),
+    Key("n", "[b", "<cmd>BufferLineCyclePrev<cr>", "Previous Buffer"),
 
     Key("n", "<Leader>b"):group("Buffers"),
     Key("n", "<Leader>bb", require("plugins.telescope").find_buffers, "Find Buffer"),
     Key("n", "<Leader>bc", "<cmd>BufDel<cr>", "Close Current"),
+    Key("n", "<Leader>bC", "<cmd>BufferLinePickClose<cr>", "Buffer Pick Close"),
     Key("n", "<Leader>bf", "<cmd>b#<cr>", "Previous"),
     Key("n", "<Leader>bh", "<cmd>BufferLineCloseLeft<cr>", "Close To Left"),
     Key("n", "<Leader>bl", "<cmd>BufferLineCloseRight<cr>", "Close To Right"),
     Key("n", "<Leader>bj", "<cmd>BufferLineMovePrev<cr>", "Move To Left"),
     Key("n", "<Leader>bk", "<cmd>BufferLineMoveNext<cr>", "Move To Right"),
-    Key("n", "<Leader>bP", "<cmd>BufferLinePick<cr>", "Buffer Pick"),
-    Key("n", "<Leader>bp", "<cmd>BufferLineTogglePin<cr>", "Buffer Pin"),
+    Key("n", "<Leader>bp", "<cmd>BufferLinePick<cr>", "Buffer Pick"),
+    Key("n", "<Leader>bP", "<cmd>BufferLineTogglePin<cr>", "Buffer Pin"),
     Key("n", "<Leader>bd", "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory"),
-    Key("n", "<Leader>bL", "<cmd>BufferLineSortByExtension<cr>", "Sort By Extension"),
-    Key("n", "<Leader>bn", "<cmd>BufferLineSortByTabs<cr>", "Sort By Tab"),
+    Key("n", "<Leader>be", "<cmd>BufferLineSortByExtension<cr>", "Sort By Extension"),
+    Key("n", "<Leader>bt", "<cmd>BufferLineSortByTabs<cr>", "Sort By Tab"),
 
-    Key("n", "<Leader>bg"):group("Buffer Goto"),
-    Key("n", "<Leader>bg1", "<cmd>BufferLineGoToBuffer 1<cr>", "Buffer Goto 1"),
-    Key("n", "<Leader>bg2", "<cmd>BufferLineGoToBuffer 2<cr>", "Buffer Goto 2"),
-    Key("n", "<Leader>bg3", "<cmd>BufferLineGoToBuffer 3<cr>", "Buffer Goto 3"),
-    Key("n", "<Leader>bg4", "<cmd>BufferLineGoToBuffer 4<cr>", "Buffer Goto 4"),
-    Key("n", "<Leader>bg5", "<cmd>BufferLineGoToBuffer 5<cr>", "Buffer Goto 5"),
-    Key("n", "<Leader>bg6", "<cmd>BufferLineGoToBuffer 6<cr>", "Buffer Goto 6"),
-    Key("n", "<Leader>bg7", "<cmd>BufferLineGoToBuffer 7<cr>", "Buffer Goto 7"),
-    Key("n", "<Leader>bg8", "<cmd>BufferLineGoToBuffer 8<cr>", "Buffer Goto 8"),
-    Key("n", "<Leader>bg9", "<cmd>BufferLineGoToBuffer 9<cr>", "Buffer Goto 9"),
+    Key("n", "<Leader>b1", "<cmd>BufferLineGoToBuffer 1<cr>", "Buffer Goto 1"),
+    Key("n", "<Leader>b2", "<cmd>BufferLineGoToBuffer 2<cr>", "Buffer Goto 2"),
+    Key("n", "<Leader>b3", "<cmd>BufferLineGoToBuffer 3<cr>", "Buffer Goto 3"),
+    Key("n", "<Leader>b4", "<cmd>BufferLineGoToBuffer 4<cr>", "Buffer Goto 4"),
+    Key("n", "<Leader>b5", "<cmd>BufferLineGoToBuffer 5<cr>", "Buffer Goto 5"),
+    Key("n", "<Leader>b6", "<cmd>BufferLineGoToBuffer 6<cr>", "Buffer Goto 6"),
+    Key("n", "<Leader>b7", "<cmd>BufferLineGoToBuffer 7<cr>", "Buffer Goto 7"),
+    Key("n", "<Leader>b8", "<cmd>BufferLineGoToBuffer 8<cr>", "Buffer Goto 8"),
+    Key("n", "<Leader>b9", "<cmd>BufferLineGoToBuffer 9<cr>", "Buffer Goto 9"),
   })
 end
 

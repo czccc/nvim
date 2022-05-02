@@ -12,9 +12,9 @@ M.packers = {
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
   },
-  {
-    "RRethy/nvim-treesitter-textsubjects",
-  },
+  -- {
+  --   "RRethy/nvim-treesitter-textsubjects",
+  -- },
   {
     "nvim-treesitter/playground",
     -- cmd: TSHighlightCapturesUnderCursor  TSPlaygroundToggle
@@ -166,7 +166,7 @@ M.opts = {
     },
   },
   textsubjects = {
-    enable = true,
+    enable = false,
     prev_selection = ",",
     keymaps = {
       ["."] = "textsubjects-smart",

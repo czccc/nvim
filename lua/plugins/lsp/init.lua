@@ -23,12 +23,6 @@ M.packers = {
       end)
     end,
   },
-  -- {
-  --   "filipdutescu/renamer.nvim",
-  --   config = function()
-  --     require("plugins.lsp.renamer").config()
-  --   end,
-  -- },
   {
     "folke/lua-dev.nvim",
     module = "lua-dev",
@@ -38,8 +32,8 @@ M.packers = {
 M.config = require("plugins.lsp.config")
 
 local function add_lsp_buffer_keybindings(bufnr)
-  local Key = require("utils.key").Key
-  require("utils.key").load({
+  local Key = utils.Key
+  utils.load({
     Key("n", "K", vim.lsp.buf.hover, "Show Hover"):buffer(bufnr),
     Key("n", "g[", vim.diagnostic.goto_next, "Diagnostic Next"):buffer(bufnr),
     Key("n", "g]", vim.diagnostic.goto_prev, "Diagnostic Prev"):buffer(bufnr),
@@ -49,7 +43,7 @@ local function add_lsp_buffer_keybindings(bufnr)
     Key("n", "gd", require("plugins.telescope").lsp_definitions, "Goto Definition"):buffer(bufnr),
     Key("n", "gD", vim.lsp.buf.declaration, "Goto Declaration"):buffer(bufnr),
     Key("n", "gI", require("plugins.telescope").lsp_implementations, "Goto Implementations"):buffer(bufnr),
-    Key("n", "gs", vim.lsp.buf.signature_help, "Show Signature Help"):buffer(bufnr),
+    -- Key("n", "gs", vim.lsp.buf.signature_help, "Show Signature Help"):buffer(bufnr),
     Key("n", "gt", vim.lsp.buf.type_definition, "Goto Type Definition"):buffer(bufnr),
     Key("n", "gl", wrap(vim.diagnostic.open_float, 0, { scope = "line" }), "Show Line Diagnostics"):buffer(bufnr),
     Key("n", "gL", vim.lsp.codelens.run, "Code Lens"):buffer(bufnr),
@@ -59,45 +53,16 @@ local function add_lsp_buffer_keybindings(bufnr)
     Key("n", "gF", vim.lsp.buf.formatting, "Format Code"):buffer(bufnr),
 
     Key("n", "<Leader>l"):group("LSP"),
-    Key("n", "<leader>la", vim.lsp.buf.code_action, "Code Actions"):buffer(bufnr),
-    Key("n", "<leader>ld", require("plugins.telescope").lsp_definitions, "Goto Definition"):buffer(bufnr),
-    Key("n", "<leader>lD", vim.lsp.buf.declaration, "Goto Declaration"):buffer(bufnr),
-    Key("n", "<leader>lf", vim.lsp.buf.formatting, "Format Code"):buffer(bufnr),
-    Key("n", "<leader>lr", require("plugins.telescope").lsp_references, "Goto References"):buffer(bufnr),
-    Key("n", "<leader>lR", vim.lsp.buf.rename, "Rename Symbol"):buffer(bufnr),
     Key("n", "<leader>lh", vim.lsp.buf.signature_help, "Show Signature Help"):buffer(bufnr),
-    Key("n", "<leader>li", require("plugins.telescope").lsp_implementations, "Goto Implementations"):buffer(bufnr),
-    Key("n", "<leader>lj", vim.diagnostic.goto_next, "Diagnostic Next"):buffer(bufnr),
-    Key("n", "<leader>lk", vim.diagnostic.goto_prev, "Diagnostic Prev"):buffer(bufnr),
-    Key("n", "<leader>ll", vim.lsp.codelens.run, "Code Lens"):buffer(bufnr),
     Key("n", "<leader>lq", vim.diagnostic.setloclist, "Quickfix"):buffer(bufnr),
-    Key("n", "<leader>lr", require("plugins.telescope").lsp_references, "Goto References"):buffer(bufnr),
-    Key("n", "<leader>lR", vim.lsp.buf.rename, "Rename Symbol"):buffer(bufnr),
     Key("n", "<leader>ls", "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols"):buffer(bufnr),
     Key("n", "<leader>lS", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols"):buffer(bufnr),
-    Key("n", "<leader>lw", "<cmd>Telescope diagnostics bufnr=0 theme=get_ivy<cr>", "Buffer Diagnostic"):buffer(bufnr),
-    Key("n", "<leader>lW", "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostic"):buffer(bufnr),
+    Key("n", "<leader>ld", "<cmd>Telescope diagnostics bufnr=0 theme=get_ivy<cr>", "Buffer Diagnostic"):buffer(bufnr),
+    Key("n", "<leader>lD", "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostic"):buffer(bufnr),
 
-    Key("n", "<Leader>lp"):group("Peek"),
-    Key("n", "<leader>lpd", wrap(require("plugins.lsp.peek").Peek, "definition"), "Definition"):buffer(bufnr),
-    Key("n", "<leader>lpr", wrap(require("plugins.lsp.peek").Peek, "references"), "References"):buffer(bufnr),
-    Key("n", "<leader>lpi", wrap(require("plugins.lsp.peek").Peek, "implementation"), "Implementation"):buffer(bufnr),
-    Key("n", "<leader>lps", wrap(require("plugins.lsp.peek").Peek, "signature_help"), "Signature Help"):buffer(bufnr),
-    Key("n", "<leader>lpt", wrap(require("plugins.lsp.peek").Peek, "type_definition"), "Type Definition"):buffer(bufnr),
-
-    Key("n", "<Leader>lu"):group("Utils"),
-    Key("n", "<Leader>lui", "<cmd>LspInfo<cr>", "Lsp Info"):buffer(bufnr),
-    Key("n", "<Leader>luI", "<cmd>LspInstallInfo<cr>", "Lsp Installer"):buffer(bufnr),
-    Key("n", "<Leader>lur", "<cmd>LspRestart<cr>", "Lsp Restart"):buffer(bufnr),
-
-    Key("n", "<Leader>lt"):group("Trouble"),
-    Key("n", "<Leader>ltd", "<cmd>Trouble document_diagnostics<cr>", "Diagnosticss"):buffer(bufnr),
-    Key("n", "<Leader>ltf", "<cmd>Trouble lsp_definitions<cr>", "Definitions"):buffer(bufnr),
-    Key("n", "<Leader>ltl", "<cmd>Trouble loclist<cr>", "LocationList"):buffer(bufnr),
-    Key("n", "<Leader>ltq", "<cmd>Trouble quickfix<cr>", "QuickFix"):buffer(bufnr),
-    Key("n", "<Leader>ltr", "<cmd>Trouble lsp_references<cr>", "References"):buffer(bufnr),
-    Key("n", "<Leader>ltt", "<cmd>TodoTrouble<cr>", "Todo"):buffer(bufnr),
-    Key("n", "<Leader>ltw", "<cmd>Trouble workspace_diagnostics<cr>", "Diagnosticss"):buffer(bufnr),
+    Key("n", "<Leader>li", "<cmd>LspInfo<cr>", "Lsp Info"):buffer(bufnr),
+    Key("n", "<Leader>lI", "<cmd>LspInstallInfo<cr>", "Lsp Installer"):buffer(bufnr),
+    Key("n", "<Leader>lr", "<cmd>LspRestart<cr>", "Lsp Restart"):buffer(bufnr),
   })
 end
 

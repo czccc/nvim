@@ -92,28 +92,27 @@ M.setup = function()
     },
   }))
 
-  ---@diagnostic disable-next-line: unused-local
-  local wildmenu_renderer = wilder.wildmenu_renderer({
-    highlighter = highlighters,
-    highlights = {
-      accent = "WildMenu",
-      border = "Normal",
-      default = "Normal",
-      separator = "Delimiter",
-    },
-    separator = " · ",
-    left = { " ", wilder.wildmenu_spinner(), " " },
-    right = { " ", wilder.wildmenu_index() },
-  })
+  -- local wildmenu_renderer = wilder.wildmenu_renderer({
+  --   highlighter = highlighters,
+  --   highlights = {
+  --     accent = "WildMenu",
+  --     border = "Normal",
+  --     default = "Normal",
+  --     separator = "Delimiter",
+  --   },
+  --   separator = " · ",
+  --   left = { " ", wilder.wildmenu_spinner(), " " },
+  --   right = { " ", wilder.wildmenu_index() },
+  -- })
 
   wilder.set_option(
     "renderer",
     wilder.renderer_mux({
       [":"] = popupmenu_renderer,
-      ["/"] = wildmenu_renderer,
-      substitute = wildmenu_renderer,
-      -- ["/"] = popupmenu_renderer,
-      -- substitute = popupmenu_renderer,
+      -- ["/"] = wildmenu_renderer,
+      -- substitute = wildmenu_renderer,
+      ["/"] = popupmenu_renderer,
+      substitute = popupmenu_renderer,
     })
   )
 end

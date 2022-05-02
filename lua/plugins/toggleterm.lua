@@ -48,18 +48,6 @@ M.config = {
       },
     },
   },
-  -- Add executables on the config.lua
-  -- { exec, keymap, name, layout}
-  execs = {
-    ["<leader>tt"] = { "zsh", "<leader>tt", "Float", "float" },
-    ["<leader>th"] = { "zsh", "<leader>th", "Horizontal", "horizontal" },
-    ["<leader>tv"] = { "zsh", "<leader>tv", "Vertical", "vertical" },
-    ["<leader>tg"] = { "lazygit", "<leader>tg", "LazyGit", "float" },
-    ["<leader>tG"] = { "gitui", "<leader>tG", "Git UI", "float" },
-    ["<leader>tp"] = { "python", "<leader>tp", "Python", "float" },
-    ["<leader>tj"] = { "htop", "<leader>tj", "htop", "float" },
-    ["<leader>tN"] = { "ncdu", "<leader>tN", "ncdu", "float" },
-  },
 }
 
 M.setup = function()
@@ -70,49 +58,34 @@ M.setup = function()
   local config = M.config
 
   terminal.setup(config.setup)
-
-  local c = 0
-  for _, exec in pairs(config.execs) do
-    c = c + 1
-    local opts = {
-      cmd = exec[1],
-      keymap = exec[2],
-      label = exec[3],
-      -- NOTE: unable to consistently bind id/count <= 9, see #2146
-      count = c + 100,
-      direction = exec[4] or config.setup.direction,
-    }
-    M.add_exec(opts)
-  end
+  utils.Key("n", "<Leader>tt", wrap(M.toggle), "Float"):set()
+  utils.Key("n", "<Leader>th", wrap(M.toggle, { nil, nil, "horizontal" }), "Horizontal"):set()
+  utils.Key("n", "<Leader>tv", wrap(M.toggle, { nil, nil, "vertical" }), "Vertical"):set()
+  utils.Key("n", "<Leader>tg", wrap(M.toggle, { "lazygit" }), "Lazygit"):set()
+  utils.Key("n", "<Leader>gg", wrap(M.toggle, { "lazygit" }), "Lazygit"):set()
+  utils.Key("n", "<Leader>tG", wrap(M.toggle, { "gitui" }), "Git UI"):set()
+  utils.Key("n", "<Leader>gG", wrap(M.toggle, { "gitui" }), "Git UI"):set()
+  utils.Key("n", "<Leader>tH", wrap(M.toggle, { "htop" }), "Htop"):set()
 end
 
-M.add_exec = function(opts)
-  local binary = opts.cmd:match("(%S+)")
-  if vim.fn.executable(binary) ~= 1 then
-    vim.notify("Skipping configuring executable " .. binary .. ". Please make sure it is installed properly.", "INFO")
-    return
+M.toggle = function(opts)
+  opts = opts or {}
+  local cmd = opts.cmd or opts[1]
+  local cwd = opts.cwd or opts[2] or vim.fn.getcwd()
+  local dir = opts.dir or opts[3] or "float"
+  if opts.cmd then
+    local binary = opts.cmd:match("(%S+)")
+    if vim.fn.executable(binary) ~= 1 then
+      vim.notify("Unknown cmd: " .. binary .. ". Please make sure it is installed properly.", "INFO")
+      return
+    end
   end
-
-  local exec_func = string.format(
-    "<cmd>lua require('plugins.toggleterm')._exec_toggle({ cmd = '%s', count = %d, direction = '%s' })<CR>",
-    opts.cmd,
-    opts.count,
-    opts.direction
-  )
-
-  local Key = require("utils.key").Key
-  require("utils.key").load({
-    Key("n", opts.keymap, exec_func, opts.label),
-  })
-end
-
-M._exec_toggle = function(opts)
   local Terminal = require("toggleterm.terminal").Terminal
   local term = Terminal:new({
-    cmd = opts.cmd,
+    cmd = cmd,
+    dir = cwd,
     hidden = true,
-    count = opts.count,
-    direction = opts.direction,
+    direction = dir,
   })
   term:toggle()
 end

@@ -2,7 +2,6 @@ local M = {}
 
 M.packer = {
   "rcarriga/nvim-notify",
-  -- commit = commit.nvim_notify,
   event = "BufRead",
   disable = false,
   config = function()

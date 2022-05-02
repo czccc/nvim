@@ -1,7 +1,7 @@
 local M = {}
 
 M.packer = {
-  "xiyaowong/which-key.nvim",
+  "czccc/which-key.nvim",
   -- "folke/which-key.nvim",
   -- event = "BufWinEnter",
   disable = false,
@@ -29,7 +29,7 @@ M.config = {
       },
       spelling = { enabled = true, suggestions = 20 }, -- use which-key for spelling hints
     },
-    operators = { gc = "Comments", c = "Change" },
+    operators = { gc = "Comments", c = "Change", ['"-c'] = "Change" },
     icons = {
       breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
       separator = "➜", -- symbol used between a key and it's label

@@ -64,13 +64,13 @@ M.config = {
 M.setup = function()
   local tmux = require("tmux")
   tmux.setup(M.config)
-  local LeadertmKey = require("utils.key").PrefixModeKey("<Leader>tm", "n")
-  require("utils.key").load({
-    LeadertmKey("h", tmux.move_left, "Navigate Left"),
-    LeadertmKey("j", tmux.move_bottom, "Navigate Down"),
-    LeadertmKey("k", tmux.move_top, "Navigate Up"),
-    LeadertmKey("l", tmux.move_right, "Navigate Right"),
-  })
+  -- local LeadertmKey = require("utils.key").PrefixModeKey("<Leader>tm", "n")
+  -- require("utils.key").load({
+  --   LeadertmKey("h", tmux.move_left, "Navigate Left"),
+  --   LeadertmKey("j", tmux.move_bottom, "Navigate Down"),
+  --   LeadertmKey("k", tmux.move_top, "Navigate Up"),
+  --   LeadertmKey("l", tmux.move_right, "Navigate Right"),
+  -- })
 end
 
 return M

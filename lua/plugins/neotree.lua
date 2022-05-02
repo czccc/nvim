@@ -233,15 +233,16 @@ M.setup = function()
   local Key = utils.Key
   local Group = utils.Group
   utils.load({
-    Key("n", "<Leader>e", "<cmd>Neotree filesystem reveal<cr>", "Explorer"),
+    Key("n", "<Leader>e", "<cmd>Neotree filesystem<cr>", "Explorer"),
     Key("n", "<Leader>E", "<cmd>Neotree toggle<cr>", "Explorer"),
-    Key("n", "<Leader>vg", "<cmd>Neotree git_status left<cr>", "Git Status"),
-    Key("n", "<Leader>vG", "<cmd>Neotree git_status float<cr>", "Git Status"),
-    Key("n", "<Leader>vb", "<cmd>Neotree buffers left<cr>", "Opened Files"),
-    Key("n", "<Leader>vB", "<cmd>Neotree buffers float<cr>", "Opened Files"),
+    Key("n", "<Leader>ug", "<cmd>Neotree git_status left<cr>", "Git Status"),
+    Key("n", "<Leader>uG", "<cmd>Neotree git_status float<cr>", "Git Status"),
+    Key("n", "<Leader>ub", "<cmd>Neotree buffers left<cr>", "Opened Files"),
+    Key("n", "<Leader>uB", "<cmd>Neotree buffers float<cr>", "Opened Files"),
     Group("UserNeoTreeTabKey"):cmd("FileType", "neo-tree", function()
       Key("n", "<Tab>", "<C-w>l"):buffer(0):set()
     end),
+    Group("UserNeoTreeNoNumber"):cmd("FileType", "neo-tree", "setlocal nonumber norelativenumber"),
   })
 end
 

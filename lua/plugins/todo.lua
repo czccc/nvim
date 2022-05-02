@@ -9,21 +9,19 @@ M.packer = {
   event = "BufRead",
 }
 
-M.config = {
-  highlight = { max_line_len = 120 },
-  colors = {
-    error = { "DiagnosticError" },
-    warning = { "DiagnosticWarn" },
-    info = { "DiagnosticInfo" },
-    hint = { "DiagnosticHint" },
-    hack = { "Function" },
-    ref = { "FloatBorder" },
-    default = { "Identifier" },
-  },
-}
-
 M.setup = function()
-  require("todo-comments").setup(M.config)
+  require("todo-comments").setup({
+    highlight = { max_line_len = 120 },
+    colors = {
+      error = { "DiagnosticError" },
+      warning = { "DiagnosticWarn" },
+      info = { "DiagnosticInfo" },
+      hint = { "DiagnosticHint" },
+      hack = { "Function" },
+      ref = { "FloatBorder" },
+      default = { "Identifier" },
+    },
+  })
 end
 
 return M

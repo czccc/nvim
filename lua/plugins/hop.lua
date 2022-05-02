@@ -12,7 +12,7 @@ M.packer = {
 
 M.setup = function()
   local hop = require("hop")
-  local hint = require("hop.hint")
+  -- local hint = require("hop.hint")
   hop.setup({
     keys = "etovxqpdygfblzhckisuran",
     jump_on_sole_occurrence = true,
@@ -21,46 +21,48 @@ M.setup = function()
 
   local Key = utils.Key
   utils.load({
-    Key({ "n", "v", "x" }, "f", function()
-      hop.hint_char1({
-        direction = hint.HintDirection.AFTER_CURSOR,
-        current_line_only = true,
-      })
-    end, "Forward To"),
-    Key({ "n", "v", "x" }, "F", function()
-      hop.hint_char1({
-        direction = hint.HintDirection.BEFORE_CURSOR,
-        current_line_only = true,
-      })
-    end, "Backward To"),
-    Key("o", "f", function()
-      hop.hint_char1({
-        direction = hint.HintDirection.AFTER_CURSOR,
-        current_line_only = true,
-        inclusive_jump = true,
-      })
-    end, "Forward To"),
-    Key("o", "F", function()
-      hop.hint_char1({
-        direction = hint.HintDirection.BEFORE_CURSOR,
-        current_line_only = true,
-        inclusive_jump = true,
-      })
-    end, "Backward To"),
-    Key({ "n", "v", "x", "o" }, "t", function()
-      hop.hint_char1({
-        direction = hint.HintDirection.AFTER_CURSOR,
-        current_line_only = true,
-      })
-    end, "Forward Till"),
-    Key({ "n", "v", "x", "o" }, "T", function()
-      hop.hint_char1({
-        direction = hint.HintDirection.BEFORE_CURSOR,
-        current_line_only = true,
-      })
-    end, "Backward Till"),
-    Key({ "n" }, "<C-z>", "<cmd>HopWordMW<cr>", "HopWord MW"),
-    Key({ "v", "x", "o" }, "<C-z>", "<cmd>HopWord<cr>", "HopWord"),
+    -- Key({ "n", "v", "x" }, "f", function()
+    --   hop.hint_char1({
+    --     direction = hint.HintDirection.AFTER_CURSOR,
+    --     current_line_only = true,
+    --   })
+    -- end, "Forward To"),
+    -- Key({ "n", "v", "x" }, "F", function()
+    --   hop.hint_char1({
+    --     direction = hint.HintDirection.BEFORE_CURSOR,
+    --     current_line_only = true,
+    --   })
+    -- end, "Backward To"),
+    -- Key("o", "f", function()
+    --   hop.hint_char1({
+    --     direction = hint.HintDirection.AFTER_CURSOR,
+    --     current_line_only = true,
+    --     inclusive_jump = true,
+    --   })
+    -- end, "Forward To"),
+    -- Key("o", "F", function()
+    --   hop.hint_char1({
+    --     direction = hint.HintDirection.BEFORE_CURSOR,
+    --     current_line_only = true,
+    --     inclusive_jump = true,
+    --   })
+    -- end, "Backward To"),
+    -- Key({ "n", "v", "x", "o" }, "t", function()
+    --   hop.hint_char1({
+    --     direction = hint.HintDirection.AFTER_CURSOR,
+    --     current_line_only = true,
+    --   })
+    -- end, "Forward Till"),
+    -- Key({ "n", "v", "x", "o" }, "T", function()
+    --   hop.hint_char1({
+    --     direction = hint.HintDirection.BEFORE_CURSOR,
+    --     current_line_only = true,
+    --   })
+    -- end, "Backward Till"),
+    -- Key("n", "s", "<cmd>HopChar2MW<cr>", "HopChar2"),
+    -- Key({ "v", "x", "o" }, "s", "<cmd>HopChar2<cr>", "HopChar2"),
+    Key({ "n" }, "<Leader>w", "<cmd>HopWord<cr>", "HopWord"),
+    Key({ "n" }, "<Leader>W", "<cmd>HopWordMW<cr>", "HopWord MW"),
     Key("n", "<Leader>j"):group("Hop"),
     Key("n", "<Leader>jj", "<cmd>HopWordMW<cr>", "HopWord MW"),
     Key("n", "<Leader>jw", "<cmd>HopWord<cr>", "HopWord"),
