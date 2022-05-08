@@ -3,6 +3,7 @@ local M = {}
 M.packer = {
   "numToStr/Comment.nvim",
   event = "BufRead",
+  -- keys = { "gc", "gcc", "gbc" },
   config = function()
     require("plugins.comment").setup()
   end,

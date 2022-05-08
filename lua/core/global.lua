@@ -27,4 +27,6 @@ end
 
 _G.utils = require("utils")
 
+_G.table.unpack = table.unpack or unpack
+
 return M

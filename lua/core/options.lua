@@ -22,6 +22,11 @@ M.disabled_plugins = {
   "zipPlugin",
 }
 
+M.gopts = {
+  mapleader = " ",
+  maplocalleader = " ",
+}
+
 M.opts = {
   backup = false, -- creates a backup file
   clipboard = "unnamedplus", -- allows neovim to access the system clipboard
@@ -80,6 +85,7 @@ M.opts = {
   sidescrolloff = 1, -- minimal number of screen lines to keep left and right of the cursor.
 
   -- newly added
+  autoread = true,
   wrapscan = true, -- Searches wrap around the end of the file
   pumblend = 10,
   joinspaces = false,
@@ -90,7 +96,6 @@ M.opts = {
   listchars = "tab:»·,nbsp:+,trail:·,extends:→,precedes:←",
   jumpoptions = "stack",
   diffopt = "filler,iwhite,internal,algorithm:patience",
-  magic = true,
   viewoptions = "folds,cursor,curdir,slash,unix",
   sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal",
   history = 2000,
@@ -120,7 +125,7 @@ M.wopts = {
   -- foldmethod = "manual", -- folding, set to "expr" for treesitter based folding
   foldexpr = "nvim_treesitter#foldexpr()",
   foldmethod = "expr",
-  foldlevel = 4,
+  foldlevel = 99,
   -- foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']],
   -- fillchars = "fold:\\",
   -- foldnestmax = 5,
@@ -135,6 +140,9 @@ function M.setup()
     vim.opt.columns = 9999 -- set the widest screen possible
     vim.opt.swapfile = false -- don't use a swap file
     return
+  end
+  for k, v in pairs(M.gopts) do
+    vim.g[k] = v
   end
   for _, plugin in pairs(M.disabled_plugins) do
     vim.g["loaded_" .. plugin] = 1

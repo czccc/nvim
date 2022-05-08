@@ -54,7 +54,7 @@ function M.setup(server_name, user_config)
   local lsp_config = require("plugins.lsp").config
 
   if lvim_lsp_utils.is_client_active(server_name) or client_is_configured(server_name) then
-    vim.notify(string.format("[%q] is already configured. Ignoring repeated setup call.", server_name), "INFO")
+    -- vim.notify(string.format("[%q] is already configured. Ignoring repeated setup call.", server_name), "INFO")
     return
   end
 
@@ -73,20 +73,7 @@ function M.setup(server_name, user_config)
     return
   end
 
-  local install_notification = false
-
-  if not requested_server:is_installed() then
-    if lsp_config.automatic_servers_installation then
-      requested_server:install()
-      install_notification = true
-    end
-  end
-
   requested_server:on_ready(function()
-    if install_notification then
-      vim.notify(string.format("Installation complete for [%s] server", requested_server.name), vim.log.levels.INFO)
-    end
-    install_notification = false
     requested_server:setup(config)
   end)
 end

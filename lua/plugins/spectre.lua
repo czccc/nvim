@@ -2,9 +2,12 @@ local M = {}
 
 M.packer = {
   "nvim-pack/nvim-spectre",
+  event = "BufRead",
   config = function()
     require("plugins.spectre").setup()
   end,
+  wants = { "plenary.nvim", "popup.nvim" },
+  requires = { "nvim-lua/popup.nvim", "nvim-lua/plenary.nvim" },
 }
 
 M.setup = function()

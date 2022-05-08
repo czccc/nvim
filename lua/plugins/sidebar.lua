@@ -1,4 +1,5 @@
 local M = {}
+
 M.packers = {
   {
     "simrat39/symbols-outline.nvim",
@@ -11,7 +12,7 @@ M.packers = {
   },
   {
     "mbbill/undotree",
-    config = function()
+    setup = function()
       require("plugins.sidebar").setup_undotree()
     end,
     cmd = { "UndotreeToggle" },

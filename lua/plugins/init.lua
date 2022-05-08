@@ -4,8 +4,7 @@ local plugin_files = {
   "plugins.which_key",
   "plugins.misc",
   "plugins.notify",
-  "plugins.hop",
-  "plugins.lightspeed",
+  "plugins.motion",
 
   "plugins.themes",
 
@@ -29,13 +28,11 @@ local plugin_files = {
   "plugins.session",
 
   "plugins.lsp",
-  "plugins.dap",
+  -- "plugins.dap",
   "plugins.lang",
 
   "plugins.hlslens",
-  "plugins.harpoon",
   "plugins.indent_blankline",
-  "plugins.lsp_signature",
   "plugins.neorg",
   "plugins.sidebar",
   "plugins.spectre",
@@ -44,31 +41,19 @@ local plugin_files = {
 
 M.packers = {}
 
-M.init = function()
-  M.packers = {}
-  for _, plugin_file in ipairs(plugin_files) do
-    local status_ok, plugin = pcall(require, plugin_file)
-    if not status_ok then
-      vim.notify("Unable to require file " .. plugin, "ERROR")
-    end
-    if plugin.init then
-      pcall(plugin.init)
-    end
-    if plugin.packer then
-      M.packers[#M.packers + 1] = plugin.packer
-    end
-    if plugin.packers then
-      for _, plugin_packer in ipairs(plugin.packers) do
-        M.packers[#M.packers + 1] = plugin_packer
-      end
-    end
-  end
+M.setup = function()
+  M.packers = M.merge(plugin_files)
 end
 
 M.reload = function()
-  M.packers = {}
-  for _, plugin_file in ipairs(plugin_files) do
-    local status_ok, plugin = pcall(require_clean, plugin_file)
+  M.packers = M.merge(plugin_files, true)
+end
+
+M.merge = function(file_list, clean)
+  local merged = {}
+  local require_fn = clean and require_clean or require
+  for _, plugin_file in ipairs(file_list) do
+    local status_ok, plugin = pcall(require_fn, plugin_file)
     if not status_ok then
       vim.notify("Unable to require file " .. plugin, "ERROR")
     end
@@ -76,14 +61,17 @@ M.reload = function()
       pcall(plugin.init)
     end
     if plugin.packer then
-      M.packers[#M.packers + 1] = plugin.packer
+      plugin.packers = { plugin.packer }
     end
     if plugin.packers then
       for _, plugin_packer in ipairs(plugin.packers) do
-        M.packers[#M.packers + 1] = plugin_packer
+        if not plugin_packer.disable then
+          merged[#merged + 1] = plugin_packer
+        end
       end
     end
   end
+  return merged
 end
 
 return M

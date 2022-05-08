@@ -8,7 +8,7 @@ M.packer = {
   config = function()
     require("plugins.indent_blankline").setup()
   end,
-  event = "BufRead",
+  event = "BufReadPre",
   cmd = { "IndentBlanklineRefresh" },
 }
 

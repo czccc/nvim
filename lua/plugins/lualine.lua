@@ -2,6 +2,7 @@ local M = {}
 
 M.packer = {
   "nvim-lualine/lualine.nvim",
+  event = "VimEnter",
   config = function()
     require("plugins.lualine").setup()
   end,
@@ -41,7 +42,7 @@ local conditions = {
   end,
 }
 
-local colors = require("core.colors").colors.cool
+local colors = require("utils.colors").onedark_cool
 
 local components = {
   left = {
@@ -53,11 +54,50 @@ local components = {
   },
   mode = {
     function()
-      return " "
+      local map = {
+        ["n"] = "NORMAL",
+        ["no"] = "O-PENDING",
+        ["nov"] = "O-PENDING",
+        ["noV"] = "O-PENDING",
+        ["no\22"] = "O-PENDING",
+        ["niI"] = "NORMAL",
+        ["niR"] = "NORMAL",
+        ["niV"] = "NORMAL",
+        ["nt"] = "NORMAL",
+        ["v"] = "VISUAL",
+        ["vs"] = "VISUAL",
+        ["V"] = "V-LINE",
+        ["Vs"] = "V-LINE",
+        ["\22"] = "V-BLOCK",
+        ["\22s"] = "V-BLOCK",
+        ["s"] = "SELECT",
+        ["S"] = "S-LINE",
+        ["\19"] = "S-BLOCK",
+        ["i"] = "INSERT",
+        ["ic"] = "INSERT",
+        ["ix"] = "INSERT",
+        ["R"] = "REPLACE",
+        ["Rc"] = "REPLACE",
+        ["Rx"] = "REPLACE",
+        ["Rv"] = "V-REPLACE",
+        ["Rvc"] = "V-REPLACE",
+        ["Rvx"] = "V-REPLACE",
+        ["c"] = "COMMAND",
+        ["cv"] = "EX ",
+        ["ce"] = "EX ",
+        ["r"] = "REPLACE",
+        ["rm"] = "MORE",
+        ["r?"] = "CONFIRM",
+        ["!"] = "SHELL",
+        ["t"] = "TERMINAL",
+      }
+      local mod = vim.fn.mode()
+      if map[mod] == nil then
+        return string.upper(mod)
+      end
+      return map[mod]:sub(1, 3)
     end,
-    padding = { left = 0, right = 0 },
-    color = {},
-    cond = nil,
+    -- padding = { left = 0, right = 0 },
   },
   mode1 = {
     function()
@@ -331,6 +371,7 @@ local components = {
         end
         return string.format("%.1f%s", size, sufixes[i])
       end
+
       local file = vim.fn.expand("%:p")
       if string.len(file) == 0 then
         return ""
@@ -397,11 +438,13 @@ M.config = {
   },
   sections = {
     -- these are to remove the defaults
-    lualine_a = {},
+    lualine_a = {
+      components.mode,
+    },
     lualine_b = {},
     lualine_c = {
       -- components.left,
-      components.mode1,
+      -- components.mode1,
       components.cwd,
       -- components.branch,
       components.branch1,
@@ -430,7 +473,6 @@ M.config = {
     lualine_z = {},
   },
   inactive_sections = {
-    -- these are to remove the defaults
     lualine_a = {},
     lualine_b = {},
     lualine_c = { components.filename },
@@ -439,51 +481,6 @@ M.config = {
     lualine_z = {},
   },
   tabline = {},
-  -- extensions = {
-  --   {
-  --     sections = {
-  --       lualine_c = {
-  --         {
-  --           function()
-  --             return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
-  --           end,
-  --           color = { gui = "bold" },
-  --         },
-  --       },
-  --     },
-  --     filetypes = { "NvimTree", "neo-tree" },
-  --   },
-  --   {
-  --     sections = {
-  --       lualine_c = {
-  --         {
-  --           function()
-  --             return "ToggleTerm #" .. vim.b.toggle_number
-  --           end,
-  --           color = { fg = colors.blue, gui = "bold" },
-  --         },
-  --       },
-  --     },
-  --     filetypes = { "toggleterm" },
-  --   },
-  --   {
-  --     sections = { lualine_c = { { "filetype", color = { gui = "bold" } } } },
-  --     filetypes = { "Outline", "SidebarNvim" },
-  --   },
-  --   {
-  --     sections = {
-  --       lualine_c = {
-  --         {
-  --           function()
-  --             return "Sidebar"
-  --           end,
-  --           color = { gui = "bold" },
-  --         },
-  --       },
-  --     },
-  --     filetypes = { "SidebarNvim" },
-  --   },
-  -- },
 }
 
 M.setup = function()

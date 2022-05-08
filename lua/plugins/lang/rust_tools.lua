@@ -1,7 +1,16 @@
 local M = {}
 
-local executor = {}
+M.packer = {
+  "simrat39/rust-tools.nvim",
+  -- "fabiocaruso/rust-tools.nvim",
+  config = function()
+    require("plugins.lang.rust_tools").setup()
+  end,
+  ft = { "rust", "rs" },
+  opt = true,
+}
 
+local executor = {}
 executor.latest_buf_id = nil
 executor.execute_command = function(command, args, cwd)
   local utils = require("rust-tools.utils.utils")
@@ -26,6 +35,7 @@ executor.execute_command = function(command, args, cwd)
   local function onDetach(_, _)
     executor.latest_buf_id = nil
   end
+
   vim.api.nvim_buf_attach(executor.latest_buf_id, false, { on_detach = onDetach })
 end
 -- executor.execute_command = require("plugins.async").exector_with_args
@@ -123,6 +133,8 @@ M.setup = function()
         })
       end,
       on_init = require("plugins.lsp").common_on_init,
+      on_exit = require("plugins.lsp").common_on_exit,
+      capabilities = require("plugins.lsp").common_capabilities(),
     },
     dap = {
       adapter = M.get_lldb_command(),

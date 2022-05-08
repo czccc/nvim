@@ -38,12 +38,6 @@ M.autocommands = {
     AuCmd("user", "TelescopePreviewerLoaded", "setlocal number relativenumber wrap list"),
     AuCmd("BufWinEnter", "dashboard", "setlocal cursorline signcolumn=yes cursorcolumn number"),
   }),
-  Group("UserFormatOnSave"):extend({
-    AuCmd("BufWritePre", "*", wrap(vim.lsp.buf.formatting_sync, {}, 1000)),
-  }),
-  Group("UserAddHighlight"):extend({
-    AuCmd("ColorScheme", "*", wrap(require("core.colors").setup_highlights)),
-  }),
 }
 
 M.setup = function()

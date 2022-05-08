@@ -55,6 +55,7 @@ local function make_sessions()
     end
     return filename
   end
+
   local dashboard = require("alpha.themes.dashboard")
   local session_list = require("session_manager.utils").get_sessions()
   local last_session = require("session_manager.utils").get_last_session_filename()

@@ -3,79 +3,51 @@ local M = {}
 M.packers = {
   {
     "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+    opt = true,
     config = function()
       require("plugins.cmp").setup_cmp()
     end,
+    wants = { "LuaSnip" },
     requires = {
-      "L3MON4D3/LuaSnip",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "f3fora/cmp-spell",
+      -- "hrsh7th/cmp-cmdline",
+      -- "hrsh7th/cmp-copilot",
+      "saadparwaiz1/cmp_luasnip",
+      "rafamadriz/friendly-snippets",
+      {
+        "L3MON4D3/LuaSnip",
+        wants = "friendly-snippets",
+        config = function()
+          require("plugins.cmp").setup_luasnip()
+        end,
+      },
+      {
+        "danymat/neogen",
+        config = function()
+          require("neogen").setup({ snippet_engine = "luasnip" })
+        end,
+        requires = "nvim-treesitter/nvim-treesitter",
+      },
+      {
+        "abecodes/tabout.nvim",
+        config = function()
+          require("plugins.cmp").setup_tabout()
+        end,
+      },
+      {
+        "github/copilot.vim",
+        -- "gelfand/copilot.vim",
+        config = function()
+          require("plugins.cmp").setup_copilot()
+        end,
+        -- disable = true,
+      },
     },
   },
-  {
-    "rafamadriz/friendly-snippets",
-  },
-  {
-    "L3MON4D3/LuaSnip",
-    config = function()
-      require("luasnip/loaders/from_vscode").lazy_load()
-      require("luasnip/loaders/from_vscode").lazy_load({ paths = { "./snippets" } })
-    end,
-  },
-  {
-    "hrsh7th/cmp-nvim-lsp",
-  },
-  {
-    "saadparwaiz1/cmp_luasnip",
-  },
-  {
-    "hrsh7th/cmp-buffer",
-  },
-  {
-    "hrsh7th/cmp-path",
-  },
-  -- {
-  --   "hrsh7th/cmp-cmdline",
-  -- },
-  {
-    "f3fora/cmp-spell",
-  },
-  {
-    "danymat/neogen",
-    config = function()
-      require("neogen").setup({ snippet_engine = "luasnip" })
-    end,
-    requires = "nvim-treesitter/nvim-treesitter",
-  },
-  {
-    "abecodes/tabout.nvim",
-    config = function()
-      require("plugins.cmp").setup_tabout()
-    end,
-  },
-  {
-    "github/copilot.vim",
-    -- "gelfand/copilot.vim",
-    config = function()
-      require("plugins.cmp").setup_copilot()
-    end,
-    -- disable = true,
-  },
-  -- {
-  --   "hrsh7th/cmp-copilot",
-  --   -- disable = true,
-  -- },
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   event = "InsertEnter",
-  --   config = function()
-  --     vim.schedule(function()
-  --       require "copilot"
-  --     end)
-  --   end,
-  -- },
-  -- {
-  --   "zbirenbaum/copilot-cmp",
-  --   after = { "copilot.lua", "nvim-cmp" },
-  -- },
 }
 
 M.config = {}
@@ -85,20 +57,12 @@ local has_words_before = function()
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
-M.setup_cmp = function()
-  local status_cmp_ok, cmp = pcall(require, "cmp")
-  if not status_cmp_ok then
-    vim.cmd([[ packadd cmp ]])
-    return
-  end
-  local status_luasnip_ok, luasnip = pcall(require, "luasnip")
-  if not status_luasnip_ok then
-    vim.cmd([[ packadd luasnip ]])
-    return
-  end
+M.setup_luasnip = function()
+  require("luasnip/loaders/from_vscode").lazy_load()
+  require("luasnip/loaders/from_vscode").lazy_load({ paths = { "./snippets" } })
   local types = require("luasnip.util.types")
   local util = require("luasnip.util.util")
-
+  local luasnip = require("luasnip")
   luasnip.config.setup({
     history = "false",
     region_check_events = "CursorMoved",
@@ -155,6 +119,7 @@ M.setup_cmp = function()
           end
         end
       end
+
       -- this is called only if the snippet is currently selected.
       function snippet:jump_from(dir, no_move)
         if dir == 1 then
@@ -164,9 +129,23 @@ M.setup_cmp = function()
           return self.prev:jump_into(dir, no_move)
         end
       end
+
       return snippet
     end,
   })
+end
+
+M.setup_cmp = function()
+  local status_cmp_ok, cmp = pcall(require, "cmp")
+  if not status_cmp_ok then
+    vim.cmd([[ packadd cmp ]])
+    return
+  end
+  local status_luasnip_ok, luasnip = pcall(require, "luasnip")
+  if not status_luasnip_ok then
+    vim.cmd([[ packadd luasnip ]])
+    return
+  end
 
   M.config = {
     confirm_opts = {
@@ -255,7 +234,7 @@ M.setup_cmp = function()
     },
     sources = {
       { name = "nvim_lsp" },
-      { name = "copilot", group_index = 2 },
+      { name = "copilot" },
       { name = "path", max_item_count = 5 },
       { name = "luasnip", max_item_count = 3 },
       { name = "cmp_tabnine" },
@@ -303,6 +282,8 @@ M.setup_cmp = function()
       ["<Esc>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.abort()
+        elseif vim.fn["copilot#Accept"]() ~= "" then
+          vim.cmd([[normal \<Plug>(copilot-dismiss)<cr>]])
         elseif luasnip.expand_or_jumpable() then
           luasnip.session.current_nodes[vim.api.nvim_get_current_buf()] = nil
           fallback()
@@ -311,21 +292,6 @@ M.setup_cmp = function()
         end
       end),
       ["<CR>"] = cmp.mapping.confirm({ select = false }),
-      -- ["<CR>"] = cmp.mapping(function(fallback)
-      --   if cmp.visible() and cmp.confirm(M.config.confirm_opts) then
-      --     if luasnip.expand_or_locally_jumpable() then
-      --       luasnip.expand_or_jump()
-      --     end
-      --     return
-      --   end
-      --   if luasnip.expand_or_locally_jumpable() then
-      --     if not luasnip.jump(1) then
-      --       fallback()
-      --     end
-      --   else
-      --     fallback()
-      --   end
-      -- end),
     }),
   }
   cmp.setup(M.config)

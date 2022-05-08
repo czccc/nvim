@@ -20,7 +20,9 @@ local dev_opts = {
         },
         workspace = {
           library = {
-            [require("utils.path").join(require("utils.path").config, "lua")] = true,
+            [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+            [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+            [join_paths(utils.Path.config_dir, "lua")] = true,
           },
           maxPreload = 100000,
           preloadFileSize = 10000,

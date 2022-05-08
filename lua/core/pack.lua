@@ -21,11 +21,7 @@ function M.init()
     compile_path = compile_path,
     log = { level = "WARN" },
     git = {
-      clone_timeout = 30,
-      subcommands = {
-        -- this is more efficient than what Packer is using
-        fetch = "fetch --no-tags --no-recurse-submodules --update-shallow --progress",
-      },
+      clone_timeout = 60,
       default_url_format = github_proxy .. "%s",
     },
     max_jobs = 50,
@@ -36,7 +32,7 @@ function M.init()
     },
     profile = {
       enable = false,
-      threshold = 1, -- integer in milliseconds, plugins which load faster than this won't be shown in profile output
+      threshold = 1, -- integer in milliseconds
     },
     autoremove = true,
   })
@@ -72,7 +68,6 @@ function M.setup()
   if not status_ok then
     vim.notify("problems detected while loading plugins' configurations\n" .. debug.traceback(), "ERROR")
   end
-  require("core.colors").setup()
 end
 
 return M

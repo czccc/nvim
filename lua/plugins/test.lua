@@ -3,31 +3,25 @@ local M = {}
 M.packer = {
   "rcarriga/vim-ultest",
   requires = {
-    "vim-test/vim-test",
-    config = function()
-      require("plugins.test").setup_test()
-    end,
+    {
+      "vim-test/vim-test",
+      event = "BufRead",
+    },
   },
   run = ":UpdateRemotePlugins",
   setup = function()
     require("plugins.test").setup_ultest()
   end,
   event = "BufRead",
-  -- disable = true,
+  opt = true,
 }
 
-M.setup_test = function()
-  vim.g["test#strategy"] = "asyncrun"
-end
-
+vim.g["test#strategy"] = "asyncrun"
 vim.g.ultest_use_pty = 1
 vim.g.ultest_output_on_line = 0
 vim.g.ultest_summary_width = 30
 
 M.setup_ultest = function()
-  -- vim.g.ultest_use_pty = 1
-  -- vim.g.ultest_output_on_line = 0
-  -- vim.g.ultest_summary_width = 30
   utils.Key("n", "]t", "<Plug>(ultest-next-fail)", "Next Failed Test"):set()
   utils.Key("n", "[t", "<Plug>(ultest-prev-fail)", "Previous Failed Test"):set()
   utils.Key("n", "<leader>tu", "<cmd>UltestSummary<cr>", "Ultest Summary"):set()

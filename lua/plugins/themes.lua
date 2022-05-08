@@ -1,7 +1,10 @@
 local M = {}
 
+M.colorscheme = "onedark"
+
 M.init = function()
-  require("core.colors").colorscheme = "onedark"
+  vim.g.colors_name = M.colorscheme
+  vim.cmd("colorscheme " .. M.colorscheme)
 end
 
 M.packers = {
@@ -99,7 +102,11 @@ M.setup_onedark = function()
       TSProperty = { fg = "$red" },
       TSFuncMacro = { fg = "$orange" },
       TSFuncBuiltin = { fg = "$orange" },
+      TSKeywordFunction = { fmt = "bold" },
       TSConstant = { fg = "$orange" },
+      cppTSConstant = { fg = "$orange" },
+      cTSConstant = { fg = "$orange" },
+      TSPunctBracket = { fg = "$purple" },
       packerStatusSuccess = { fg = "$green" },
       CmpItemAbbrMatch = { fg = "$green" },
       CmpItemAbbrMatchFuzzy = { fg = "$green" },
@@ -129,9 +136,8 @@ M.setup_onedark = function()
     },
   })
   -- require("onedark").load()
-  local cl = require("core.colors")
-  -- cl.define_links("Search", "Visual")
-  cl.setup_colorscheme()
+  vim.g.colors_name = M.colorscheme
+  vim.cmd("colorscheme " .. M.colorscheme)
 end
 
 M.setup_nightfox = function()

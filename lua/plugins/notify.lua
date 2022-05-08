@@ -2,8 +2,7 @@ local M = {}
 
 M.packer = {
   "rcarriga/nvim-notify",
-  event = "BufRead",
-  disable = false,
+  event = "VimEnter",
   config = function()
     require("plugins.notify").setup()
   end,

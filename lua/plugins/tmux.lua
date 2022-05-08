@@ -2,6 +2,7 @@ local M = {}
 
 M.packer = {
   "aserowy/tmux.nvim",
+  event = "BufRead",
   config = function()
     require("plugins.tmux").setup()
   end,

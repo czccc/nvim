@@ -3,6 +3,13 @@ local M = {}
 M.packer = {
   "nvim-neo-tree/neo-tree.nvim",
   branch = "v2.x",
+  event = "BufRead",
+  opt = true,
+  wants = {
+    "plenary.nvim",
+    "nvim-web-devicons",
+    "nui.nvim",
+  },
   requires = {
     "nvim-lua/plenary.nvim",
     "kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
@@ -182,6 +189,7 @@ M.config = {
       hide_by_name = {
         ".DS_Store",
         "thumbs.db",
+        ".git",
         --"node_modules"
       },
       never_show = { -- remains hidden even if visible is toggled to true

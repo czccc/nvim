@@ -1,5 +1,18 @@
 local M = {}
 
+M.packer = {
+  "ray-x/go.nvim",
+  requires = {
+    "ray-x/guihua.lua",
+    "theHamsta/nvim-dap-virtual-text",
+  },
+  config = function()
+    require("plugins.lang.go").setup()
+  end,
+  ft = { "go" },
+  opt = true,
+}
+
 M.setup = function()
   local status_ok, go = pcall(require, "go")
   if not status_ok then
@@ -109,6 +122,8 @@ M.setup = function()
       },
       cmd_env = requested_server._default_options.cmd_env,
       on_init = require("plugins.lsp").common_on_init,
+      on_exit = require("plugins.lsp").common_on_exit,
+      capabilities = require("plugins.lsp").common_capabilities(),
     },
   })
 end

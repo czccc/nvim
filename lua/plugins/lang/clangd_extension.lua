@@ -1,5 +1,14 @@
 local M = {}
 
+M.packer = {
+  "p00f/clangd_extensions.nvim",
+  config = function()
+    require("plugins.lang.clangd_extension").setup()
+  end,
+  ft = { "c", "cpp", "objc", "objcpp" },
+  opt = true,
+}
+
 M.setup = function()
   local status_ok, clangd_extensions = pcall(require, "clangd_extensions")
   if not status_ok then
@@ -39,6 +48,7 @@ M.setup = function()
         })
       end,
       on_init = require("plugins.lsp").common_on_init,
+      on_exit = require("plugins.lsp").common_on_exit,
       capabilities = require("plugins.lsp").common_capabilities(),
     },
     extensions = {

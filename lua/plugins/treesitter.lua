@@ -3,46 +3,28 @@ local M = {}
 M.packers = {
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = vim.fn.has("nvim-0.6") == 1 and "master" or "0.5-compat",
-    -- run = ":TSUpdate",
+    run = ":TSUpdate",
+    -- event = "BufRead",
+    -- opt = true,
     config = function()
       require("plugins.treesitter").setup()
     end,
-  },
-  {
-    "nvim-treesitter/nvim-treesitter-textobjects",
-  },
-  -- {
-  --   "RRethy/nvim-treesitter-textsubjects",
-  -- },
-  {
-    "nvim-treesitter/playground",
-    -- cmd: TSHighlightCapturesUnderCursor  TSPlaygroundToggle
-  },
-  {
-    "p00f/nvim-ts-rainbow",
-  },
-  {
-    "andymass/vim-matchup",
-  },
-  {
-    "romgrk/nvim-treesitter-context",
-    -- cmd: TSContextEnable, TSContextDisable and TSContextToggle
-    -- highlight: TreesitterContext
-    config = function()
-      require("plugins.treesitter").setup_context()
-    end,
-    disable = true,
-  },
-  {
-    "SmiteshP/nvim-gps",
-    config = function()
-      require("plugins.treesitter").setup_gps()
-    end,
-  },
-  {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    event = "BufReadPost",
+    requires = {
+      { "nvim-treesitter/playground", opt = true, cmd = "TSHighlightCapturesUnderCursor" },
+      "JoosepAlviste/nvim-ts-context-commentstring",
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      -- "RRethy/nvim-treesitter-textsubjects",
+      "p00f/nvim-ts-rainbow",
+      "andymass/vim-matchup",
+      {
+        "SmiteshP/nvim-gps",
+        config = function()
+          require("plugins.treesitter").setup_gps()
+        end,
+        event = "BufRead",
+        opt = true,
+      },
+    },
   },
 }
 
@@ -70,12 +52,12 @@ M.opts = {
     enable = true, -- mandatory, false will disable the whole extension
     -- disable = { "c", "ruby" },  -- optional, list of language that will be disabled
     matchparen_offscreen = { method = "popup" },
-    vim.cmd([[ let g:matchup_matchparen_offscreen = {'method': 'popup'} ]]),
-    -- vim.cmd [[ let g:matchup_matchparen_offscreen = {'method': 'status_manual'} ]],
+    -- vim.cmd([[ let g:matchup_matchparen_offscreen = {'method': 'popup'} ]]),
+    vim.cmd([[ let g:matchup_matchparen_offscreen = {'method': 'status_manual'} ]]),
   },
   highlight = {
     enable = true, -- false will disable the whole extension
-    additional_vim_regex_highlighting = true,
+    additional_vim_regex_highlighting = false,
     disable = { "latex" },
   },
   incremental_selection = {
@@ -160,8 +142,8 @@ M.opts = {
       enable = true,
       border = "none",
       peek_definition_code = {
-        ["<leader>lpf"] = "@function.outer",
-        ["<leader>lpF"] = "@class.outer",
+        ["<leader>lf"] = "@function.outer",
+        ["<leader>lc"] = "@class.outer",
       },
     },
   },
@@ -207,7 +189,6 @@ M.opts = {
     -- "#4dbdcb",
     -- }, -- table of hex strings
     -- termcolors = {} -- table of colour name strings
-    -- require("core.colors").define_styles("rainbowcol1", { guifg = "#4dbdcb" }),
   },
 }
 
@@ -245,6 +226,9 @@ function M.setup()
     Key("n", "[c"):desc("Previous Class Start"),
     Key("n", "[F"):desc("Previous Function End"),
     Key("n", "[C"):desc("Previous Class End"),
+    Key("n", "<Leader>lf"):desc("Peek Function"),
+    Key("n", "<Leader>lc"):desc("Peek Class"),
+    Key("n", "<Leader>ut", "<cmd>TSHighlightCapturesUnderCursor<cr>", "TSHighlightCapturesUnderCursor"),
   })
 end
 

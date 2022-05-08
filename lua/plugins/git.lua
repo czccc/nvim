@@ -3,6 +3,7 @@ local M = {}
 M.packers = {
   {
     "lewis6991/gitsigns.nvim",
+    module = "gitsigns",
     config = function()
       require("plugins.git").setup_gitsigns()
     end,

@@ -2,7 +2,8 @@ local M = {}
 
 M.packer = {
   "gelguy/wilder.nvim",
-  -- event = { "CursorHold", "CmdlineEnter" },
+  event = { "CmdlineEnter" },
+  opt = true,
   -- rocks = { "luarocks-fetch-gitrec", "pcre2" },
   requires = { "romgrk/fzy-lua-native", "nixprime/cpsm" },
   config = function()

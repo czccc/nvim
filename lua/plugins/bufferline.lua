@@ -8,17 +8,23 @@ M.packers = {
     config = function()
       require("plugins.bufferline").setup()
     end,
-  },
-  {
-    "ojroques/nvim-bufdel",
-    event = "BufWinEnter",
-    disable = false,
-    config = function()
-      require("bufdel").setup({
-        next = "alternate", -- or 'alternate'
-        quit = false,
-      })
-    end,
+    wants = {
+      "nvim-web-devicons",
+      "nvim-bufdel",
+    },
+    requires = {
+      "nvim-web-devicons",
+      {
+        "ojroques/nvim-bufdel",
+        event = "BufWinEnter",
+        config = function()
+          require("bufdel").setup({
+            next = "alternate", -- or 'alternate'
+            quit = false,
+          })
+        end,
+      },
+    },
   },
 }
 

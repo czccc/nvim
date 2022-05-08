@@ -65,7 +65,7 @@ function M.restore_explorer()
     -- pcall(neotree.execute, { action = "close" })
     -- pcall(neotree.execute, { action = "focus" })
     pcall(vim.cmd, [[ Neotree filesystem show reveal ]])
-    pcall(vim.cmd, vim.api.nvim_replace_termcodes("normal <C-w>=", true, true, true))
+    pcall(vim.cmd, vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>=", true, false, true), "n", false))
     return
   end
   local status_ok, nvim_tree = pcall(require, "nvim-tree")

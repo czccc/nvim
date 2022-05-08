@@ -52,6 +52,7 @@ function Path.require_clean(module)
 end
 
 Path.runtime_dir = vim.fn.stdpath("data")
+Path.data_dir = vim.fn.stdpath("data")
 Path.config_dir = vim.fn.stdpath("config")
 Path.cache_dir = vim.fn.stdpath("cache")
 
@@ -65,24 +66,5 @@ Path.dap_install_path = Path.join(Path.runtime_dir, "dap_install")
 Path.lsp_install_path = Path.join(Path.runtime_dir, "lsp_servers")
 
 Path.cache_path = vim.fn.stdpath("cache")
-
-local create_dir = function()
-  local data_dir = {
-    Path.join(Path.cache_path, "backup"),
-    Path.join(Path.cache_path, "sessions"),
-    Path.join(Path.cache_path, "swap"),
-    Path.join(Path.cache_path, "tags"),
-    Path.join(Path.cache_path, "undo"),
-    Path.join(Path.site_path, "lua"),
-  }
-  os.execute("mkdir -p " .. Path.cache_path)
-  for _, v in pairs(data_dir) do
-    if vim.fn.isdirectory(v) == 0 then
-      os.execute("mkdir -p " .. v)
-    end
-  end
-end
-
-Path.create_dir = create_dir
 
 return Path

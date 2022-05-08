@@ -1,17 +1,8 @@
 local M = {}
 
-local leader_map = function()
-  -- vim.api.nvim_set_keymap("", "<Space>", "<Nop>", { noremap = true, silent = true })
-  vim.g.mapleader = " "
-  vim.g.maplocalleader = " "
-  -- vim.api.nvim_set_keymap("n", " ", "", {noremap = true})
-  -- vim.api.nvim_set_keymap("x", " ", "", {noremap = true})
-end
-
 M.load_core = function()
   pcall(require, "impatient")
   -- require("impatient").enable_profile()
-  leader_map()
   require("core.global")
   require("core.options").setup()
   require("core.keymap").setup()
@@ -20,10 +11,9 @@ end
 
 M.load_plugins = function()
   require("core.pack").init()
-  require("plugins").init()
+  require("plugins").setup()
   require("core.osconf").setup()
   require("core.pack").setup()
-  require("core.colors").setup()
 end
 
 M.reload = function()
@@ -33,12 +23,35 @@ M.reload = function()
       _G.packer_plugins[v] = nil
     end
   end
+  for _, lua_file in ipairs(M.config_lua_list()) do
+    package.loaded[lua_file] = nil
+    _G[lua_file] = nil
+  end
 
-  require("plugins").reload()
+  require("core.global")
+  require("core.options").setup()
+  require("core.keymap").setup()
+  require("core.autocmds").setup()
+
+  require("core.pack").init()
+  require("plugins").setup()
   require("core.osconf").setup()
   require("core.pack").setup()
 
-  vim.notify("Reloaded")
+  vim.notify("Reloaded", "INFO")
+end
+
+M.config_lua_list = function()
+  local base_lua_dir = join_paths(utils.Path.config_dir, "lua")
+  local lua_files = vim.fn.globpath(base_lua_dir, "**/*.lua", 0, 1)
+  for i, lua_file in ipairs(lua_files) do
+    lua_file = lua_file:gsub(base_lua_dir, "")
+    lua_file = lua_file:sub(2, -5)
+    lua_file = lua_file:gsub(utils.Path.separator, ".")
+    lua_file = lua_file:gsub(".init", "")
+    lua_files[i] = lua_file
+  end
+  return lua_files
 end
 
 return M

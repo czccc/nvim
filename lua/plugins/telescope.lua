@@ -3,31 +3,48 @@ local M = {}
 M.packers = {
   {
     "nvim-telescope/telescope.nvim",
-    disable = false,
+    -- event = "VimEnter",
+    -- cmd = { "Telescope" },
+    -- module = "telescope",
+    -- keys = { "<leader>s", "<leader>f" },
+    -- opt = true,
+    setup = function()
+      require("plugins.telescope").set_keys()
+    end,
     config = function()
       require("plugins.telescope").setup()
     end,
-  },
-  {
-    "nvim-telescope/telescope-fzf-native.nvim",
-    disable = false,
-    run = "make",
-  },
-  {
-    "nvim-telescope/telescope-frecency.nvim",
-    requires = { "tami5/sqlite.lua" },
-  },
-  -- {
-  --   "nvim-telescope/telescope-file-browser.nvim",
-  -- },
-  -- {
-  --   "nvim-telescope/telescope-ui-select.nvim",
-  -- },
-  {
-    "stevearc/dressing.nvim",
-    config = function()
-      require("plugins.telescope").setup_dressing()
-    end,
+    wants = {
+      "plenary.nvim",
+      "popup.nvim",
+      "telescope-frecency.nvim",
+      "telescope-fzf-native.nvim",
+      "dressing.nvim",
+    },
+    requires = {
+      "nvim-lua/popup.nvim",
+      "nvim-lua/plenary.nvim",
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        run = "make",
+      },
+      {
+        "nvim-telescope/telescope-frecency.nvim",
+        requires = { "tami5/sqlite.lua" },
+      },
+      {
+        "stevearc/dressing.nvim",
+        config = function()
+          require("plugins.telescope").setup_dressing()
+        end,
+      },
+      {
+        "ThePrimeagen/harpoon",
+        config = function()
+          require("plugins.telescope").setup_harpoon()
+        end,
+      },
+    },
   },
 }
 
@@ -152,11 +169,6 @@ M.config = {
     frecency = {
       -- show_scores = true,
     },
-    ["ui-select"] = {
-      require("telescope.themes").get_dropdown({
-        -- even more opts
-      }),
-    },
   },
 }
 function M.set_keys()
@@ -229,15 +241,13 @@ function M.setup()
   telescope.setup(M.config)
   require("telescope").load_extension("fzf")
   require("telescope").load_extension("frecency")
-  -- require("telescope").load_extension "file_browser"
-  -- require("telescope").load_extension "ui-select"
 
   utils.Group("UserTelescopeFoldFix")
-    :cmd("BufRead", "*", function()
-      utils.AuCmd("BufWinEnter", "*", "normal! zx"):once():set()
-    end)
-    :set()
-  M.set_keys()
+      :cmd("BufRead", "*", function()
+        utils.AuCmd("BufWinEnter", "*", "normal! zx"):once():set()
+      end)
+      :set()
+  -- M.set_keys()
 end
 
 M.setup_dressing = function()
@@ -268,6 +278,36 @@ M.setup_dressing = function()
   })
 end
 
+M.setup_harpoon = function()
+  require("harpoon").setup({
+    global_settings = {
+      -- sets the marks upon calling `toggle` on the ui, instead of require `:w`.
+      save_on_toggle = false,
+
+      -- saves the harpoon file upon every change. disabling is unrecommended.
+      save_on_change = true,
+
+      -- sets harpoon to run the command immediately as it's passed to the terminal when calling `sendCommand`.
+      enter_on_sendcmd = false,
+
+      -- closes any tmux windows harpoon that harpoon creates when you close Neovim.
+      tmux_autoclose_windows = false,
+
+      -- filetypes that you want to prevent from adding to the harpoon list menu.
+      excluded_filetypes = { "harpoon" },
+
+      -- set marks specific to each git branch inside git repository
+      mark_branch = false,
+    },
+  })
+  require("telescope").load_extension("harpoon")
+  -- utils.Key("n", "<leader>fm", require("harpoon.ui").toggle_quick_menu, "Harpoon"):set()
+  utils.Key("n", "<leader>fh", "<cmd>Telescope harpoon marks theme=dropdown<cr>", "Harpoon"):set()
+  utils.Key("n", "<leader>fH", require("harpoon.mark").add_file, "Harpoon Add"):set()
+  utils.Key("n", "<leader>fn", require("harpoon.ui").nav_next, "Harpoon Next"):set()
+  utils.Key("n", "<leader>fp", require("harpoon.ui").nav_prev, "Harpoon Previous"):set()
+end
+
 local function dropdown_opts()
   return require("telescope.themes").get_dropdown({
     winblend = 15,
@@ -286,6 +326,7 @@ local function dropdown_opts()
     shorten_path = false,
   })
 end
+
 M.dropdown_opts = dropdown_opts
 
 local function ivy_opts()
@@ -304,17 +345,20 @@ local function ivy_opts()
     ignore_filename = false,
   })
 end
+
 M.ivy_opts = ivy_opts
 
 function M.lsp_definitions()
   local opts = ivy_opts()
   require("telescope.builtin").lsp_definitions(opts)
 end
+
 -- show refrences to this using language server
 function M.lsp_references()
   local opts = ivy_opts()
   require("telescope.builtin").lsp_references(opts)
 end
+
 -- show implementations of the current thingy using language server
 function M.lsp_implementations()
   local opts = ivy_opts()
