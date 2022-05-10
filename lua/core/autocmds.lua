@@ -12,18 +12,21 @@ M.autocommands = {
       "*",
       "setlocal formatoptions-=c formatoptions-=r formatoptions-=o"
     ),
+    AuCmd("BufReadPost", "*", function()
+      local last_pos = vim.fn.line("'\"")
+      if not vim.fn.expand("%:p"):match(".git") and last_pos > 1 and last_pos <= vim.fn.line("$") then
+        vim.cmd("normal! g'\"")
+        -- vim.cmd("normal zz")
+      end
+    end),
   }),
   Group("UserFileTypeSetting"):extend({
     AuCmd("FileType", { "markdown", "gitcommit" }, "setlocal spell wrap"),
-    AuCmd(
-      "FileType",
-      { "go" },
-      "setlocal noexpandtab copyindent preserveindent shiftwidth=2 tabstop=2 softtabstop=0 wrap"
-    ),
-    AuCmd("FileType", { "go" }, [[setlocal listchars=tab:\ \ ,nbsp:+,trail:·,extends:→,precedes:←]]),
+    AuCmd("FileType", "python", "setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4"),
+    AuCmd("FileType", "go", "setlocal noexpandtab shiftwidth=2 tabstop=2 softtabstop=0"),
+    AuCmd("FileType", "go", [[setlocal listchars=tab:\ \ ,nbsp:+,trail:·,extends:→,precedes:←]]),
   }),
   Group("UserBufferQuit"):extend({
-    AuCmd("FileType", { "alpha", "floaterm" }, "nnoremap <silent> <buffer> q :q<CR>"),
     AuCmd(
       "FileType",
       { "qf", "help", "man", "lspinfo", "lsp-installer", "null-ls-info" },
@@ -35,7 +38,7 @@ M.autocommands = {
     AuCmd("TermOpen", "term://*", "nnoremap <silent> <buffer> q :q<CR>"),
     AuCmd("FileType", "qf", "setlocal nobuflisted"),
     AuCmd("FileType", "Outline", "setlocal signcolumn=no nowrap"),
-    AuCmd("user", "TelescopePreviewerLoaded", "setlocal number relativenumber wrap list"),
+    AuCmd("User", "TelescopePreviewerLoaded", "setlocal number relativenumber wrap list"),
     AuCmd("BufWinEnter", "dashboard", "setlocal cursorline signcolumn=yes cursorcolumn number"),
   }),
 }

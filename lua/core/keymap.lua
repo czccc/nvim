@@ -25,13 +25,16 @@ M.keys = {
   Key("n", "<Esc>", ":noh<CR>", "No Highlight"),
   Key("n", "D", "d$"),
   Key("n", "Y", "y$"),
+  Key("x", "p", [["-dP"]]),
   -- Key({ "n", "x" }, "p", [["0p]]),
   -- Key({ "n", "x" }, "P", [["0P]]),
   Key({ "n", "x" }, "x", [["-x]]),
   Key({ "n", "x" }, "c", [["-c]]),
   -- Key({ "n", "x" }, "<Leader>y", [["+]]),
-  Key("n", "j", "gj"),
-  Key("n", "k", "gk"),
+  Key({ "n", "x", "o" }, "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"'):expr(),
+  Key({ "n", "x", "o" }, "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"'):expr(),
+  Key("", "<Down>", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"'):expr(),
+  Key("", "<Up>", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"'):expr(),
   Key("n", "gj", "j"),
   Key("n", "gk", "k"),
   Key("n", "<C-h>", "<C-w>h", "Navigate Left"),
@@ -44,6 +47,11 @@ M.keys = {
   Key("n", "<C-Right>", ":vertical resize +2<CR>", "Resize Right"),
   Key("n", "<A-j>", ":m .+1<CR>==", "Move Line Down"),
   Key("n", "<A-k>", ":m .-2<CR>==", "Move Line Up"),
+
+  Key("n", "<F2>", [[yiw:%s/\<<C-r>"\>/<C-r>"/gc<Left><Left><Left>]], "Substitute CurWord"):nosilent(),
+  Key("v", "<F2>", [[y:%s/\<<C-r>"\>/<C-r>"/gc<Left><Left><Left>]], "Substitute CurWord"):nosilent(),
+  Key("n", "<F3>", "yiw", "Yank CurWord"),
+  Key("n", "<F4>", "viwp", "Paste CurWord"),
 
   -- Which-Key Groups
   Key("n", "<Leader>"):group("Leader"),
@@ -68,12 +76,8 @@ M.keys = {
   Key("n", "<Leader>t"):group("Terminal"),
   Key("n", "<Leader>m"):group("Module"),
   Key("n", "<Leader>u"):group("Utils"),
-  Key("n", "<Leader>ui", function()
-    require("core.info").toggle_popup(vim.bo.filetype)
-  end, "Infos"),
-  Key("n", "<Leader>up", function()
-    require("utils.startup").setup({ print = true })
-  end, "Startup Time"),
+  Key("n", "<Leader>ui", wrap(require("core.info").toggle_popup, vim.bo.filetype), "Infos"),
+  Key("n", "<Leader>up", wrap(require("utils.startup").setup, { print = true }), "Startup Time"),
   Key("n", "<Leader>uh", ":checkhealth<CR>", "Check Health"),
   Key("n", "<Leader>uH", ":checktime<CR>", "Check Time"),
   Key("n", "<Leader>um", ":messages<CR>", "Messages"),

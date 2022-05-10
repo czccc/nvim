@@ -37,6 +37,8 @@ local plugin_files = {
   "plugins.sidebar",
   "plugins.spectre",
   "plugins.todo",
+
+  "plugins.competitest",
 }
 
 M.packers = {}
