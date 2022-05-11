@@ -32,12 +32,12 @@ M.packers = {
         end,
         requires = "nvim-treesitter/nvim-treesitter",
       },
-      {
-        "abecodes/tabout.nvim",
-        config = function()
-          require("plugins.cmp").setup_tabout()
-        end,
-      },
+      -- {
+      --   "abecodes/tabout.nvim",
+      --   config = function()
+      --     require("plugins.cmp").setup_tabout()
+      --   end,
+      -- },
       {
         "github/copilot.vim",
         -- "gelfand/copilot.vim",
@@ -160,7 +160,7 @@ M.setup_cmp = function()
       entries = { name = "custom", selection_order = "near_cursor" },
     },
     experimental = {
-      ghost_text = true,
+      ghost_text = false,
       native_menu = false,
       custom_menu = true,
     },
@@ -194,15 +194,15 @@ M.setup_cmp = function()
         Variable = " ",
       },
       source_names = {
-        nvim_lsp = "(LSP)",
-        emoji = "(Emoji)",
-        path = "(Path)",
-        calc = "(Calc)",
-        cmp_tabnine = "(Tabnine)",
-        vsnip = "(Snippet)",
-        luasnip = "(Snippet)",
-        buffer = "(Buffer)",
-        copilot = "(Copilot)",
+        nvim_lsp = "[LSP]",
+        emoji = "[Emoji]",
+        path = "[Path]",
+        calc = "[Calc]",
+        cmp_tabnine = "[Tabnine]",
+        vsnip = "[Snippet]",
+        luasnip = "[Snippet]",
+        buffer = "[Buffer]",
+        copilot = "[Copilot]",
       },
       duplicates = {
         buffer = 1,
@@ -225,11 +225,11 @@ M.setup_cmp = function()
       end,
     },
     window = {
-      border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-      scrollbar = "║",
+      -- completion = {
+      --   border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+      -- },
       documentation = {
         border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-        scrollbar = "║",
       },
     },
     sources = {

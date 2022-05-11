@@ -61,7 +61,13 @@ function AuCmd:pattern(pattern)
       )
     )
   end
-  self.inner.opts.pattern = pattern
+  if pattern == "buffer" then
+    self.inner.opts.buffer = 0
+  elseif type(pattern) == "number" then
+    self.inner.opts.buffer = pattern
+  else
+    self.inner.opts.pattern = pattern
+  end
   return self
 end
 
@@ -193,6 +199,16 @@ function AuGroup:cmd(event, pattern, command, opts)
   return cmd
 end
 
+function AuGroup:cmds(cmds)
+  for _, opt in ipairs(cmds) do
+    local t = self.inner
+    local group = vim.api.nvim_create_augroup(t.name, { clear = t.clear })
+    local cmd = M.AuCmd(table.unpack(opt)):group(group)
+    table.insert(self.inner.cmds, cmd)
+  end
+  return self
+end
+
 function AuGroup:add(cmd)
   table.insert(self.inner.cmds, cmd)
   return self
@@ -215,7 +231,10 @@ end
 
 function AuGroup:unset()
   local t = self.inner
-  vim.api.nvim_del_augroup_by_name(t.name)
+  local status, _ = vim.api.nvim_del_augroup_by_name(t.name)
+  if not status then
+    vim.notify("Failed to delete group: " .. t.name, "WARN")
+  end
 end
 
 M.AuCmd = function(event, pattern, command, opts)

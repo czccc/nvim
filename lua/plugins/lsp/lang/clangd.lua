@@ -3,7 +3,7 @@ local M = {}
 M.packer = {
   "p00f/clangd_extensions.nvim",
   config = function()
-    require("plugins.lang.clangd_extension").setup()
+    require("plugins.lsp.lang.clangd").setup()
   end,
   ft = { "c", "cpp", "objc", "objcpp" },
   opt = true,
@@ -37,18 +37,18 @@ M.setup = function()
       cmd = { "clangd", table.unpack(clangd_flags) },
       on_attach = function(client, bufnr)
         require("plugins.lsp").common_on_attach(client, bufnr)
-        local Key = require("utils.key").Key
-        require("utils.key").load({
-          Key("n", "<Leader>ms", "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source Header"):buffer(bufnr),
-          Key("n", "<Leader>mi", "<cmd>ClangdSymbolInfo<cr>", "Symbol Info"):buffer(bufnr),
-          Key("n", "<Leader>mt", "<cmd>ClangdTypeHierarchy<cr>", "Type Hierarchy"):buffer(bufnr),
-          Key("n", "<Leader>mT", "<cmd>ClangdToggleInlayHints<cr>", "Toggle Inlay Hints"):buffer(bufnr),
-          Key("n", "<Leader>mm", "<cmd>ClangdMemoryUsage<cr>", "Memory Usage"):buffer(bufnr),
-          Key("n", "<Leader>ma", "<cmd>ClangdAST<cr>", "AST"):buffer(bufnr),
-        })
+        local mapping = {
+          { "<Leader>ms", "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source Header" },
+          { "<Leader>mi", "<cmd>ClangdSymbolInfo<cr>", "Symbol Info" },
+          { "<Leader>mt", "<cmd>ClangdTypeHierarchy<cr>", "Type Hierarchy" },
+          { "<Leader>mT", "<cmd>ClangdToggleInlayHints<cr>", "Toggle Inlay Hints" },
+          { "<Leader>mm", "<cmd>ClangdMemoryUsage<cr>", "Memory Usage" },
+          { "<Leader>ma", "<cmd>ClangdAST<cr>", "AST" },
+        }
+        for _, m in ipairs(mapping) do
+          utils.Key("n", m[1], m[2], m[3]):buffer(bufnr):set()
+        end
       end,
-      on_init = require("plugins.lsp").common_on_init,
-      on_exit = require("plugins.lsp").common_on_exit,
       capabilities = require("plugins.lsp").common_capabilities(),
     },
     extensions = {

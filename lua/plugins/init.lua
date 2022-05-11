@@ -29,7 +29,6 @@ local plugin_files = {
 
   "plugins.lsp",
   -- "plugins.dap",
-  "plugins.lang",
 
   "plugins.hlslens",
   "plugins.indent_blankline",

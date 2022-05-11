@@ -155,7 +155,7 @@ M.config = {
       },
       live_grep = {
         --@usage don't include the filename in the search results
-        only_sort_text = true,
+        -- only_sort_text = true,
       },
     },
   },
@@ -171,6 +171,7 @@ M.config = {
     },
   },
 }
+
 function M.set_keys()
   local LeaderfKey = require("utils.key").PrefixModeKey("<Leader>f", "n")
   local LeadersKey = require("utils.key").PrefixModeKey("<Leader>s", "n")
@@ -213,41 +214,172 @@ function M.setup()
   local previewers = require("telescope.previewers")
   local sorters = require("telescope.sorters")
   local actions = require("telescope.actions")
-
-  M.config = vim.tbl_extend("keep", {
+  local action_layout = require("telescope.actions.layout")
+  require("telescope").setup({
     file_previewer = previewers.vim_buffer_cat.new,
     grep_previewer = previewers.vim_buffer_vimgrep.new,
     qflist_previewer = previewers.vim_buffer_qflist.new,
+    -- ignore files bigger than a threshold and don't preview binaries
+    buffer_previewer_maker = function(filepath, bufnr, opts)
+      opts = opts or {}
+      filepath = vim.fn.expand(filepath)
+      local Job = require("plenary.job")
+      vim.loop.fs_stat(filepath, function(_, stat)
+        if not stat then
+          return
+        end
+        if stat.size > 100000 then
+          return
+        else
+          Job
+            :new({
+              command = "file",
+              args = { "--mime-type", "-b", filepath },
+              on_exit = function(j)
+                local mime_type = vim.split(j:result()[1], "/")[1]
+                if mime_type == "text" then
+                  previewers.buffer_previewer_maker(filepath, bufnr, opts)
+                else
+                  -- maybe we want to write something to the buffer here
+                  vim.schedule(function()
+                    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "BINARY" })
+                  end)
+                end
+              end,
+            })
+            :sync()
+        end
+      end)
+    end,
     file_sorter = sorters.get_fuzzy_file,
     generic_sorter = sorters.get_generic_fuzzy_sorter,
-    ---@usage Mappings are fully customizable. Many familiar mapping patterns are setup as defaults.
-    mappings = {
-      i = {
-        ["<C-n>"] = actions.move_selection_next,
-        ["<C-p>"] = actions.move_selection_previous,
-        ["<C-j>"] = actions.cycle_history_next,
-        ["<C-k>"] = actions.cycle_history_prev,
+
+    defaults = {
+      prompt_prefix = " ",
+      selection_caret = " ",
+      entry_prefix = "  ",
+      initial_mode = "insert",
+      selection_strategy = "reset",
+      sorting_strategy = "descending",
+      layout_strategy = "horizontal",
+      layout_config = {
+        width = 0.75,
+        preview_cutoff = 120,
+        horizontal = {
+          mirror = false,
+          preview_width = 0.6,
+        },
+        vertical = { mirror = false },
       },
-      n = {
-        ["<C-n>"] = actions.move_selection_next,
-        ["<C-p>"] = actions.move_selection_previous,
-        ["<C-j>"] = actions.cycle_history_next,
-        ["<C-k>"] = actions.cycle_history_prev,
+      vimgrep_arguments = {
+        "rg",
+        "--color=never",
+        "--no-heading",
+        "--with-filename",
+        "--line-number",
+        "--column",
+        "--smart-case",
+        "--hidden",
+        "--trim", -- add this value
+        "--glob=!.git/",
+      },
+      mappings = {
+        i = {
+          ["<C-n>"] = actions.move_selection_next,
+          ["<C-p>"] = actions.move_selection_previous,
+          ["<C-j>"] = actions.cycle_history_next,
+          ["<C-k>"] = actions.cycle_history_prev,
+          ["<M-p>"] = action_layout.toggle_preview,
+        },
+        n = {
+          ["<C-n>"] = actions.move_selection_next,
+          ["<C-p>"] = actions.move_selection_previous,
+          ["<C-j>"] = actions.cycle_history_next,
+          ["<C-k>"] = actions.cycle_history_prev,
+          ["<M-p>"] = action_layout.toggle_preview,
+        },
+      },
+      file_ignore_patterns = {
+        "vendor/*",
+        "%.lock",
+        "__pycache__/*",
+        "%.sqlite3",
+        "%.ipynb",
+        "node_modules/*",
+        "%.jpg",
+        "%.jpeg",
+        "%.png",
+        "%.svg",
+        "%.otf",
+        "%.ttf",
+        ".git/",
+        "%.webp",
+        ".dart_tool/",
+        ".github/",
+        ".gradle/",
+        ".idea/",
+        ".settings/",
+        ".vscode/",
+        "__pycache__/",
+        "build/",
+        "env/",
+        "gradle/",
+        "node_modules/",
+        "target/",
+        "%.pdb",
+        "%.dll",
+        "%.class",
+        "%.exe",
+        "%.cache",
+        "%.ico",
+        "%.pdf",
+        "%.dylib",
+        "%.jar",
+        "%.docx",
+        "%.met",
+        "smalljre_*/*",
+        ".vale/",
+      },
+      path_display = { shorten = 10 },
+      winblend = 6,
+      border = {},
+      borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+      color_devicons = true,
+      set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
+      pickers = {
+        find_files = {
+          find_command = { "fd", "--type=file", "--hidden", "--smart-case", "--strip-cwd-prefix" },
+        },
+        live_grep = {
+          --@usage don't include the filename in the search results
+          -- only_sort_text = true,
+        },
       },
     },
-  }, M.config)
+    extensions = {
+      fzf = {
+        fuzzy = true, -- false will only do exact matching
+        override_generic_sorter = true, -- override the generic sorter
+        override_file_sorter = true, -- override the file sorter
+        case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+      },
+      frecency = {
+        -- show_scores = true,
+      },
+    },
+  })
 
-  local telescope = require("telescope")
-  telescope.setup(M.config)
   require("telescope").load_extension("fzf")
   require("telescope").load_extension("frecency")
 
   utils.Group("UserTelescopeFoldFix")
-      :cmd("BufRead", "*", function()
+    :extend({
+      utils.AuCmd("BufRead", "*", function()
         utils.AuCmd("BufWinEnter", "*", "normal! zx"):once():set()
-      end)
-      :set()
-  -- M.set_keys()
+      end),
+      -- utils.AuCmd("User", "TelescopePreviewerLoaded", "setlocal number relativenumber wrap list"),
+    })
+    :set()
 end
 
 M.setup_dressing = function()

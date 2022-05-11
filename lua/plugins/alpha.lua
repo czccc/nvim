@@ -37,7 +37,7 @@ local function make_infos()
   table.insert(infos, os.date(" %H:%M:%S"))
   table.insert(infos, string.format(" v%d.%d.%d", v.major, v.minor, v.patch))
   table.insert(infos, string.format(" %d", plugins))
-  infos = require("utils.text").format_table(infos, 50, "     ")
+  infos = table.concat(infos, "     ")
   return {
     type = "text",
     val = infos,

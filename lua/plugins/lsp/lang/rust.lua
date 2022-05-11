@@ -4,7 +4,7 @@ M.packer = {
   "simrat39/rust-tools.nvim",
   -- "fabiocaruso/rust-tools.nvim",
   config = function()
-    require("plugins.lang.rust_tools").setup()
+    require("plugins.lsp.lang.rust").setup()
   end,
   ft = { "rust", "rs" },
   opt = true,
@@ -57,9 +57,6 @@ M.setup = function()
     return
   end
 
-  local lsp_installer_servers = require("nvim-lsp-installer.servers")
-  local _, requested_server = lsp_installer_servers.get_server("rust_analyzer")
-
   local opts = {
     tools = {
       autoSetHints = true,
@@ -110,31 +107,30 @@ M.setup = function()
       },
     },
     server = {
-      cmd_env = requested_server._default_options.cmd_env,
+      standalone = true,
       on_attach = function(client, bufnr)
         require("plugins.lsp").common_on_attach(client, bufnr)
-        local Key = require("utils.key").Key
-        require("utils.key").load({
-          Key("n", "<Leader>mt", "<cmd>RustToggleInlayHints<cr>", "Toggle Inlay Hints"):buffer(bufnr),
-          Key("n", "<Leader>mr", "<cmd>RustRunnables<cr>", "Runnables"):buffer(bufnr),
-          Key("n", "<Leader>md", "<cmd>RustDebuggables<cr>", "Debuggables"):buffer(bufnr),
-          Key("n", "<Leader>me", "<cmd>RustExpandMacro<cr>", "Expand Macro"):buffer(bufnr),
-          Key("n", "<Leader>mc", "<cmd>RustOpenCargo<cr>", "Open Cargo"):buffer(bufnr),
-          Key("n", "<Leader>mR", "<cmd>RustReloadWorkspace<cr>", "Reload"):buffer(bufnr),
-          Key("n", "<Leader>ma", "<cmd>RustHoverActions<cr>", "Hover Actions"):buffer(bufnr),
-          Key("n", "<Leader>mA", "<cmd>RustHoverRange<cr>", "Hover Range"):buffer(bufnr),
-          Key("n", "<Leader>ml", "<cmd>RustJoinLines<cr>", "Join Lines"):buffer(bufnr),
-          Key("n", "<Leader>mj", "<cmd>RustMoveItemDown<cr>", "Move Item Down"):buffer(bufnr),
-          Key("n", "<Leader>mk", "<cmd>RustMoveItemUp<cr>", "Move Item Up"):buffer(bufnr),
-          Key("n", "<Leader>mp", "<cmd>RustParentModule<cr>", "Parent Module"):buffer(bufnr),
-          Key("n", "<Leader>ms", "<cmd>RustSSR<cr>", "Structural Search Replace"):buffer(bufnr),
-          Key("n", "<Leader>mg", "<cmd>RustViewCrateGraph<cr>", "View Crate Graph"):buffer(bufnr),
-          Key("n", "<Leader>mS", "<cmd>RustStartStandaloneServerForBuffer<cr>", "Standalone Server"):buffer(bufnr),
-        })
+        local mapping = {
+          { "<Leader>mt", "<cmd>RustToggleInlayHints<cr>", "Toggle Inlay Hints" },
+          { "<Leader>mr", "<cmd>RustRunnables<cr>", "Runnables" },
+          { "<Leader>md", "<cmd>RustDebuggables<cr>", "Debuggables" },
+          { "<Leader>me", "<cmd>RustExpandMacro<cr>", "Expand Macro" },
+          { "<Leader>mc", "<cmd>RustOpenCargo<cr>", "Open Cargo" },
+          { "<Leader>mR", "<cmd>RustReloadWorkspace<cr>", "Reload" },
+          { "<Leader>ma", "<cmd>RustHoverActions<cr>", "Hover Actions" },
+          { "<Leader>mA", "<cmd>RustHoverRange<cr>", "Hover Range" },
+          { "<Leader>ml", "<cmd>RustJoinLines<cr>", "Join Lines" },
+          { "<Leader>mj", "<cmd>RustMoveItemDown<cr>", "Move Item Down" },
+          { "<Leader>mk", "<cmd>RustMoveItemUp<cr>", "Move Item Up" },
+          { "<Leader>mp", "<cmd>RustParentModule<cr>", "Parent Module" },
+          { "<Leader>ms", "<cmd>RustSSR<cr>", "Structural Search Replace" },
+          { "<Leader>mg", "<cmd>RustViewCrateGraph<cr>", "View Crate Graph" },
+          { "<Leader>mS", "<cmd>RustStartStandaloneServerForBuffer<cr>", "Standalone Server" },
+        }
+        for _, m in ipairs(mapping) do
+          utils.Key("n", m[1], m[2], m[3]):buffer(bufnr):set()
+        end
       end,
-      on_init = require("plugins.lsp").common_on_init,
-      on_exit = require("plugins.lsp").common_on_exit,
-      capabilities = require("plugins.lsp").common_capabilities(),
     },
     dap = {
       adapter = M.get_lldb_command(),

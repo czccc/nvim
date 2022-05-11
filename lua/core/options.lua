@@ -87,7 +87,7 @@ M.opts = {
   -- newly added
   autoread = true,
   wrapscan = true, -- Searches wrap around the end of the file
-  pumblend = 10,
+  pumblend = 0,
   joinspaces = false,
   -- autowriteall = true,
   grepprg = "rg --hidden --vimgrep --smart-case --",

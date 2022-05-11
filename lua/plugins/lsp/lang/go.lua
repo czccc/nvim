@@ -7,7 +7,7 @@ M.packer = {
     "theHamsta/nvim-dap-virtual-text",
   },
   config = function()
-    require("plugins.lang.go").setup()
+    require("plugins.lsp.lang.go").setup()
   end,
   ft = { "go" },
   opt = true,
@@ -18,9 +18,6 @@ M.setup = function()
   if not status_ok then
     return
   end
-
-  local lsp_installer_servers = require("nvim-lsp-installer.servers")
-  local _, requested_server = lsp_installer_servers.get_server("gopls")
 
   go.setup({
     go = "go", -- go command, can be go[default] or go1.18beta1
@@ -37,27 +34,29 @@ M.setup = function()
     lsp_gofumpt = true, -- true: set default gofmt in gopls format to gofumpt
     lsp_on_attach = function(client, bufnr)
       require("plugins.lsp").common_on_attach(client, bufnr)
-      local Key = require("utils.key").Key
-      require("utils.key").load({
-        Key("n", "<Leader>mF", "<cmd>GoFmt<cr>", "GoFmt"):buffer(bufnr),
-        Key("n", "<Leader>ms", "<cmd>GoFillStruct<cr>", "GoFillStruct"):buffer(bufnr),
-        Key("n", "<Leader>mS", "<cmd>GoFillSwitch<cr>", "GoFillSwitch"):buffer(bufnr),
-        Key("n", "<Leader>me", "<cmd>GoIfErr<cr>", "GoIfErr"):buffer(bufnr),
-        Key("n", "<Leader>mm", "<cmd>GoMake<cr>", "GoMake"):buffer(bufnr),
-        Key("n", "<Leader>mb", "<cmd>GoBuild<cr>", "GoBuild"):buffer(bufnr),
-        Key("n", "<Leader>mg", "<cmd>GoGenerate<cr>", "GoGenerate"):buffer(bufnr),
-        Key("n", "<Leader>mr", "<cmd>GoRun<cr>", "GoRun"):buffer(bufnr),
-        Key("n", "<Leader>mv", "<cmd>GoVet<cr>", "GoVet"):buffer(bufnr),
-        Key("n", "<Leader>mc", "<cmd>GoCoverage<cr>", "GoCoverage"):buffer(bufnr),
-        Key("n", "<Leader>mT", "<cmd>GoTest<cr>", "GoTest"):buffer(bufnr),
-        Key("n", "<Leader>mp", "<cmd>GoTestPkg<cr>", "GoTestPkg"):buffer(bufnr),
-        Key("n", "<Leader>mt", "<cmd>GoTestFunc<cr>", "GoTestFunc"):buffer(bufnr),
-        Key("n", "<Leader>mf", "<cmd>GoTestFile<cr>", "GoTestFile"):buffer(bufnr),
-        Key("n", "<Leader>md", "<cmd>GoDoc<cr>", "GoDoc"):buffer(bufnr),
-        Key("n", "<Leader>mD", "<cmd>GoDebug<cr>", "GoDebug"):buffer(bufnr),
-        Key("n", "<Leader>ma", "<cmd>GoCodeAction<cr>", "GoCodeAction"):buffer(bufnr),
-        Key("n", "<Leader>mc", "<cmd>GoCmt<cr>", "GoCmt "):buffer(bufnr),
-      })
+      local mapping = {
+        { "<Leader>mF", "<cmd>GoFmt<cr>", "GoFmt" },
+        { "<Leader>ms", "<cmd>GoFillStruct<cr>", "GoFillStruct" },
+        { "<Leader>mS", "<cmd>GoFillSwitch<cr>", "GoFillSwitch" },
+        { "<Leader>me", "<cmd>GoIfErr<cr>", "GoIfErr" },
+        { "<Leader>mm", "<cmd>GoMake<cr>", "GoMake" },
+        { "<Leader>mb", "<cmd>GoBuild<cr>", "GoBuild" },
+        { "<Leader>mg", "<cmd>GoGenerate<cr>", "GoGenerate" },
+        { "<Leader>mr", "<cmd>GoRun<cr>", "GoRun" },
+        { "<Leader>mv", "<cmd>GoVet<cr>", "GoVet" },
+        { "<Leader>mc", "<cmd>GoCoverage<cr>", "GoCoverage" },
+        { "<Leader>mT", "<cmd>GoTest<cr>", "GoTest" },
+        { "<Leader>mp", "<cmd>GoTestPkg<cr>", "GoTestPkg" },
+        { "<Leader>mt", "<cmd>GoTestFunc<cr>", "GoTestFunc" },
+        { "<Leader>mf", "<cmd>GoTestFile<cr>", "GoTestFile" },
+        { "<Leader>md", "<cmd>GoDoc<cr>", "GoDoc" },
+        { "<Leader>mD", "<cmd>GoDebug<cr>", "GoDebug" },
+        { "<Leader>ma", "<cmd>GoCodeAction<cr>", "GoCodeAction" },
+        { "<Leader>mc", "<cmd>GoCmt<cr>", "GoCmt " },
+      }
+      for _, m in ipairs(mapping) do
+        utils.Key("n", m[1], m[2], m[3]):buffer(bufnr):set()
+      end
     end, -- nil: use on_attach function defined in go/lsp.lua,
     --      when lsp_cfg is true
     -- if lsp_on_attach is a function: use this function as on_attach function for gopls
@@ -120,10 +119,6 @@ M.setup = function()
           },
         },
       },
-      cmd_env = requested_server._default_options.cmd_env,
-      on_init = require("plugins.lsp").common_on_init,
-      on_exit = require("plugins.lsp").common_on_exit,
-      capabilities = require("plugins.lsp").common_capabilities(),
     },
   })
 end

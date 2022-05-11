@@ -7,7 +7,6 @@ M.config = {
     debounce = 150,
     save_after_format = true,
   },
-  config = {},
 }
 
 function M.setup()
@@ -15,29 +14,33 @@ function M.setup()
   if not status_ok then
     return
   end
-  M.config.setup.sources = {
-    -- null_ls.builtins.completion.spell:with({
-    --   filetypes = { "markdown" },
-    -- }),
 
-    null_ls.builtins.formatting.prettierd,
-    null_ls.builtins.formatting.stylua,
-    null_ls.builtins.formatting.black,
+  null_ls.setup({
+    debounce = 150,
+    save_after_format = true,
+    on_attach = require("plugins.lsp").common_on_attach,
+    capabilities = require("plugins.lsp").common_capabilities(),
+    sources = {
+      -- null_ls.builtins.completion.spell:with({
+      --   filetypes = { "markdown" },
+      -- }),
 
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.luacheck,
-    null_ls.builtins.diagnostics.vint,
-    null_ls.builtins.diagnostics.markdownlint.with({
-      extra_args = { "--config", path.join(path.config_dir, "markdownlint.json") },
-      filetypes = { "markdown" },
-    }),
+      null_ls.builtins.formatting.prettierd,
+      null_ls.builtins.formatting.stylua,
+      null_ls.builtins.formatting.black,
 
-    null_ls.builtins.code_actions.shellcheck,
-    -- null_ls.builtins.code_actions.gitsigns,
-  }
+      null_ls.builtins.diagnostics.shellcheck,
+      null_ls.builtins.diagnostics.luacheck,
+      null_ls.builtins.diagnostics.vint,
+      null_ls.builtins.diagnostics.markdownlint.with({
+        extra_args = { "--config", path.join(path.config_dir, "markdownlint.json") },
+        filetypes = { "markdown" },
+      }),
 
-  local default_opts = require("plugins.lsp").get_common_opts()
-  null_ls.setup(vim.tbl_deep_extend("force", default_opts, M.config.setup))
+      null_ls.builtins.code_actions.shellcheck,
+      -- null_ls.builtins.code_actions.gitsigns,
+    },
+  })
 end
 
 function M.list_registered_providers_names(filetype)

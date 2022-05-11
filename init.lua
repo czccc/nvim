@@ -1,7 +1,7 @@
 -- require("core").config()
 -- require("core").setup()
 
-if not vim.fn.exists("g:vscode") then
+if vim.fn.exists("g:vscode") == 0 then
   require("core").load_core()
   require("core").load_plugins()
 else

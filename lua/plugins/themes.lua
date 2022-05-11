@@ -86,7 +86,7 @@ M.setup_onedark = function()
 
     -- Custom Highlights --
     colors = {
-      bg0 = "#282c34",
+      -- bg0 = "#282c34",
     }, -- Override default colors
     highlights = {
       -- StatusLine = { bg = "$bg1" },

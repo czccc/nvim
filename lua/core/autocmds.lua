@@ -38,7 +38,6 @@ M.autocommands = {
     AuCmd("TermOpen", "term://*", "nnoremap <silent> <buffer> q :q<CR>"),
     AuCmd("FileType", "qf", "setlocal nobuflisted"),
     AuCmd("FileType", "Outline", "setlocal signcolumn=no nowrap"),
-    AuCmd("User", "TelescopePreviewerLoaded", "setlocal number relativenumber wrap list"),
     AuCmd("BufWinEnter", "dashboard", "setlocal cursorline signcolumn=yes cursorcolumn number"),
   }),
 }

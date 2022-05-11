@@ -76,7 +76,6 @@ M.keys = {
   Key("n", "<Leader>t"):group("Terminal"),
   Key("n", "<Leader>m"):group("Module"),
   Key("n", "<Leader>u"):group("Utils"),
-  Key("n", "<Leader>ui", wrap(require("core.info").toggle_popup, vim.bo.filetype), "Infos"),
   Key("n", "<Leader>up", wrap(require("utils.startup").setup, { print = true }), "Startup Time"),
   Key("n", "<Leader>uh", ":checkhealth<CR>", "Check Health"),
   Key("n", "<Leader>uH", ":checktime<CR>", "Check Time"),
@@ -106,23 +105,40 @@ M.keys = {
   Key("n", "[o"):group("Toggle ON"),
   Key("n", "]o"):group("Toggle OFF"),
   Key("n", "yo"):group("Toggle"),
+
   Key("n", "[os", "<cmd>setlocal spell<CR>", "Spell"),
   Key("n", "]os", "<cmd>setlocal nospell<CR>", "Spell"),
   Key("n", "yos", "<cmd>setlocal invspell<CR>", "Spell"),
+
   Key("n", "[ow", "<cmd>setlocal wrap<CR>", "Wrap"),
   Key("n", "]ow", "<cmd>setlocal nowrap<CR>", "Wrap"),
   Key("n", "yow", "<cmd>setlocal invwrap<CR>", "Wrap"),
+
   Key("n", "[om", "<cmd>setlocal modifiable<CR>", "Modifiable"),
   Key("n", "]om", "<cmd>setlocal nomodifiable<CR>", "Modifiable"),
   Key("n", "yom", "<cmd>setlocal invmodifiable<CR>", "Modifiable"),
+
+  Key("n", "[oM", "<cmd>set mouse=a<CR>", "Mouse"),
+  Key("n", "]oM", "<cmd>set mouse=<CR>", "Mouse"),
+  Key("n", "yoM", function()
+    if vim.api.nvim_get_option("mouse") == "a" then
+      vim.api.nvim_set_option("mouse", "")
+    else
+      vim.api.nvim_set_option("mouse", "a")
+    end
+  end, "Mouse"),
+
   Key("n", "[on", "<cmd>setlocal number<CR>", "Number"),
   Key("n", "]on", "<cmd>setlocal nonumber<CR>", "Number"),
   Key("n", "yon", "<cmd>setlocal invnumber<CR>", "Number"),
+
   Key("n", "[or", "<cmd>setlocal relativenumber<CR>", "Relative Number"),
   Key("n", "]or", "<cmd>setlocal norelativenumber<CR>", "Relative Number"),
   Key("n", "yor", "<cmd>setlocal invrelativenumber<CR>", "Relative Number"),
+
   Key("n", "[q", "<cmd>cprevious<CR>", "Previous Quickfix"),
   Key("n", "]q", "<cmd>cnext<CR>", "Next Quickfix"),
+
   Key("n", "[<Space>", "<cmd>put!=repeat(nr2char(10), v:count1)|silent<CR>", "Previous Add Lines"),
   Key("n", "]<Space>", "<cmd>put =repeat(nr2char(10), v:count1)|silent<CR>", "Previous Add Lines"),
 }
