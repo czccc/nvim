@@ -74,11 +74,6 @@ M.init = function()
   }
 end
 
-local has_words_before = function()
-  local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
 M.setup_luasnip = function()
   require("luasnip/loaders/from_vscode").lazy_load()
   require("luasnip/loaders/from_vscode").lazy_load({ paths = { "./snippets" } })
@@ -270,17 +265,22 @@ M.setup_cmp = function()
     mapping = cmp.mapping.preset.insert({
       ["<C-d>"] = cmp.mapping.scroll_docs(-4),
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
-      ["<C-Space>"] = cmp.mapping.complete(),
+      -- ["<C-Space>"] = cmp.mapping.complete(),
+      ["<C-y>"] = cmp.mapping.complete(),
       ["<Tab>"] = cmp.mapping(function(fallback)
         local copilot_keys = vim.fn["copilot#Accept"]()
+        -- local has_words_before = function()
+        --   local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
+        --   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+        -- end
         if cmp.visible() then
           cmp.select_next_item()
         elseif copilot_keys ~= "" then
           vim.api.nvim_feedkeys(copilot_keys, "i", true)
         elseif luasnip.expand_or_locally_jumpable() then
           luasnip.expand_or_jump()
-        elseif has_words_before() then
-          cmp.complete()
+          -- elseif has_words_before() then
+          --   cmp.complete()
         else
           fallback()
         end
@@ -305,7 +305,7 @@ M.setup_cmp = function()
           cmp.abort()
         elseif vim.fn["copilot#Accept"]() ~= "" then
           vim.cmd([[normal \<Plug>(copilot-dismiss)<cr>]])
-        elseif luasnip.expand_or_jumpable() then
+        elseif luasnip.expand_or_locally_jumpable() then
           luasnip.session.current_nodes[vim.api.nvim_get_current_buf()] = nil
           fallback()
         else
