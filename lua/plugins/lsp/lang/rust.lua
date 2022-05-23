@@ -131,6 +131,13 @@ M.setup = function()
           utils.Key("n", m[1], m[2], m[3]):buffer(bufnr):set()
         end
       end,
+      settings = {
+        ["rust-analyzer"] = {
+          checkOnSave = {
+            command = "clippy",
+          },
+        },
+      },
     },
     dap = {
       adapter = M.get_lldb_command(),

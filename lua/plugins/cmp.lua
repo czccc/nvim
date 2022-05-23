@@ -52,6 +52,28 @@ M.packers = {
 
 M.config = {}
 
+M.init = function()
+  vim.g.copilot_no_tab_map = true
+  vim.g.copilot_assume_mapped = true
+  vim.g.copilot_tab_fallback = ""
+  vim.g.copilot_filetypes = {
+    ["*"] = false,
+    python = true,
+    lua = true,
+    go = true,
+    rust = true,
+    html = true,
+    c = true,
+    cpp = true,
+    java = true,
+    javascript = true,
+    typescript = true,
+    javascriptreact = true,
+    typescriptreact = true,
+    terraform = true,
+  }
+end
+
 local has_words_before = function()
   local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
@@ -253,8 +275,7 @@ M.setup_cmp = function()
         local copilot_keys = vim.fn["copilot#Accept"]()
         if cmp.visible() then
           cmp.select_next_item()
-        elseif copilot_keys ~= "" then -- prioritise copilot over snippets
-          -- Copilot keys do not need to be wrapped in termcodes
+        elseif copilot_keys ~= "" then
           vim.api.nvim_feedkeys(copilot_keys, "i", true)
         elseif luasnip.expand_or_locally_jumpable() then
           luasnip.expand_or_jump()
@@ -326,25 +347,6 @@ M.setup_cmp = function()
 end
 
 M.setup_copilot = function()
-  vim.g.copilot_no_tab_map = true
-  vim.g.copilot_assume_mapped = true
-  vim.g.copilot_tab_fallback = ""
-  vim.g.copilot_filetypes = {
-    ["*"] = false,
-    python = true,
-    lua = true,
-    go = true,
-    rust = true,
-    html = true,
-    c = true,
-    cpp = true,
-    java = true,
-    javascript = true,
-    typescript = true,
-    javascriptreact = true,
-    typescriptreact = true,
-    terraform = true,
-  }
   local Key = utils.Key
   Key("i", "<C-h>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
   Key("i", "<C-l>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()

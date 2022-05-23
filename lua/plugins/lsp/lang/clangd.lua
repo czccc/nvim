@@ -9,6 +9,26 @@ M.packer = {
   opt = true,
 }
 
+local function switch_source_header_splitcmd(bufnr, splitcmd)
+  bufnr = require("lspconfig").util.validate_bufnr(bufnr)
+  local clangd_client = require("lspconfig").util.get_active_client_by_name(bufnr, "clangd")
+  local params = { uri = vim.uri_from_bufnr(bufnr) }
+  if clangd_client then
+    clangd_client.request("textDocument/switchSourceHeader", params, function(err, result)
+      if err then
+        vim.notify(tostring(err))
+      end
+      if not result then
+        vim.notify("Corresponding file can't be determined")
+        return
+      end
+      vim.api.nvim_command(splitcmd .. " " .. vim.uri_to_fname(result))
+    end, bufnr)
+  else
+    vim.notify("textDocument/switchSourceHeader is not supported by the clangd server active on the current buffer")
+  end
+end
+
 M.setup = function()
   local status_ok, clangd_extensions = pcall(require, "clangd_extensions")
   if not status_ok then
@@ -39,6 +59,8 @@ M.setup = function()
         require("plugins.lsp").common_on_attach(client, bufnr)
         local mapping = {
           { "<Leader>ms", "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source Header" },
+          { "<Leader>mS", "<cmd>ClangdSwitchSourceHeaderSplit<cr>", "Split Source Header" },
+          { "<Leader>mv", "<cmd>ClangdSwitchSourceHeaderVSplit<cr>", "VSplit Source Header" },
           { "<Leader>mi", "<cmd>ClangdSymbolInfo<cr>", "Symbol Info" },
           { "<Leader>mt", "<cmd>ClangdTypeHierarchy<cr>", "Type Hierarchy" },
           { "<Leader>mT", "<cmd>ClangdToggleInlayHints<cr>", "Toggle Inlay Hints" },
@@ -50,6 +72,26 @@ M.setup = function()
         end
       end,
       capabilities = require("plugins.lsp").common_capabilities(),
+      commands = {
+        ClangdSwitchSourceHeader = {
+          function()
+            switch_source_header_splitcmd(0, "edit")
+          end,
+          description = "Open source/header in current buffer",
+        },
+        ClangdSwitchSourceHeaderVSplit = {
+          function()
+            switch_source_header_splitcmd(0, "vsplit")
+          end,
+          description = "Open source/header in a new vsplit",
+        },
+        ClangdSwitchSourceHeaderSplit = {
+          function()
+            switch_source_header_splitcmd(0, "split")
+          end,
+          description = "Open source/header in a new split",
+        },
+      },
     },
     extensions = {
       -- defaults:
