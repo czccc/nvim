@@ -18,6 +18,13 @@ function M.format_filter(clients)
   end, clients)
 end
 
+function M.enable_format_on_save()
+  utils.Group("UserLSPFormatOnSave"):cmd("BufWritePre", "*", wrap(M.format)):set()
+end
+function M.disable_format_on_save()
+  utils.Group("UserLSPFormatOnSave"):unset()
+end
+
 ---Provide vim.lsp.buf.format for nvim <0.8
 ---@param opts table
 function M.format(opts)

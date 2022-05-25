@@ -147,6 +147,7 @@ function M.common_on_attach(client, bufnr)
       :callback(require("plugins.lsp.utils").code_action_listener)
       :set()
   end
+  require("plugins.lsp.utils").enable_format_on_save()
 
   local mapping = {
     Key("n", "K", vim.lsp.buf.hover, "Show Hover"),
@@ -207,14 +208,6 @@ function M.setup()
     Group("UserCursorDiagnostic"):unset()
   end
   enable_cursor_diagnostic()
-
-  local function enable_format_on_save()
-    Group("UserLSPFormatOnSave"):cmd("BufWritePre", "*", wrap(require("plugins.lsp.utils").format)):set()
-  end
-  local function disable_format_on_save()
-    Group("UserLSPFormatOnSave"):unset()
-  end
-  enable_format_on_save()
 
   local mapping = {
     Key("n", "[d", vim.diagnostic.goto_prev, "Previous Diagnostic"),

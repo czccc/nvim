@@ -233,9 +233,11 @@ M.config = {
   },
 }
 
-M.setup = function()
+M.init = function()
   vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
+end
 
+M.setup = function()
   require("neo-tree").setup(M.config)
 
   local Key = utils.Key
