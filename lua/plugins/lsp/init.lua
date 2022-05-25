@@ -214,8 +214,8 @@ function M.setup()
     Key("n", "]d", vim.diagnostic.goto_next, "Next Diagnostic"),
     Key("n", "[od", enable_cursor_diagnostic, "Cursor Diagnostic"),
     Key("n", "]od", disable_cursor_diagnostic, "Cursor Diagnostic"),
-    Key("n", "[of", enable_format_on_save, "Format On Save"),
-    Key("n", "]of", disable_format_on_save, "Format On Save"),
+    Key("n", "[of", require("plugins.lsp.utils").enable_format_on_save, "Format On Save"),
+    Key("n", "]of", require("plugins.lsp.utils").disable_format_on_save, "Format On Save"),
 
     Key("n", "<Leader>l"):group("LSP"),
     Key("n", "<Leader>lI", "<cmd>LspInstallInfo<cr>", "Lsp Installer"),
