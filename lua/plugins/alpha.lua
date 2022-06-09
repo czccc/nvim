@@ -63,6 +63,8 @@ local function make_sessions()
   local buttons = {
     type = "group",
     val = {
+      dashboard.button("s", "  > Restore Current Session", ":SessionManager load_current_dir_session<CR>"),
+      dashboard.button("l", "  > Restore Last Session", ":SessionManager load_last_session<CR>"),
       dashboard.button("S", "  > Sessions List", ":SessionManager load_session<CR>"),
     },
     opts = {
@@ -102,9 +104,8 @@ function M.setup()
   local buttons = {
     type = "group",
     val = {
-      dashboard.button("s", "  > Restore Current Session", ":SessionManager load_current_dir_session<CR>"),
-      dashboard.button("l", "  > Restore Last Session", ":SessionManager load_last_session<CR>"),
-      dashboard.button("e", "  > New file", ":ene <BAR> startinsert <CR>"),
+      dashboard.button("e", "  > File Explore", ":Neotree filesystem show<CR>"),
+      dashboard.button("E", "  > New file", ":ene <BAR> startinsert <CR>"),
       dashboard.button("f", "  > Find file", ":Telescope find_files<CR>"),
       dashboard.button("r", "  > Recent Files", ":Telescope frecency<CR>"),
       dashboard.button("q", "  > Quit NVIM", ":q<CR>"),

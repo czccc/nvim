@@ -84,33 +84,33 @@ M.setup_sandwich = function()
   --   silent! xmap <unique> Sr <Plug>(operator-sandwich-replace)
   -- ]])
   utils.Key("n", "S"):group("Sandwich"):set()
-  utils.Key("", "Sa", "<Plug>(operator-sandwich-add)", "Sandwich Add"):set()
+  utils.Key("x", "Sa", "<Plug>(operator-sandwich-add)", "Sandwich Add"):set()
   utils.Key("x", "Sd", "<Plug>(operator-sandwich-delete)", "Sandwich Delete"):set()
   utils.Key("x", "Sr", "<Plug>(operator-sandwich-replace)", "Sandwich Replace"):set()
-  utils.Key(
-    "n",
-    "Sd",
-    "<Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)",
-    "Sandwich Delete"
-  ):set()
-  utils.Key(
-    "n",
-    "Sdb",
-    "<Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)",
-    "Sandwich Delete Block"
-  ):set()
-  utils.Key(
-    "n",
-    "Sr",
-    "<Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)",
-    "Sandwich Replace"
-  ):set()
-  utils.Key(
-    "n",
-    "Srb",
-    "<Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)",
-    "Sandwich Replace Block"
-  ):set()
+  -- utils.Key(
+  --   "n",
+  --   "Sd",
+  --   "<Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)",
+  --   "Sandwich Delete"
+  -- ):set()
+  -- utils.Key(
+  --   "n",
+  --   "Sdb",
+  --   "<Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)",
+  --   "Sandwich Delete Block"
+  -- ):set()
+  -- utils.Key(
+  --   "n",
+  --   "Sr",
+  --   "<Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)",
+  --   "Sandwich Replace"
+  -- ):set()
+  -- utils.Key(
+  --   "n",
+  --   "Srb",
+  --   "<Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)",
+  --   "Sandwich Replace Block"
+  -- ):set()
 end
 
 return M
