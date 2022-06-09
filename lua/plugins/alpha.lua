@@ -104,7 +104,7 @@ function M.setup()
   local buttons = {
     type = "group",
     val = {
-      dashboard.button("e", "  > File Explore", ":Neotree filesystem show<CR>"),
+      dashboard.button("e", "  > File Explore", ":Neotree filesystem<CR>"),
       dashboard.button("E", "  > New file", ":ene <BAR> startinsert <CR>"),
       dashboard.button("f", "  > Find file", ":Telescope find_files<CR>"),
       dashboard.button("r", "  > Recent Files", ":Telescope frecency<CR>"),
