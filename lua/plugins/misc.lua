@@ -60,6 +60,14 @@ M.packers = {
     event = "BufRead",
     -- disable = true,
   },
+  {
+    "junegunn/vim-easy-align",
+    setup = function()
+      require("plugins.misc").setup_easy_align()
+    end,
+    event = "BufRead",
+    -- disable = true,
+  },
 }
 
 vim.g.sandwich_no_default_key_mappings = 1
@@ -111,6 +119,11 @@ M.setup_sandwich = function()
   --   "<Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)",
   --   "Sandwich Replace Block"
   -- ):set()
+end
+
+M.setup_easy_align = function()
+  utils.Key("n", "gA", "<Plug>(EasyAlign)", "Easy Align"):set()
+  utils.Key("x", "gA", "<Plug>(EasyAlign)", "Easy Align"):set()
 end
 
 return M

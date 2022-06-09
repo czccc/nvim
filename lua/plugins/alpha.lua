@@ -63,21 +63,23 @@ local function make_sessions()
   local buttons = {
     type = "group",
     val = {
-      dashboard.button("s", "  > Restore Current Session", ":SessionManager load_current_dir_session<CR>"),
+      dashboard.button("p", "  > Sessions Pick", ":SessionManager load_session<CR>"),
+      dashboard.button("c", "  > Restore Current Session", ":SessionManager load_current_dir_session<CR>"),
       dashboard.button("l", "  > Restore Last Session", ":SessionManager load_last_session<CR>"),
-      dashboard.button("S", "  > Sessions List", ":SessionManager load_session<CR>"),
     },
     opts = {
       spacing = 1,
     },
   }
+  local idx = 0
   for _, session in ipairs(session_list) do
-    if #buttons.val > 9 then
+    idx = idx + 1
+    if idx > 9 then
       return buttons
     end
     local desc = " "
     if session.dir.filename == vim.loop.cwd() then
-      desc = desc .. "(s)"
+      desc = desc .. "(c)"
     end
     if session.filename == last_session then
       desc = desc .. "(l)"
@@ -106,6 +108,7 @@ function M.setup()
     val = {
       dashboard.button("e", "  > File Explore", ":Neotree filesystem<CR>"),
       dashboard.button("E", "  > New file", ":ene <BAR> startinsert <CR>"),
+      dashboard.button("s", "  > Find ...", ":Telescope<CR>"),
       dashboard.button("f", "  > Find file", ":Telescope find_files<CR>"),
       dashboard.button("r", "  > Recent Files", ":Telescope frecency<CR>"),
       dashboard.button("q", "  > Quit NVIM", ":q<CR>"),

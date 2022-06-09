@@ -40,6 +40,10 @@ M.autocommands = {
     AuCmd("FileType", "Outline", "setlocal signcolumn=no nowrap"),
     AuCmd("BufWinEnter", "dashboard", "setlocal cursorline signcolumn=yes cursorcolumn number"),
   }),
+  -- Group("UserFoldViewSave"):extend({
+  --   AuCmd("BufWinLeave", "*.*", "mkview"),
+  --   AuCmd("BufWinEnter", "*.*", "silent loadview"),
+  -- }),
 }
 
 M.setup = function()

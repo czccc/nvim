@@ -195,6 +195,7 @@ function M.set_keys()
     LeaderfKey("z", M.search_only_certain_files, "Certain Filetype"),
 
     LeadersKey(""):group("Search"),
+    LeadersKey("a", builtin.autocommands, "autocommands"),
     LeadersKey("b", builtin.git_branches, "Checkout Branch"),
     LeadersKey("c", builtin.colorscheme, "Colorschemes"),
     LeadersKey("C", function()

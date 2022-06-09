@@ -12,7 +12,8 @@ M.packers = {
 
 M.setup_session_manager = function()
   local Path = require("plenary.path")
-  require("session_manager").setup({
+  local session_manager = require("session_manager")
+  session_manager.setup({
     sessions_dir = Path:new(vim.fn.stdpath("data"), "sessions"), -- The directory where the session files will be saved.
     path_replacer = "__", -- The character to which the path separator will be replaced for session files.
     colon_replacer = "++", -- The character to which the colon symbol will be replaced for session files.
@@ -33,14 +34,17 @@ M.setup_session_manager = function()
   local Key = utils.Key
   local Group = utils.Group
   utils.load({
-    Key("n", "<Leader>sp", "<cmd>SessionManager load_session<cr>", "Projects"),
+    Key("n", "<Leader>sp", session_manager.load_session, "Projects"),
     Key("n", "<Leader>S"):group("Sessions"),
-    Key("n", "<Leader>Ss", "<cmd>SessionManager save_current_session<cr>", "Save"),
-    Key("n", "<Leader>Sr", "<cmd>SessionManager load_current_dir_session<cr>", "Restore CurDir"),
-    Key("n", "<Leader>SR", "<cmd>SessionManager load_last_session<cr>", "Restore Last"),
-    Key("n", "<Leader>Sd", "<cmd>SessionManager delete_session<cr>", "Delete"),
-    Key("n", "<Leader>Sl", "<cmd>SessionManager load_session<cr>", "List"),
-    Group("UserSessionRestoreExplorer"):cmd("User", "SessionLoadPost", require("plugins.session").restore_explorer),
+    Key("n", "<Leader>Ss", session_manager.save_current_session, "Save"),
+    Key("n", "<Leader>Sc", session_manager.load_current_dir_session, "Restore CurDir"),
+    Key("n", "<Leader>Sl", session_manager.load_last_session, "Restore Last"),
+    Key("n", "<Leader>SA", session_manager.autosave_session, "Auto Save"),
+    Key("n", "<Leader>Sa", session_manager.autoload_session, "Auto Restore"),
+    Key("n", "<Leader>Sd", session_manager.delete_session, "Delete"),
+    Key("n", "<Leader>Sp", session_manager.load_session, "List"),
+    Group("UserSessionRestoreExplorer"):cmd("User", "SessionLoadPost", M.restore_explorer),
+    Group("UserSessionSaveOnLeave"):cmd("QuitPre", "*", session_manager.autosave_session),
   })
 end
 

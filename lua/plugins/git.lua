@@ -123,7 +123,7 @@ M.setup_gitsigns = function()
         Key("n", "<Leader>gb", "<cmd>Telescope git_branches<cr>", "Checkout Branch"),
         Key("n", "<Leader>gB", "<cmd>Telescope git_stash<cr>", "Checkout Stash"),
         Key("n", "<Leader>gc", "<cmd>Telescope git_commits<cr>", "Checkout Commit"),
-        Key("n", "<Leader>gC", "<cmd>Telescope git_bcommits<cr>", "Checkout Current File)"),
+        Key("n", "<Leader>gC", "<cmd>Telescope git_bcommits<cr>", "Checkout Current File"),
 
         Key("n", "yog"):group("Gitsigns"),
         Key("n", "yogs", "<cmd>Gitsigns toggle_signcolumn<cr>", "Toggle Signcolumn"),

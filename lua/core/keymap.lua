@@ -25,7 +25,7 @@ M.keys = {
   Key("n", "<Esc>", ":noh<CR>", "No Highlight"),
   Key("n", "D", "d$"),
   Key("n", "Y", "y$"),
-  Key("x", "p", [["-dP]]),
+  Key("x", "p", [["_dP]]),
   -- Key({ "n", "x" }, "p", [["0p]]),
   -- Key({ "n", "x" }, "P", [["0P]]),
   Key({ "n", "x" }, "x", [["-x]]),
@@ -51,7 +51,7 @@ M.keys = {
   Key("n", "<F2>", [[yiw:%s/\<<C-r>"\>/<C-r>"/gc<Left><Left><Left>]], "Substitute CurWord"):nosilent(),
   Key("v", "<F2>", [[y:%s/\<<C-r>"\>/<C-r>"/gc<Left><Left><Left>]], "Substitute CurWord"):nosilent(),
   Key("n", "<F3>", "yiw", "Yank CurWord"),
-  Key("n", "<F4>", 'viw"-dP', "Paste CurWord"),
+  Key("n", "<F4>", 'viw"_dP', "Paste CurWord"),
 
   -- Which-Key Groups
   Key("n", "<Leader>"):group("Leader"),
