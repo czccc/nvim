@@ -203,12 +203,13 @@ function M.setup()
   end
 
   local function enable_cursor_diagnostic()
-    utils.IGroup("UserCursorDiagnostic")
-      :cmd("CursorHold", "*", wrap(vim.diagnostic.open_float, 0, { focusable = false, scope = "cursor" }))
-      :set()
+    utils.Group(
+      "UserCursorDiagnostic",
+      { "CursorHold", "*", wrap(vim.diagnostic.open_float, 0, { focusable = false, scope = "cursor" }) }
+    )
   end
   local function disable_cursor_diagnostic()
-    utils.IGroup("UserCursorDiagnostic"):unset()
+    utils.Group("UserCursorDiagnostic"):unset()
   end
   enable_cursor_diagnostic()
 

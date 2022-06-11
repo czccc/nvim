@@ -42,7 +42,7 @@ M.setup_vim_markdown = function()
   vim.g.vim_markdown_toc_autofit = 1
   vim.g.vim_markdown_frontmatter = 1
 
-  utils.IGroup("UserVimMarkdown", {
+  utils.Group("UserVimMarkdown", {
     "FileType",
     "markdown",
     function()
@@ -60,7 +60,7 @@ M.setup_vim_markdown_toc = function()
   -- vim.g.vmt_cycle_list_item_markers = 1
   vim.g.vmt_include_headings_before = 1
 
-  utils.IGroup("UserVimMarkdown", {
+  utils.Group("UserVimMarkdown", {
     "FileType",
     "markdown",
     function()
