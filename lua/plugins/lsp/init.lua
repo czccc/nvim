@@ -45,16 +45,7 @@ M.packers = {
   },
 }
 
-M.lang_files = {
-  "plugins.lsp.lang.clangd",
-  "plugins.lsp.lang.go",
-  "plugins.lsp.lang.json",
-  "plugins.lsp.lang.lua",
-  "plugins.lsp.lang.markdown",
-  "plugins.lsp.lang.rust",
-  "plugins.lsp.lang.yaml",
-}
-for _, packer in ipairs(require("plugins").merge(M.lang_files)) do
+for _, packer in ipairs(require("plugins.lsp.lang").packers) do
   table.insert(M.packers, packer)
 end
 
@@ -193,14 +184,9 @@ function M.setup()
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, M.config.float)
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, M.config.float)
 
+  require("plugins.lsp.lang").setup()
   require("plugins.lsp.null-ls").setup()
   require("nvim-lsp-installer").setup({})
-  for _, file in ipairs(M.lang_files) do
-    local status, lang = pcall(require, file)
-    if status and lang.lsp_setup then
-      lang.lsp_setup()
-    end
-  end
 
   local function enable_cursor_diagnostic()
     utils.Group(

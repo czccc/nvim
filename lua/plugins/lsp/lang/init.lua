@@ -1,14 +1,25 @@
 local M = {}
 
-M.packer = require("plugins").merge({
-  "plugins.lang.rust_tools",
-  "plugins.lang.clangd_extension",
-  "plugins.lang.markdown",
-  "plugins.lang.go",
+M.lang_files = {
+  "plugins.lsp.lang.clangd",
+  "plugins.lsp.lang.go",
+  "plugins.lsp.lang.json",
+  "plugins.lsp.lang.lua",
+  "plugins.lsp.lang.markdown",
+  "plugins.lsp.lang.rust",
+  "plugins.lsp.lang.yaml",
+}
 
-  "plugins.lang.sumneko_lua",
-  "plugins.lang.jsonls",
-  "plugins.lang.yamlls",
-})
+M.packers = require("plugins").merge(M.lang_files)
+
+M.setup = function()
+  for _, file in ipairs(M.lang_files) do
+    local status, lang = pcall(require, file)
+    if status and lang.lsp_setup then
+      lang.lsp_setup()
+    end
+  end
+  require("lspconfig")["pyright"].setup({})
+end
 
 return M

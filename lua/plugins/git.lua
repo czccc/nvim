@@ -33,7 +33,7 @@ M.setup_diffview = function()
   })
   utils.Key("n", "<Leader>gd", "<cmd>DiffviewOpen<cr>", "Diff HEAD")
   utils.Key("n", "<Leader>gD", "<cmd>DiffviewOpen -uno -- %<cr>", "Diff Current File")
-  utils.Key("n", "<Leader>gh", "<cmd>DiffviewFileHistory<cr>", "View File History")
+  utils.Key("n", "<Leader>gh", "<cmd>DiffviewFileHistory %<cr>", "View File History")
 end
 
 M.setup_gitsigns = function()

@@ -155,6 +155,8 @@ function M.setup()
   vim.cmd(
     [[set foldtext=substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)).'\ ('.(v:foldend-v:foldstart+1).'\ lines)']]
   )
+  -- set blink cursor
+  vim.cmd([[set guicursor+=a:-blinkwait5-blinkoff5-blinkon5]])
   for k, v in pairs(M.wopts) do
     vim.wo[k] = v
   end
