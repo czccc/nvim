@@ -97,18 +97,17 @@ M.setup = function()
   nvim_comment.setup(M.config)
 
   local api = require("Comment.api")
-  local Key = utils.Key
   utils.load({
-    Key("n", "gc"):group("Line Comment"),
-    Key("n", "gcc"):desc("Line Comment"),
-    Key("n", "gca"):desc("Line Comment (at EOL)"),
-    Key("n", "gco"):desc("Add Comment Line Below"),
-    Key("n", "gcO"):desc("Add Comment Line Above"),
-    Key("x", "gc"):desc("Line Comment"),
-    Key("n", "gb"):group("Block Comment"),
-    Key("n", "gbc"):desc("Block Comment"),
-    Key("x", "gb"):desc("Block Comment"),
-    Key({ "n", "i" }, "<C-_>", api.toggle_current_linewise, "Line Comment"),
+    utils.IKey("n", "gc"):group("Line Comment"),
+    utils.IKey("n", "gcc"):desc("Line Comment"),
+    utils.IKey("n", "gca"):desc("Line Comment (at EOL)"),
+    utils.IKey("n", "gco"):desc("Add Comment Line Below"),
+    utils.IKey("n", "gcO"):desc("Add Comment Line Above"),
+    utils.IKey("x", "gc"):desc("Line Comment"),
+    utils.IKey("n", "gb"):group("Block Comment"),
+    utils.IKey("n", "gbc"):desc("Block Comment"),
+    utils.IKey("x", "gb"):desc("Block Comment"),
+    utils.IKey({ "n", "i" }, "<C-_>", api.toggle_current_linewise, "Line Comment"),
   })
 end
 

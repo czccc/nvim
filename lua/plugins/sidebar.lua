@@ -45,15 +45,13 @@ M.setup_symbol = function()
     symbol_blacklist = {},
   }
   vim.cmd([[ highlight! link FocusedSymbol Visual ]])
-  local Key = require("utils.key").Key
-  Key("n", "<Leader>us", "<cmd>SymbolsOutline<cr>", "Symbols Outline"):set()
+  utils.Key("n", "<Leader>us", "<cmd>SymbolsOutline<cr>", "Symbols Outline")
 end
 
 M.setup_undotree = function()
   vim.cmd([[ let g:undotree_WindowLayout = 3 ]])
   vim.cmd([[ let g:undotree_SetFocusWhenToggle = 1 ]])
-  local Key = require("utils.key").Key
-  Key("n", "<Leader>uu", "<cmd>UndotreeToggle<cr>", "Undo Tree"):set()
+  utils.Key("n", "<Leader>uu", "<cmd>UndotreeToggle<cr>", "Undo Tree")
 end
 
 return M

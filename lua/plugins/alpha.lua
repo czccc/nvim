@@ -146,7 +146,7 @@ function M.setup()
 
   alpha.setup(config)
   utils.Group("UserAlphaSetting"):cmd("FileType"):pattern("alpha"):command("setlocal nofoldenable"):set()
-  utils.Key("n", "<Leader>ua", "<cmd>Alpha<cr>", "Dashboard"):set()
+  utils.Key("n", "<Leader>ua", "<cmd>Alpha<cr>", "Dashboard")
 end
 
 return M

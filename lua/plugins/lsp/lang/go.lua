@@ -34,29 +34,27 @@ M.setup = function()
     lsp_gofumpt = true, -- true: set default gofmt in gopls format to gofumpt
     lsp_on_attach = function(client, bufnr)
       require("plugins.lsp").common_on_attach(client, bufnr)
-      local mapping = {
-        { "<Leader>mF", "<cmd>GoFmt<cr>", "GoFmt" },
-        { "<Leader>ms", "<cmd>GoFillStruct<cr>", "GoFillStruct" },
-        { "<Leader>mS", "<cmd>GoFillSwitch<cr>", "GoFillSwitch" },
-        { "<Leader>me", "<cmd>GoIfErr<cr>", "GoIfErr" },
-        { "<Leader>mm", "<cmd>GoMake<cr>", "GoMake" },
-        { "<Leader>mb", "<cmd>GoBuild<cr>", "GoBuild" },
-        { "<Leader>mg", "<cmd>GoGenerate<cr>", "GoGenerate" },
-        { "<Leader>mr", "<cmd>GoRun<cr>", "GoRun" },
-        { "<Leader>mv", "<cmd>GoVet<cr>", "GoVet" },
-        { "<Leader>mc", "<cmd>GoCoverage<cr>", "GoCoverage" },
-        { "<Leader>mT", "<cmd>GoTest<cr>", "GoTest" },
-        { "<Leader>mp", "<cmd>GoTestPkg<cr>", "GoTestPkg" },
-        { "<Leader>mt", "<cmd>GoTestFunc<cr>", "GoTestFunc" },
-        { "<Leader>mf", "<cmd>GoTestFile<cr>", "GoTestFile" },
-        { "<Leader>md", "<cmd>GoDoc<cr>", "GoDoc" },
-        { "<Leader>mD", "<cmd>GoDebug<cr>", "GoDebug" },
-        { "<Leader>ma", "<cmd>GoCodeAction<cr>", "GoCodeAction" },
-        { "<Leader>mc", "<cmd>GoCmt<cr>", "GoCmt " },
-      }
-      for _, m in ipairs(mapping) do
-        utils.Key("n", m[1], m[2], m[3]):buffer(bufnr):set()
-      end
+      utils.load_wk({
+        name = "Module",
+        F = { "<cmd>GoFmt<cr>", "GoFmt" },
+        s = { "<cmd>GoFillStruct<cr>", "GoFillStruct" },
+        S = { "<cmd>GoFillSwitch<cr>", "GoFillSwitch" },
+        e = { "<cmd>GoIfErr<cr>", "GoIfErr" },
+        m = { "<cmd>GoMake<cr>", "GoMake" },
+        b = { "<cmd>GoBuild<cr>", "GoBuild" },
+        g = { "<cmd>GoGenerate<cr>", "GoGenerate" },
+        r = { "<cmd>GoRun<cr>", "GoRun" },
+        v = { "<cmd>GoVet<cr>", "GoVet" },
+        C = { "<cmd>GoCoverage<cr>", "GoCoverage" },
+        T = { "<cmd>GoTest<cr>", "GoTest" },
+        p = { "<cmd>GoTestPkg<cr>", "GoTestPkg" },
+        t = { "<cmd>GoTestFunc<cr>", "GoTestFunc" },
+        f = { "<cmd>GoTestFile<cr>", "GoTestFile" },
+        d = { "<cmd>GoDoc<cr>", "GoDoc" },
+        D = { "<cmd>GoDebug<cr>", "GoDebug" },
+        a = { "<cmd>GoCodeAction<cr>", "GoCodeAction" },
+        c = { "<cmd>GoCmt<cr>", "GoCmt " },
+      }, { prefix = "<Leader>m", mode = "n", opts = { buffer = bufnr } })
     end, -- nil: use on_attach function defined in go/lsp.lua,
     --      when lsp_cfg is true
     -- if lsp_on_attach is a function: use this function as on_attach function for gopls

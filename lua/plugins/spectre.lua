@@ -152,12 +152,9 @@ M.setup = function()
     is_open_target_win = true, --open file on opener window
     is_insert_mode = false, -- start open panel on is_insert_mode
   })
-  local Key = utils.Key
-  utils.load({
-    Key("n", "<Leader>uR", spectre.open_file_search, "Spectre File Search"),
-    Key("n", "<Leader>ur", spectre.open, "Spectre Open"),
-    Key("v", "<Leader>ur", M.visual_selection, "Spectre Visual"),
-  })
+  utils.Key("n", "<Leader>uR", spectre.open_file_search, "Spectre File Search")
+  utils.Key("n", "<Leader>ur", spectre.open, "Spectre Open")
+  utils.Key("v", "<Leader>ur", M.visual_selection, "Spectre Visual")
 end
 
 M.visual_selection = function()

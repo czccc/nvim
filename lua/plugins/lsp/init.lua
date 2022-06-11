@@ -1,7 +1,4 @@
 local M = {}
-local AuCmd = utils.AuCmd
-local Group = utils.Group
-local Key = utils.Key
 
 M.packers = {
   {
@@ -121,55 +118,63 @@ end
 
 function M.common_on_attach(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-  local cap = client.server_capabilities
-  if cap.documentHighlightProvider then
-    Group("UserLSPDocumentHighlight")
+  if client.supports_method("textDocument/documentHighlight") then
+    utils.Group("UserLSPDocumentHighlight" .. bufnr)
       :extend({
-        AuCmd("CursorHold"):buffer(bufnr):callback(wrap(vim.lsp.buf.document_highlight, client.id)),
-        AuCmd("CursorMoved"):buffer(bufnr):callback(vim.lsp.buf.clear_references),
+        utils.AuCmd("CursorHold"):buffer(bufnr):callback(wrap(vim.lsp.buf.document_highlight, client.id)),
+        utils.AuCmd("CursorMoved"):buffer(bufnr):callback(vim.lsp.buf.clear_references),
       })
       :set()
   end
-  if cap.codeLensProvider then
-    Group("UserLSPCodeLensRefresh")
+  if client.supports_method("textDocument/codeLens") then
+    utils.Group("UserLSPCodeLensRefresh" .. bufnr)
       :extend({
-        AuCmd("InsertLeave"):buffer(bufnr):callback(wrap(vim.lsp.codelens.refresh)),
-        AuCmd("InsertLeave"):buffer(bufnr):callback(wrap(vim.lsp.codelens.display)),
+        utils.AuCmd({ "BufEnter", "InsertLeave" }):buffer(bufnr):callback(wrap(vim.lsp.codelens.refresh)),
+        utils.AuCmd("InsertLeave"):buffer(bufnr):callback(wrap(vim.lsp.codelens.display)),
       })
       :set()
   end
-  -- if cap.codeActionProvider and cap.codeActionProvider.resolveProvider then
-  -- if cap.codeActionProvider then
   if client.supports_method("textDocument/codeAction") then
-    Group("UserLSPCodeAction")
+    utils.Group("UserLSPCodeAction" .. bufnr)
       :cmd("CursorHold,CursorHoldI")
       :buffer(bufnr)
       :callback(require("plugins.lsp.utils").code_action_listener)
       :set()
   end
-  require("plugins.lsp.utils").enable_format_on_save()
-
-  local mapping = {
-    Key("n", "K", vim.lsp.buf.hover, "Show Hover"),
-    Key("n", "ga", vim.lsp.buf.code_action, "Code Actions"),
-    Key("v", "ga", vim.lsp.buf.range_code_action, "Code Actions"),
-    Key("n", "gd", require("plugins.telescope").lsp_definitions, "Goto Definition"),
-    Key("n", "gD", vim.lsp.buf.declaration, "Goto Declaration"),
-    Key("n", "gI", require("plugins.telescope").lsp_implementations, "Goto Implementations"),
-    -- Key("n", "gs", vim.lsp.buf.signature_help, "Show Signature Help"),
-    Key("n", "gt", vim.lsp.buf.type_definition, "Goto Type Definition"),
-    Key("n", "gl", wrap(vim.diagnostic.open_float, 0, { scope = "line" }), "Show Line Diagnostics"),
-    Key("n", "gL", vim.lsp.codelens.run, "Code Lens"),
-    Key("n", "gr", require("plugins.telescope").lsp_references, "Goto References"),
-    Key("n", "gR", vim.lsp.buf.rename, "Rename Symbol"),
-    Key("n", "gp", wrap(require("plugins.lsp.peek").Peek, "definition"), "Peek Definition"),
-    Key("n", "gF", require("plugins.lsp.utils").format, "Format Code"),
-    Key("v", "gF", vim.lsp.buf.range_formatting, "Format Code"),
-    Key("n", "gh", vim.lsp.buf.signature_help, "Show Signature Help"),
-  }
-  for _, m in pairs(mapping) do
-    m:buffer(bufnr):set()
+  if client.supports_method("textDocument/formatting") then
+    local format_group = utils.Group("UserLSPFormatOnSave" .. bufnr):extend({
+      utils.AuCmd("BufWritePre"):buffer(bufnr):callback(wrap(require("plugins.lsp.utils").format)),
+    })
+    format_group:set()
+    utils.IKey("n", "[of", function()
+      format_group:set()
+    end, "Format On Save"):buffer():set()
+    utils.IKey("n", "]of", function()
+      format_group:unset()
+    end, "Format On Save"):buffer():set()
   end
+  -- require("plugins.lsp.utils").enable_format_on_save()
+
+  utils.Key("n", "K", vim.lsp.buf.hover, "Show Hover")
+  utils.load_wk({
+    a = { vim.lsp.buf.range_code_action, "Code Actions" },
+    F = { vim.lsp.buf.range_formatting, "Format Code" },
+  }, { prefix = "g", mode = "v", opts = { buffer = bufnr } })
+  utils.load_wk({
+    a = { vim.lsp.buf.code_action, "Code Actions" },
+    d = { require("plugins.telescope").lsp_definitions, "Goto Definition" },
+    D = { vim.lsp.buf.declaration, "Goto Declaration" },
+    I = { require("plugins.telescope").lsp_implementations, "Goto Implementations" },
+    -- Key("n", "gs", vim.lsp.buf.signature_help, "Show Signature Help"),
+    t = { vim.lsp.buf.type_definition, "Goto Type Definition" },
+    l = { wrap(vim.diagnostic.open_float, 0, { scope = "line" }), "Show Line Diagnostics" },
+    L = { vim.lsp.codelens.run, "Code Lens" },
+    r = { require("plugins.telescope").lsp_references, "Goto References" },
+    R = { vim.lsp.buf.rename, "Rename Symbol" },
+    p = { wrap(require("plugins.lsp.peek").Peek, "definition"), "Peek Definition" },
+    F = { require("plugins.lsp.utils").format, "Format Code" },
+    h = { vim.lsp.buf.signature_help, "Show Signature Help" },
+  }, { prefix = "g", mode = "n", opts = { buffer = bufnr } })
 end
 
 function M.setup()
@@ -200,38 +205,34 @@ function M.setup()
   end
 
   local function enable_cursor_diagnostic()
-    Group("UserCursorDiagnostic")
+    utils.Group("UserCursorDiagnostic")
       :cmd("CursorHold", "*", wrap(vim.diagnostic.open_float, 0, { focusable = false, scope = "cursor" }))
       :set()
   end
   local function disable_cursor_diagnostic()
-    Group("UserCursorDiagnostic"):unset()
+    utils.Group("UserCursorDiagnostic"):unset()
   end
   enable_cursor_diagnostic()
 
-  local mapping = {
-    Key("n", "[d", vim.diagnostic.goto_prev, "Previous Diagnostic"),
-    Key("n", "]d", vim.diagnostic.goto_next, "Next Diagnostic"),
-    Key("n", "[od", enable_cursor_diagnostic, "Cursor Diagnostic"),
-    Key("n", "]od", disable_cursor_diagnostic, "Cursor Diagnostic"),
-    Key("n", "[of", require("plugins.lsp.utils").enable_format_on_save, "Format On Save"),
-    Key("n", "]of", require("plugins.lsp.utils").disable_format_on_save, "Format On Save"),
+  utils.Key("n", "[d", vim.diagnostic.goto_prev, "Previous Diagnostic")
+  utils.Key("n", "]d", vim.diagnostic.goto_next, "Next Diagnostic")
+  utils.Key("n", "[od", enable_cursor_diagnostic, "Cursor Diagnostic")
+  utils.Key("n", "]od", disable_cursor_diagnostic, "Cursor Diagnostic")
 
-    Key("n", "<Leader>l"):group("LSP"),
-    Key("n", "<Leader>lI", "<cmd>LspInstallInfo<cr>", "Lsp Installer"),
-    Key("n", "<Leader>li", "<cmd>LspInfo<cr>", "Lsp Info"),
-    Key("n", "<Leader>lr", "<cmd>LspRestart<cr>", "Lsp Restart"),
-    Key("n", "<leader>lq", vim.diagnostic.setloclist, "Loc List"),
-    Key("n", "<leader>ls", "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols"),
-    Key("n", "<leader>lS", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols"),
-    Key("n", "<leader>ld", "<cmd>Telescope diagnostics bufnr=0 theme=get_ivy<cr>", "Buffer Diagnostic"),
-    Key("n", "<leader>lD", "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostic"),
-    Key("n", "<Leader>ui", "<cmd>LspInfo<cr>", "Lsp Info"),
-    Key("n", "<Leader>uI", "<cmd>NullLsInfo<cr>", "NullLs Info"),
-  }
-  for _, m in pairs(mapping) do
-    m:set()
-  end
+  utils.load_wk({
+    name = "LSP",
+    I = { "<cmd>LspInstallInfo<cr>", "Lsp Installer" },
+    i = { "<cmd>LspInfo<cr>", "Lsp Info" },
+    r = { "<cmd>LspRestart<cr>", "Lsp Restart" },
+    q = { vim.diagnostic.setloclist, "Loc List" },
+    s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
+    S = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols" },
+    d = { "<cmd>Telescope diagnostics bufnr=0 theme=get_ivy<cr>", "Buffer Diagnostic" },
+    D = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostic" },
+  }, { prefix = "<Leader>l", mode = "n" })
+
+  utils.Key("n", "<Leader>ui", "<cmd>LspInfo<cr>", "Lsp Info")
+  utils.Key("n", "<Leader>uI", "<cmd>NullLsInfo<cr>", "NullLs Info")
 end
 
 return M

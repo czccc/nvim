@@ -205,40 +205,39 @@ M.setup = function()
     highlights = M.config.highlights,
   })
 
-  local Key = utils.Key
-  utils.load({
-    Key("n", "<S-x>", "<cmd>BufDel<cr>", "BufDel"),
-    Key("n", "<Leader>c", "<cmd>BufDel<cr>", "Close Buffer"),
-    Key("n", "<Tab>", "<cmd>BufferLineCycleNext<cr>", "BufferLineCycleNext"),
-    Key("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<cr>", "BufferLineCyclePrev"),
-    Key("n", "]b", "<cmd>BufferLineCycleNext<cr>", "Next Buffer"),
-    Key("n", "[b", "<cmd>BufferLineCyclePrev<cr>", "Previous Buffer"),
+  utils.Key("n", "<S-x>", "<cmd>BufDel<cr>", "BufDel")
+  utils.Key("n", "<Leader>c", "<cmd>BufDel<cr>", "Close Buffer")
+  utils.Key("n", "<Tab>", "<cmd>BufferLineCycleNext<cr>", "BufferLineCycleNext")
+  utils.Key("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<cr>", "BufferLineCyclePrev")
+  utils.Key("n", "]b", "<cmd>BufferLineCycleNext<cr>", "Next Buffer")
+  utils.Key("n", "[b", "<cmd>BufferLineCyclePrev<cr>", "Previous Buffer")
 
-    Key("n", "<Leader>b"):group("Buffers"),
-    Key("n", "<Leader>bb", require("plugins.telescope").find_buffers, "Find Buffer"),
-    Key("n", "<Leader>bc", "<cmd>BufDel<cr>", "Close Current"),
-    Key("n", "<Leader>bC", "<cmd>BufferLinePickClose<cr>", "Buffer Pick Close"),
-    Key("n", "<Leader>bf", "<cmd>b#<cr>", "Previous"),
-    Key("n", "<Leader>bh", "<cmd>BufferLineCloseLeft<cr>", "Close To Left"),
-    Key("n", "<Leader>bl", "<cmd>BufferLineCloseRight<cr>", "Close To Right"),
-    Key("n", "<Leader>bj", "<cmd>BufferLineMovePrev<cr>", "Move To Left"),
-    Key("n", "<Leader>bk", "<cmd>BufferLineMoveNext<cr>", "Move To Right"),
-    Key("n", "<Leader>bp", "<cmd>BufferLinePick<cr>", "Buffer Pick"),
-    Key("n", "<Leader>bP", "<cmd>BufferLineTogglePin<cr>", "Buffer Pin"),
-    Key("n", "<Leader>bd", "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory"),
-    Key("n", "<Leader>be", "<cmd>BufferLineSortByExtension<cr>", "Sort By Extension"),
-    Key("n", "<Leader>bt", "<cmd>BufferLineSortByTabs<cr>", "Sort By Tab"),
+  utils.load_wk({
+    name = "Buffers",
+    b = { require("plugins.telescope").find_buffers, "Find Buffer" },
+    c = { "<cmd>BufDel<cr>", "Close Current" },
+    C = { "<cmd>BufferLinePickClose<cr>", "Buffer Pick Close" },
+    f = { "<cmd>b#<cr>", "Previous" },
+    h = { "<cmd>BufferLineCloseLeft<cr>", "Close To Left" },
+    l = { "<cmd>BufferLineCloseRight<cr>", "Close To Right" },
+    j = { "<cmd>BufferLineMovePrev<cr>", "Move To Left" },
+    k = { "<cmd>BufferLineMoveNext<cr>", "Move To Right" },
+    p = { "<cmd>BufferLinePick<cr>", "Buffer Pick" },
+    P = { "<cmd>BufferLineTogglePin<cr>", "Buffer Pin" },
+    d = { "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory" },
+    e = { "<cmd>BufferLineSortByExtension<cr>", "Sort By Extension" },
+    t = { "<cmd>BufferLineSortByTabs<cr>", "Sort By Tab" },
 
-    Key("n", "<Leader>b1", "<cmd>BufferLineGoToBuffer 1<cr>", "Buffer Goto 1"),
-    Key("n", "<Leader>b2", "<cmd>BufferLineGoToBuffer 2<cr>", "Buffer Goto 2"),
-    Key("n", "<Leader>b3", "<cmd>BufferLineGoToBuffer 3<cr>", "Buffer Goto 3"),
-    Key("n", "<Leader>b4", "<cmd>BufferLineGoToBuffer 4<cr>", "Buffer Goto 4"),
-    Key("n", "<Leader>b5", "<cmd>BufferLineGoToBuffer 5<cr>", "Buffer Goto 5"),
-    Key("n", "<Leader>b6", "<cmd>BufferLineGoToBuffer 6<cr>", "Buffer Goto 6"),
-    Key("n", "<Leader>b7", "<cmd>BufferLineGoToBuffer 7<cr>", "Buffer Goto 7"),
-    Key("n", "<Leader>b8", "<cmd>BufferLineGoToBuffer 8<cr>", "Buffer Goto 8"),
-    Key("n", "<Leader>b9", "<cmd>BufferLineGoToBuffer 9<cr>", "Buffer Goto 9"),
-  })
+    ["1"] = { "<cmd>BufferLineGoToBuffer 1<cr>", "Buffer Goto 1" },
+    ["2"] = { "<cmd>BufferLineGoToBuffer 2<cr>", "Buffer Goto 2" },
+    ["3"] = { "<cmd>BufferLineGoToBuffer 3<cr>", "Buffer Goto 3" },
+    ["4"] = { "<cmd>BufferLineGoToBuffer 4<cr>", "Buffer Goto 4" },
+    ["5"] = { "<cmd>BufferLineGoToBuffer 5<cr>", "Buffer Goto 5" },
+    ["6"] = { "<cmd>BufferLineGoToBuffer 6<cr>", "Buffer Goto 6" },
+    ["7"] = { "<cmd>BufferLineGoToBuffer 7<cr>", "Buffer Goto 7" },
+    ["8"] = { "<cmd>BufferLineGoToBuffer 8<cr>", "Buffer Goto 8" },
+    ["9"] = { "<cmd>BufferLineGoToBuffer 9<cr>", "Buffer Goto 9" },
+  }, { prefix = "<Leader>b", mode = "n" })
 end
 
 return M

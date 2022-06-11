@@ -347,12 +347,11 @@ M.setup_cmp = function()
 end
 
 M.setup_copilot = function()
-  local Key = utils.Key
-  Key("i", "<C-h>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
-  Key("i", "<C-l>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
-  Key("i", "<M-]>", "<Plug>(copilot-next)", "Copilot Next"):set()
-  Key("i", "<M-[>", "<Plug>(copilot-previous)", "Copilot Previous"):set()
-  Key("i", "<M-\\>", "<Cmd>vertical Copilot panel<CR>", "Copilot Panel"):set()
+  utils.IKey("i", "<C-h>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
+  utils.IKey("i", "<C-l>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
+  utils.IKey("i", "<M-]>", "<Plug>(copilot-next)", "Copilot Next"):set()
+  utils.IKey("i", "<M-[>", "<Plug>(copilot-previous)", "Copilot Previous"):set()
+  utils.IKey("i", "<M-\\>", "<Cmd>vertical Copilot panel<CR>", "Copilot Panel"):set()
 end
 
 M.setup_tabout = function()

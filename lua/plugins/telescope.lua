@@ -151,7 +151,7 @@ M.config = {
     set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
     pickers = {
       find_files = {
-        find_command = { "fd", "--type=file", "--hidden", "--smart-case" },
+        hidden = true,
       },
       live_grep = {
         --@usage don't include the filename in the search results
@@ -173,42 +173,44 @@ M.config = {
 }
 
 function M.set_keys()
-  local LeaderfKey = require("utils.key").PrefixModeKey("<Leader>f", "n")
-  local LeadersKey = require("utils.key").PrefixModeKey("<Leader>s", "n")
   local builtin = require("telescope.builtin")
-  require("utils.key").load({
-    LeaderfKey(""):group("Find Files"),
-    LeaderfKey("b", M.curbuf, "Current Buffer"),
-    LeaderfKey("B", M.curbuf_grep_cursor_string, "Buffer CurWord"),
-    LeaderfKey("e", builtin.oldfiles, "History"),
-    LeaderfKey("f", builtin.find_files, "History"),
-    LeaderfKey("g", M.git_files, "Git Files"),
-    LeaderfKey("j", builtin.jumplist, "Jump List"),
-    LeaderfKey("l", builtin.resume, "Resume"),
-    LeaderfKey("m", builtin.marks, "Marks"),
-    LeaderfKey("P", M.project_search, "Project Files"),
-    LeaderfKey("r", M.workspace_frequency, "Frequency"),
-    LeaderfKey("s", M.git_status, "Git Status"),
-    LeaderfKey("t", "<cmd>TodoTelescope<cr>", "Todo"),
-    LeaderfKey("w", M.live_grep, "Live Grep"),
-    LeaderfKey("W", M.grep_cursor_string, "Live Grep CurWord"),
-    LeaderfKey("z", M.search_only_certain_files, "Certain Filetype"),
-
-    LeadersKey(""):group("Search"),
-    LeadersKey("a", builtin.autocommands, "autocommands"),
-    LeadersKey("b", builtin.git_branches, "Checkout Branch"),
-    LeadersKey("c", builtin.colorscheme, "Colorschemes"),
-    LeadersKey("C", function()
-      require("telescope.builtin.internal").colorscheme({ enable_preview = true })
-    end, "Colorschemes with Preview"),
-    LeadersKey("h", builtin.help_tags, "Find Help"),
-    LeadersKey("H", builtin.highlights, "Highlights"),
-    LeadersKey("k", builtin.keymaps, "Keymaps"),
-    LeadersKey("l", builtin.resume, "Resume"),
-    LeadersKey("m", builtin.commands, "Commands"),
-    LeadersKey("M", builtin.man_pages, "Man Pages"),
-    LeadersKey("s", builtin.builtin, "Telescope"),
-  })
+  utils.load_wk({
+    name = "Find Files",
+    b = { M.curbuf, "Current Buffer" },
+    B = { M.curbuf_grep_cursor_string, "Buffer CurWord" },
+    e = { builtin.oldfiles, "History" },
+    f = { builtin.find_files, "History" },
+    g = { M.git_files, "Git Files" },
+    j = { builtin.jumplist, "Jump List" },
+    l = { builtin.resume, "Resume" },
+    m = { builtin.marks, "Marks" },
+    P = { M.project_search, "Project Files" },
+    r = { M.workspace_frequency, "Frequency" },
+    s = { M.git_status, "Git Status" },
+    t = { "<cmd>TodoTelescope<cr>", "Todo" },
+    w = { M.live_grep, "Live Grep" },
+    W = { M.grep_cursor_string, "Live Grep CurWord" },
+    z = { M.search_only_certain_files, "Certain Filetype" },
+  }, { prefix = "<Leader>f", mode = "n" })
+  utils.load_wk({
+    name = "Search",
+    a = { builtin.autocommands, "Autocommands" },
+    b = { builtin.git_branches, "Checkout Branch" },
+    c = { builtin.colorscheme, "Colorschemes" },
+    C = {
+      function()
+        require("telescope.builtin.internal").colorscheme({ enable_preview = true })
+      end,
+      "Colorschemes with Preview",
+    },
+    h = { builtin.help_tags, "Find Help" },
+    H = { builtin.highlights, "Highlights" },
+    k = { builtin.keymaps, "Keymaps" },
+    l = { builtin.resume, "Resume" },
+    m = { builtin.commands, "Commands" },
+    M = { builtin.man_pages, "Man Pages" },
+    s = { builtin.builtin, "Telescope" },
+  }, { prefix = "<Leader>s", mode = "n" })
 end
 
 function M.setup()
@@ -434,11 +436,13 @@ M.setup_harpoon = function()
     },
   })
   require("telescope").load_extension("harpoon")
-  -- utils.Key("n", "<leader>fm", require("harpoon.ui").toggle_quick_menu, "Harpoon"):set()
-  utils.Key("n", "<leader>fh", "<cmd>Telescope harpoon marks theme=dropdown<cr>", "Harpoon"):set()
-  utils.Key("n", "<leader>fH", require("harpoon.mark").add_file, "Harpoon Add"):set()
-  utils.Key("n", "<leader>fn", require("harpoon.ui").nav_next, "Harpoon Next"):set()
-  utils.Key("n", "<leader>fp", require("harpoon.ui").nav_prev, "Harpoon Previous"):set()
+  utils.load_wk({
+    -- m = { require("harpoon.ui").toggle_quick_menu, "Harpoon" },
+    h = { "<cmd>Telescope harpoon marks theme=dropdown<cr>", "Harpoon" },
+    H = { require("harpoon.mark").add_file, "Harpoon Add" },
+    n = { require("harpoon.ui").nav_next, "Harpoon Next" },
+    p = { require("harpoon.ui").nav_prev, "Harpoon Previous" },
+  }, { prefix = "<Leader>f", mode = "n" })
 end
 
 local function dropdown_opts()

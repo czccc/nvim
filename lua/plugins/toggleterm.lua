@@ -58,14 +58,21 @@ M.setup = function()
   local config = M.config
 
   terminal.setup(config.setup)
-  utils.Key("n", "<Leader>tt", wrap(M.toggle), "Float"):set()
-  utils.Key("n", "<Leader>th", wrap(M.toggle, { nil, nil, "horizontal" }), "Horizontal"):set()
-  utils.Key("n", "<Leader>tv", wrap(M.toggle, { nil, nil, "vertical" }), "Vertical"):set()
-  utils.Key("n", "<Leader>tg", wrap(M.toggle, { "lazygit" }), "Lazygit"):set()
-  utils.Key("n", "<Leader>gg", wrap(M.toggle, { "lazygit" }), "Lazygit"):set()
-  utils.Key("n", "<Leader>tG", wrap(M.toggle, { "gitui" }), "Git UI"):set()
-  utils.Key("n", "<Leader>gG", wrap(M.toggle, { "gitui" }), "Git UI"):set()
-  utils.Key("n", "<Leader>tH", wrap(M.toggle, { "htop" }), "Htop"):set()
+
+  utils.load_wk({
+    name = "Terminal",
+    t = { wrap(M.toggle), "Float" },
+    h = { wrap(M.toggle, { nil, nil, "horizontal" }), "Horizontal" },
+    v = { wrap(M.toggle, { nil, nil, "vertical" }), "Vertical" },
+    g = { wrap(M.toggle, { "lazygit" }), "Lazygit" },
+    G = { wrap(M.toggle, { "gitui" }), "Git UI" },
+    H = { wrap(M.toggle, { "htop" }), "Htop" },
+  }, { prefix = "<Leader>t", mode = "n" })
+  utils.load_wk({
+    name = "Git",
+    g = { wrap(M.toggle, { "lazygit" }), "Lazygit" },
+    G = { wrap(M.toggle, { "gitui" }), "Git UI" },
+  }, { prefix = "<Leader>g", mode = "n" })
 end
 
 M.toggle = function(opts)

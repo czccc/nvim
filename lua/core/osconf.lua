@@ -31,11 +31,10 @@ M.setup = function()
     ]])
   end
   if path.is_mac then
-    local Key = utils.Key
-    Key("n", "<A-Up>", ":resize -2<CR>", "Resize Up"):set()
-    Key("n", "<A-Down>", ":resize +2<CR>", "Resize Down"):set()
-    Key("n", "<A-Left>", ":vertical resize -2<CR>", "Resize Left"):set()
-    Key("n", "<A-Right>", ":vertical resize +2<CR>", "Resize Right"):set()
+    utils.Key("n", "<A-Up>", ":resize -2<CR>", "Resize Up")
+    utils.Key("n", "<A-Down>", ":resize +2<CR>", "Resize Down")
+    utils.Key("n", "<A-Left>", ":vertical resize -2<CR>", "Resize Left")
+    utils.Key("n", "<A-Right>", ":vertical resize +2<CR>", "Resize Right")
   end
 end
 

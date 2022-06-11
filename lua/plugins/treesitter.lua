@@ -207,28 +207,27 @@ function M.setup()
 
   treesitter_configs.setup(M.opts)
 
-  local Key = require("utils.key").Key
-  require("utils.key").load({
-    Key("o", "af"):desc("Function Outer"),
-    Key("o", "if"):desc("Function Inner"),
-    Key("o", "ac"):desc("Class Outer"),
-    Key("o", "ic"):desc("Class Inner"),
-    Key("o", "al"):desc("Loop Outer"),
-    Key("o", "il"):desc("Loop Inner"),
-    Key("o", "aa"):desc("Parameter Outer"),
-    Key("o", "ia"):desc("Parameter Inner"),
+  utils.load({
+    utils.IKey("o", "af"):desc("Function Outer"),
+    utils.IKey("o", "if"):desc("Function Inner"),
+    utils.IKey("o", "ac"):desc("Class Outer"),
+    utils.IKey("o", "ic"):desc("Class Inner"),
+    utils.IKey("o", "al"):desc("Loop Outer"),
+    utils.IKey("o", "il"):desc("Loop Inner"),
+    utils.IKey("o", "aa"):desc("Parameter Outer"),
+    utils.IKey("o", "ia"):desc("Parameter Inner"),
 
-    Key("n", "]f"):desc("Next Function Start"),
-    Key("n", "]c"):desc("Next Class Start"),
-    Key("n", "]F"):desc("Next Function End"),
-    Key("n", "]C"):desc("Next Class End"),
-    Key("n", "[f"):desc("Previous Function Start"),
-    Key("n", "[c"):desc("Previous Class Start"),
-    Key("n", "[F"):desc("Previous Function End"),
-    Key("n", "[C"):desc("Previous Class End"),
-    Key("n", "<Leader>lf"):desc("Peek Function"),
-    Key("n", "<Leader>lc"):desc("Peek Class"),
-    Key("n", "<Leader>ut", "<cmd>TSHighlightCapturesUnderCursor<cr>", "TSHighlightCapturesUnderCursor"),
+    utils.IKey("n", "]f"):desc("Next Function Start"),
+    utils.IKey("n", "]c"):desc("Next Class Start"),
+    utils.IKey("n", "]F"):desc("Next Function End"),
+    utils.IKey("n", "]C"):desc("Next Class End"),
+    utils.IKey("n", "[f"):desc("Previous Function Start"),
+    utils.IKey("n", "[c"):desc("Previous Class Start"),
+    utils.IKey("n", "[F"):desc("Previous Function End"),
+    utils.IKey("n", "[C"):desc("Previous Class End"),
+    utils.IKey("n", "<Leader>lf"):desc("Peek Function"),
+    utils.IKey("n", "<Leader>lc"):desc("Peek Class"),
+    utils.IKey("n", "<Leader>ut", "<cmd>TSHighlightCapturesUnderCursor<cr>", "TSHighlightCapturesUnderCursor"),
   })
 end
 

@@ -37,30 +37,29 @@ M.setup_hop = function()
     create_hl_autocmd = false,
   })
 
-  local Key = utils.Key
-  utils.load({
-    -- Key("n", "s", "<cmd>HopChar2MW<cr>", "HopChar2"),
-    -- Key({ "v", "x", "o" }, "s", "<cmd>HopChar2<cr>", "HopChar2"),
-    Key({ "n" }, "<Leader>w", "<cmd>HopWord<cr>", "HopWord"),
-    Key({ "n" }, "<Leader>W", "<cmd>HopWordMW<cr>", "HopWord MW"),
-    Key("n", "<Leader>j"):group("Hop"),
-    Key("n", "<Leader>jj", "<cmd>HopWordMW<cr>", "HopWord MW"),
-    Key("n", "<Leader>jw", "<cmd>HopWord<cr>", "HopWord"),
-    Key("n", "<Leader>jW", "<cmd>HopWordMW<cr>", "HopWord MW"),
-    Key("n", "<Leader>jp", "<cmd>HopPattern<cr>", "HopPattern"),
-    Key("n", "<Leader>jP", "<cmd>HopPatternMW<cr>", "HopPattern MW"),
-    Key("n", "<Leader>jC", "<cmd>HopChar2<cr>", "HopChar2"),
-    Key("n", "<Leader>jc", "<cmd>HopChar1<cr>", "HopChar1"),
-    Key("n", "<Leader>jl", "<cmd>HopLine<cr>", "HopLine"),
-    Key("n", "<Leader>jL", "<cmd>HopLineStart<cr>", "HopLineStart"),
+  -- Key("n", "s", "<cmd>HopChar2MW<cr>", "HopChar2")
+  -- Key({ "v", "x", "o" }, "s", "<cmd>HopChar2<cr>", "HopChar2")
+  utils.Key("n", "<Leader>w", "<cmd>HopWord<cr>", "HopWord")
+  utils.Key("n", "<Leader>W", "<cmd>HopWordMW<cr>", "HopWord MW")
+  utils.load_wk({
+    name = "Hop",
+    j = { "<cmd>HopWordMW<cr>", "HopWord MW" },
+    w = { "<cmd>HopWord<cr>", "HopWord" },
+    W = { "<cmd>HopWordMW<cr>", "HopWord MW" },
+    p = { "<cmd>HopPattern<cr>", "HopPattern" },
+    P = { "<cmd>HopPatternMW<cr>", "HopPattern MW" },
+    C = { "<cmd>HopChar2<cr>", "HopChar2" },
+    c = { "<cmd>HopChar1<cr>", "HopChar1" },
+    l = { "<cmd>HopLine<cr>", "HopLine" },
+    L = { "<cmd>HopLineStart<cr>", "HopLineStart" },
+  }, { prefix = "<Leader>j", mode = "n" })
 
-    Key({ "v", "x" }, "<Leader>w", "<cmd>HopWord<cr>", "HopWord"),
-    Key({ "v", "x" }, "<Leader>p", "<cmd>HopPattern<cr>", "HopPattern"),
-    Key({ "v", "x" }, "<Leader>l", "<cmd>HopLine<cr>", "HopLine"),
-    Key({ "v", "x" }, "<Leader>L", "<cmd>HopLineStart<cr>", "HopLineStart"),
-    Key({ "v", "x" }, "<Leader>c", "<cmd>HopChar1<cr>", "HopChar1"),
-    Key({ "v", "x" }, "<Leader>C", "<cmd>HopChar2<cr>", "HopChar2"),
-  })
+  utils.Key({ "v", "x" }, "<Leader>w", "<cmd>HopWord<cr>", "HopWord")
+  utils.Key({ "v", "x" }, "<Leader>p", "<cmd>HopPattern<cr>", "HopPattern")
+  utils.Key({ "v", "x" }, "<Leader>l", "<cmd>HopLine<cr>", "HopLine")
+  utils.Key({ "v", "x" }, "<Leader>L", "<cmd>HopLineStart<cr>", "HopLineStart")
+  utils.Key({ "v", "x" }, "<Leader>c", "<cmd>HopChar1<cr>", "HopChar1")
+  utils.Key({ "v", "x" }, "<Leader>C", "<cmd>HopChar2<cr>", "HopChar2")
 end
 
 return M

@@ -31,20 +31,20 @@ M.setup_session_manager = function()
     max_path_length = 80, -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
   })
 
-  local Key = utils.Key
-  local Group = utils.Group
+  utils.Key("n", "<Leader>sp", session_manager.load_session, "Projects")
+  utils.load_wk({
+    name = "Sessions",
+    s = { session_manager.save_current_session, "Save" },
+    c = { session_manager.load_current_dir_session, "Restore CurDir" },
+    l = { session_manager.load_last_session, "Restore Last" },
+    A = { session_manager.autosave_session, "Auto Save" },
+    a = { session_manager.autoload_session, "Auto Restore" },
+    d = { session_manager.delete_session, "Delete" },
+    p = { session_manager.load_session, "List" },
+  }, { prefix = "<Leader>S", mode = "n" })
   utils.load({
-    Key("n", "<Leader>sp", session_manager.load_session, "Projects"),
-    Key("n", "<Leader>S"):group("Sessions"),
-    Key("n", "<Leader>Ss", session_manager.save_current_session, "Save"),
-    Key("n", "<Leader>Sc", session_manager.load_current_dir_session, "Restore CurDir"),
-    Key("n", "<Leader>Sl", session_manager.load_last_session, "Restore Last"),
-    Key("n", "<Leader>SA", session_manager.autosave_session, "Auto Save"),
-    Key("n", "<Leader>Sa", session_manager.autoload_session, "Auto Restore"),
-    Key("n", "<Leader>Sd", session_manager.delete_session, "Delete"),
-    Key("n", "<Leader>Sp", session_manager.load_session, "List"),
-    Group("UserSessionRestoreExplorer"):cmd("User", "SessionLoadPost", M.restore_explorer),
-    Group("UserSessionSaveOnLeave"):cmd("QuitPre", "*", session_manager.autosave_session),
+    utils.Group("UserSessionRestoreExplorer"):cmd("User", "SessionLoadPost", M.restore_explorer),
+    utils.Group("UserSessionSaveOnLeave"):cmd("QuitPre", "*", session_manager.autosave_session),
   })
 end
 

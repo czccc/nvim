@@ -1,5 +1,10 @@
 local M = {}
+
+M.keys = {}
+M.buffer_keys = {}
+
 local Key = {}
+
 function Key.new()
   local inner = {
     mode = "",
@@ -123,19 +128,36 @@ end
 
 function Key:set()
   local key = self.inner
-  if
-    not key.opts.buffer
-    and M.keys[key.mode]
-    and M.keys[key.mode][key.lhs]
-    and tostring(self) ~= tostring(M.keys[key.mode][key.lhs])
-  then
-    vim.notify(
-      "Key already exists!\n\tOld: " .. tostring(self) .. "\n\tNew: " .. tostring(M.keys[key.mode][key.lhs]),
-      "WARN"
-    )
-  elseif not key.opts.buffer and not key.group then
-    M.keys[key.mode] = M.keys[key.mode] or {}
-    M.keys[key.mode][key.lhs] = self
+  if key.opts.buffer then
+    if
+      key.opts.buffer ~= 0
+      and M.buffer_keys[key.opts.buffer]
+      and M.buffer_keys[key.opts.buffer][key.mode]
+      and M.buffer_keys[key.opts.buffer][key.mode][key.lhs]
+      and tostring(self) ~= tostring(M.buffer_keys[key.opts.buffer][key.mode][key.lhs])
+    then
+      vim.notify(
+        "Key already exists!\n\tOld: "
+          .. tostring(self)
+          .. "\n\tNew: "
+          .. tostring(M.buffer_keys[key.opts.buffer][key.mode][key.lhs]),
+        "WARN"
+      )
+    elseif key.opts.buffer ~= 0 and not key.group then
+      M.buffer_keys[key.opts.buffer] = M.buffer_keys[key.opts.buffer] or {}
+      M.buffer_keys[key.opts.buffer][key.mode] = M.buffer_keys[key.opts.buffer][key.mode] or {}
+      M.buffer_keys[key.opts.buffer][key.mode][key.lhs] = self
+    end
+  else
+    if M.keys[key.mode] and M.keys[key.mode][key.lhs] and tostring(self) ~= tostring(M.keys[key.mode][key.lhs]) then
+      vim.notify(
+        "Key already exists!\n\tOld: " .. tostring(self) .. "\n\tNew: " .. tostring(M.keys[key.mode][key.lhs]),
+        "WARN"
+      )
+    elseif not key.group then
+      M.keys[key.mode] = M.keys[key.mode] or {}
+      M.keys[key.mode][key.lhs] = self
+    end
   end
   if key.group then
     local status_ok, wk = pcall(require, "which-key")
@@ -162,9 +184,7 @@ function Key:set()
   end
 end
 
-M.keys = {}
-
-M.Key = function(mode, lhs, rhs, opts)
+M.IKey = function(mode, lhs, rhs, opts)
   local key = Key.new()
   if mode then
     key:mode(mode)
@@ -183,13 +203,32 @@ M.Key = function(mode, lhs, rhs, opts)
   return key
 end
 
+M.Key = function(mode, lhs, rhs, opts)
+  local key = Key.new()
+  if mode then
+    key:mode(mode)
+  end
+  if lhs then
+    key:lhs(lhs)
+  end
+  if rhs then
+    key:rhs(rhs)
+  end
+  if opts and type(opts) == "string" then
+    key:desc(opts)
+  else
+    key:opts(opts)
+  end
+  return key:set()
+end
+
 M.ScoopKey = function(mode, prefix, oopts)
   mode = mode or "n"
   prefix = prefix or ""
   oopts = oopts or {}
   local prefix_func = function(lhs, rhs, opts)
     lhs = string.format("%s%s", prefix, lhs)
-    return M.Key(mode, lhs, rhs, opts):opts(oopts)
+    return M.IKey(mode, lhs, rhs, opts):opts(oopts)
   end
   return prefix_func
 end
@@ -197,7 +236,7 @@ end
 M.PrefixKey = function(prefix)
   local prefix_func = function(mode, lhs, rhs, opts)
     lhs = string.format("%s%s", prefix, lhs)
-    return M.Key(mode, lhs, rhs, opts)
+    return M.IKey(mode, lhs, rhs, opts)
   end
   return prefix_func
 end
@@ -206,7 +245,7 @@ M.PrefixModeKey = function(prefix, mode)
   local prefix_func = function(lhs, rhs, opts)
     mode = mode or "n"
     lhs = string.format("%s%s", prefix, lhs)
-    return M.Key(mode, lhs, rhs, opts)
+    return M.IKey(mode, lhs, rhs, opts)
   end
   return prefix_func
 end
@@ -218,16 +257,31 @@ M.load = function(keymaps)
   end
 end
 
--- M.load_from_wk = function(keymaps, opts)
---   keymaps = keymaps or {}
---   local FuncKey = M.Key
---   if opts.prefix then
---     FuncKey = M.PrefixKey(opts.prefix)
---   end
---   local mode = opts.mode or "n"
---   for key, val in pairs(keymaps) do
---     FuncKey(mode, key, key.rhs):set()
---   end
--- end
+M.load_wk = function(keymaps, opts)
+  keymaps = keymaps or {}
+  opts = opts or {}
+  opts.prefix = opts.prefix or ""
+  opts.mode = opts.mode or "n"
+  if keymaps.name then
+    M.IKey(opts.mode, opts.prefix):group(keymaps.name):set()
+  end
+  keymaps.name = nil
+  if #keymaps == 0 then
+    for lhs, val in pairs(keymaps) do
+      local prefix = string.format("%s%s", opts.prefix, lhs)
+      M.load_wk(val, { prefix = prefix, mode = opts.mode, opts = opts.opts })
+    end
+  elseif #keymaps == 1 then
+    local rhs = nil
+    local desc = keymaps[1]
+    M.IKey(opts.mode, opts.prefix, rhs, desc):opts(opts.opts):set()
+  elseif #keymaps == 2 then
+    local rhs = keymaps[1]
+    local desc = keymaps[2]
+    M.IKey(opts.mode, opts.prefix, rhs, desc):opts(opts.opts):set()
+  else
+    vim.notify("Unexpected " .. #keymaps .. " arg for keymap!", "WARN")
+  end
+end
 
 return M

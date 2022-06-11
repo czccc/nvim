@@ -55,6 +55,11 @@ M.setup = function()
 
   notify.setup(M.config.setup)
   vim.notify = notify
+
+  pcall(function()
+    require("telescope").load_extension("notify")
+    utils.Key("n", "<Leader>sn", "<cmd>Telescope notify<cr>", "Notify")
+  end)
 end
 
 return M

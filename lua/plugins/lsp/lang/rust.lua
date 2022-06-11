@@ -110,26 +110,24 @@ M.setup = function()
       standalone = true,
       on_attach = function(client, bufnr)
         require("plugins.lsp").common_on_attach(client, bufnr)
-        local mapping = {
-          { "<Leader>mt", "<cmd>RustToggleInlayHints<cr>", "Toggle Inlay Hints" },
-          { "<Leader>mr", "<cmd>RustRunnables<cr>", "Runnables" },
-          { "<Leader>md", "<cmd>RustDebuggables<cr>", "Debuggables" },
-          { "<Leader>me", "<cmd>RustExpandMacro<cr>", "Expand Macro" },
-          { "<Leader>mc", "<cmd>RustOpenCargo<cr>", "Open Cargo" },
-          { "<Leader>mR", "<cmd>RustReloadWorkspace<cr>", "Reload" },
-          { "<Leader>ma", "<cmd>RustHoverActions<cr>", "Hover Actions" },
-          { "<Leader>mA", "<cmd>RustHoverRange<cr>", "Hover Range" },
-          { "<Leader>ml", "<cmd>RustJoinLines<cr>", "Join Lines" },
-          { "<Leader>mj", "<cmd>RustMoveItemDown<cr>", "Move Item Down" },
-          { "<Leader>mk", "<cmd>RustMoveItemUp<cr>", "Move Item Up" },
-          { "<Leader>mp", "<cmd>RustParentModule<cr>", "Parent Module" },
-          { "<Leader>ms", "<cmd>RustSSR<cr>", "Structural Search Replace" },
-          { "<Leader>mg", "<cmd>RustViewCrateGraph<cr>", "View Crate Graph" },
-          { "<Leader>mS", "<cmd>RustStartStandaloneServerForBuffer<cr>", "Standalone Server" },
-        }
-        for _, m in ipairs(mapping) do
-          utils.Key("n", m[1], m[2], m[3]):buffer(bufnr):set()
-        end
+        utils.load_wk({
+          name = "Module",
+          t = { "<cmd>RustToggleInlayHints<cr>", "Toggle Inlay Hints" },
+          r = { "<cmd>RustRunnables<cr>", "Runnables" },
+          d = { "<cmd>RustDebuggables<cr>", "Debuggables" },
+          e = { "<cmd>RustExpandMacro<cr>", "Expand Macro" },
+          c = { "<cmd>RustOpenCargo<cr>", "Open Cargo" },
+          R = { "<cmd>RustReloadWorkspace<cr>", "Reload" },
+          a = { "<cmd>RustHoverActions<cr>", "Hover Actions" },
+          A = { "<cmd>RustHoverRange<cr>", "Hover Range" },
+          l = { "<cmd>RustJoinLines<cr>", "Join Lines" },
+          j = { "<cmd>RustMoveItemDown<cr>", "Move Item Down" },
+          k = { "<cmd>RustMoveItemUp<cr>", "Move Item Up" },
+          p = { "<cmd>RustParentModule<cr>", "Parent Module" },
+          s = { "<cmd>RustSSR<cr>", "Structural Search Replace" },
+          g = { "<cmd>RustViewCrateGraph<cr>", "View Crate Graph" },
+          S = { "<cmd>RustStartStandaloneServerForBuffer<cr>", "Standalone Server" },
+        }, { prefix = "<Leader>m", mode = "n", opts = { buffer = bufnr } })
       end,
       settings = {
         ["rust-analyzer"] = {

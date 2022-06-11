@@ -69,21 +69,20 @@ M.setup = function()
 
   dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
   require("plugins.dap.config").setup()
-  local Key = require("utils.key").Key
-  require("utils.key").load({
-    Key("n", "<Leader>d"):group("Debug"),
-    Key("n", "<Leader>dt", dap.toggle_breakpoint, "Toggle Breakpoint"),
-    Key("n", "<Leader>db", dap.step_back, "Step Back"),
-    Key("n", "<Leader>dc", dap.continue, "Continue"),
-    Key("n", "<Leader>dC", dap.run_to_cursor, "Run To Cursor"),
-    Key("n", "<Leader>dd", dap.disconnect, "Disconnect"),
-    Key("n", "<Leader>dg", dap.session, "Get Session"),
-    Key("n", "<Leader>di", dap.step_into, "Step Into"),
-    Key("n", "<Leader>ds", dap.step_over, "Step Over"),
-    Key("n", "<Leader>do", dap.step_out, "Step Out"),
-    Key("n", "<Leader>dp", dap.pause, "Pause"),
-    Key("n", "<Leader>dr", dap.repl.toggle, "Toggle Repl"),
-    Key("n", "<Leader>dq", dap.close, "Quit"),
+  utils.load_wk({
+    name = "Debug",
+    t = { dap.toggle_breakpoint, "Toggle Breakpoint" },
+    b = { dap.step_back, "Step Back" },
+    c = { dap.continue, "Continue" },
+    C = { dap.run_to_cursor, "Run To Cursor" },
+    d = { dap.disconnect, "Disconnect" },
+    g = { dap.session, "Get Session" },
+    i = { dap.step_into, "Step Into" },
+    s = { dap.step_over, "Step Over" },
+    o = { dap.step_out, "Step Out" },
+    p = { dap.pause, "Pause" },
+    r = { dap.repl.toggle, "Toggle Repl" },
+    q = { dap.close, "Quit" },
   })
 end
 
@@ -130,11 +129,10 @@ M.setup_dapui = function()
     windows = { indent = 1 },
   })
   local dap, dapui = require("dap"), require("dapui")
-  local Key = require("utils.key").Key
-  require("utils.key").load({
-    Key("n", "<Leader>d"):group("Debug"),
-    Key("n", "<Leader>de", dapui.eval, "Eval"),
-    Key("n", "<Leader>du", dapui.toggle, "Toggle Dap UI"),
+  utils.load_wk({
+    name = "Debug",
+    e = { dapui.eval, "Eval" },
+    u = { dapui.toggle, "Toggle Dap UI" },
   })
   dap.listeners.after.event_initialized["dapui_config"] = function()
     dapui.open()

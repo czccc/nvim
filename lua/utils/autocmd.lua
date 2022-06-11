@@ -231,7 +231,7 @@ end
 
 function AuGroup:unset()
   local t = self.inner
-  local status, _ = vim.api.nvim_del_augroup_by_name(t.name)
+  local status, _ = pcall(vim.api.nvim_del_augroup_by_name, t.name)
   if not status then
     vim.notify("Failed to delete group: " .. t.name, "WARN")
   end

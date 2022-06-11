@@ -57,19 +57,17 @@ M.setup = function()
       cmd = { "clangd", table.unpack(clangd_flags) },
       on_attach = function(client, bufnr)
         require("plugins.lsp").common_on_attach(client, bufnr)
-        local mapping = {
-          { "<Leader>ms", "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source Header" },
-          { "<Leader>mS", "<cmd>ClangdSwitchSourceHeaderSplit<cr>", "Split Source Header" },
-          { "<Leader>mv", "<cmd>ClangdSwitchSourceHeaderVSplit<cr>", "VSplit Source Header" },
-          { "<Leader>mi", "<cmd>ClangdSymbolInfo<cr>", "Symbol Info" },
-          { "<Leader>mt", "<cmd>ClangdTypeHierarchy<cr>", "Type Hierarchy" },
-          { "<Leader>mT", "<cmd>ClangdToggleInlayHints<cr>", "Toggle Inlay Hints" },
-          { "<Leader>mm", "<cmd>ClangdMemoryUsage<cr>", "Memory Usage" },
-          { "<Leader>ma", "<cmd>ClangdAST<cr>", "AST" },
-        }
-        for _, m in ipairs(mapping) do
-          utils.Key("n", m[1], m[2], m[3]):buffer(bufnr):set()
-        end
+        utils.load_wk({
+          name = "Module",
+          s = { "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source Header" },
+          S = { "<cmd>ClangdSwitchSourceHeaderSplit<cr>", "Split Source Header" },
+          v = { "<cmd>ClangdSwitchSourceHeaderVSplit<cr>", "VSplit Source Header" },
+          i = { "<cmd>ClangdSymbolInfo<cr>", "Symbol Info" },
+          t = { "<cmd>ClangdTypeHierarchy<cr>", "Type Hierarchy" },
+          T = { "<cmd>ClangdToggleInlayHints<cr>", "Toggle Inlay Hints" },
+          m = { "<cmd>ClangdMemoryUsage<cr>", "Memory Usage" },
+          a = { "<cmd>ClangdAST<cr>", "AST" },
+        }, { prefix = "<Leader>m", mode = "n", opts = { buffer = bufnr } })
       end,
       capabilities = require("plugins.lsp").common_capabilities(),
       commands = {

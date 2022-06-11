@@ -36,17 +36,16 @@ function M.init()
     },
     autoremove = true,
   })
-  local LeaderpKey = require("utils.key").PrefixModeKey("<Leader>p", "n")
-  require("utils.key").load({
-    LeaderpKey(""):group("Packer"),
-    LeaderpKey("c", "<cmd>PackerCompile<CR>", "Compile"),
-    LeaderpKey("C", "<cmd>PackerClean<CR>", "Clean"),
-    LeaderpKey("i", "<cmd>PackerInstall<CR>", "Install"),
-    LeaderpKey("s", "<cmd>PackerSync<CR>", "Sync"),
-    LeaderpKey("S", "<cmd>PackerStatus<CR>", "Status"),
-    LeaderpKey("u", "<cmd>PackerUpdate<CR>", "Update"),
-    LeaderpKey("r", require("core").reload, "Reload"),
-  })
+  require("utils.key").load_wk({
+    name = "Packer",
+    c = { "<cmd>PackerCompile<cr>", "Compile" },
+    C = { "<cmd>PackerClean<cr>", "Clean" },
+    i = { "<cmd>PackerInstall<cr>", "Install" },
+    s = { "<cmd>PackerSync<cr>", "Sync" },
+    S = { "<cmd>PackerStatus<cr>", "Status" },
+    u = { "<cmd>PackerUpdate<cr>", "Update" },
+    r = { require("core").reload, "Reload" },
+  }, { prefix = "<Leader>p", mode = "n" })
 end
 
 function M.setup()
