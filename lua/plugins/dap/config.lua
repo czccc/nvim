@@ -1,12 +1,12 @@
 local M = {}
 
 M.setup = function()
-  local function sep_os_replacer(str)
-    local result = str
-    local path_sep = package.config:sub(1, 1)
-    result = result:gsub("/", path_sep)
-    return result
-  end
+  -- local function sep_os_replacer(str)
+  --   local result = str
+  --   local path_sep = package.config:sub(1, 1)
+  --   result = result:gsub("/", path_sep)
+  --   return result
+  -- end
 
   local status_ok, dap = pcall(require, "dap")
   if not status_ok then
