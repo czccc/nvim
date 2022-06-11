@@ -219,35 +219,8 @@ M.Key = function(mode, lhs, rhs, opts)
   else
     key:opts(opts)
   end
-  return key:set()
-end
-
-M.ScoopKey = function(mode, prefix, oopts)
-  mode = mode or "n"
-  prefix = prefix or ""
-  oopts = oopts or {}
-  local prefix_func = function(lhs, rhs, opts)
-    lhs = string.format("%s%s", prefix, lhs)
-    return M.IKey(mode, lhs, rhs, opts):opts(oopts)
-  end
-  return prefix_func
-end
-
-M.PrefixKey = function(prefix)
-  local prefix_func = function(mode, lhs, rhs, opts)
-    lhs = string.format("%s%s", prefix, lhs)
-    return M.IKey(mode, lhs, rhs, opts)
-  end
-  return prefix_func
-end
-
-M.PrefixModeKey = function(prefix, mode)
-  local prefix_func = function(lhs, rhs, opts)
-    mode = mode or "n"
-    lhs = string.format("%s%s", prefix, lhs)
-    return M.IKey(mode, lhs, rhs, opts)
-  end
-  return prefix_func
+  key:set()
+  return key
 end
 
 M.load = function(keymaps)

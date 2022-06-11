@@ -99,7 +99,7 @@ M.setup = function()
   utils.Key("n", "[oi", "<cmd>IndentBlanklineEnable<CR>", "Indent Line")
   utils.Key("n", "]oi", "<cmd>IndentBlanklineDisable<CR>", "Indent Line")
   utils.Key("n", "yoi", "<cmd>IndentBlanklineToggle<CR>", "Indent Line")
-  utils.Group("UserIndentBlanklineRefreash"):cmd("CursorMoved", "*", "IndentBlanklineRefresh"):set()
+  utils.Group("UserIndentBlanklineRefreash", { "CursorMoved", "*", "IndentBlanklineRefresh" })
 
   -- vim.cmd [[highlight IndentBlanklineIndent1 guifg=#E06C75 gui=nocombine]]
   -- vim.cmd [[highlight IndentBlanklineIndent2 guifg=#E5C07B gui=nocombine]]

@@ -19,7 +19,7 @@ function M.format_filter(clients)
 end
 
 function M.enable_format_on_save()
-  utils.Group("UserLSPFormatOnSave"):cmd("BufWritePre", "*", wrap(M.format)):set()
+  utils.Group("UserLSPFormatOnSave", { "BufWritePre", "*", wrap(M.format) })
 end
 function M.disable_format_on_save()
   utils.Group("UserLSPFormatOnSave"):unset()

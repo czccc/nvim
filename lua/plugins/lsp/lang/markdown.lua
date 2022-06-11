@@ -27,13 +27,13 @@ M.packers = {
 }
 
 M.setup_markdown_preview = function()
-  utils.Group("UserMarkdownPreview")
-    :cmd("FileType")
-    :pattern("markdown")
-    :callback(function()
+  utils.Group("UserMarkdownPreview", {
+    "FileType",
+    "markdown",
+    function()
       utils.IKey("n", "<Leader>mp", "<cmd>MarkdownPreview<cr>", "Preview"):buffer():set()
-    end)
-    :set()
+    end,
+  })
 end
 
 M.setup_vim_markdown = function()
@@ -42,16 +42,16 @@ M.setup_vim_markdown = function()
   vim.g.vim_markdown_toc_autofit = 1
   vim.g.vim_markdown_frontmatter = 1
 
-  utils.Group("UserVimMarkdown")
-    :cmd("FileType")
-    :pattern("markdown")
-    :callback(function()
+  utils.IGroup("UserVimMarkdown", {
+    "FileType",
+    "markdown",
+    function()
       utils.IKey("n", "<Leader>mh", "<cmd>HeaderDecrease<cr>", "Header Decrease"):buffer():set()
       utils.IKey("n", "<Leader>ml", "<cmd>HeaderIncrease<cr>", "Header Increase"):buffer():set()
       utils.IKey("n", "<Leader>mf", "<cmd>TableFormat<cr>", "Table Format"):buffer():set()
       utils.IKey("n", "<Leader>mt", "<cmd>Toc<cr>", "Toc"):buffer():set()
-    end)
-    :set()
+    end,
+  })
 end
 
 M.setup_vim_markdown_toc = function()
@@ -60,14 +60,14 @@ M.setup_vim_markdown_toc = function()
   -- vim.g.vmt_cycle_list_item_markers = 1
   vim.g.vmt_include_headings_before = 1
 
-  utils.Group("UserVimMarkdown")
-    :cmd("FileType")
-    :pattern("markdown")
-    :callback(function()
+  utils.IGroup("UserVimMarkdown", {
+    "FileType",
+    "markdown",
+    function()
       utils.IKey("n", "<Leader>mg", "<cmd>GenTocGFM<cr>", "Gen Toc GFM"):buffer():set()
       utils.IKey("n", "<Leader>mu", "<cmd>UpdateToc<cr>", "Update Toc"):buffer():set()
-    end)
-    :set()
+    end,
+  })
 end
 
 return M

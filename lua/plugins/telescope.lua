@@ -375,14 +375,22 @@ function M.setup()
   require("telescope").load_extension("fzf")
   require("telescope").load_extension("frecency")
 
-  utils.Group("UserTelescopeFoldFix")
-    :extend({
-      utils.AuCmd("BufRead", "*", function()
+  utils.Group(
+    "UserTelescopeFoldFix",
+    {
+      "BufRead",
+      "*",
+      function()
         utils.AuCmd("BufWinEnter", "*", "normal! zx"):once():set()
-      end),
-      -- utils.AuCmd("User", "TelescopePreviewerLoaded", "setlocal number relativenumber wrap list"),
-    })
-    :set()
+      end,
+    }
+    -- {
+    --   "User",
+    --   "TelescopePreviewerLoaded",
+    --   "setlocal number relativenumber wrap list",
+    -- },
+  )
+  -- utils.AuCmd("User", "TelescopePreviewerLoaded", "setlocal number relativenumber wrap list"),
 end
 
 M.setup_dressing = function()

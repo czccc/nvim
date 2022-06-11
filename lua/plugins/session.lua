@@ -42,10 +42,8 @@ M.setup_session_manager = function()
     d = { session_manager.delete_session, "Delete" },
     p = { session_manager.load_session, "List" },
   }, { prefix = "<Leader>S", mode = "n" })
-  utils.load({
-    utils.Group("UserSessionRestoreExplorer"):cmd("User", "SessionLoadPost", M.restore_explorer),
-    utils.Group("UserSessionSaveOnLeave"):cmd("QuitPre", "*", session_manager.autosave_session),
-  })
+  utils.Group("UserSessionRestoreExplorer", { "User", "SessionLoadPost", M.restore_explorer })
+  utils.Group("UserSessionSaveOnLeave", { "QuitPre", "*", session_manager.autosave_session })
 end
 
 function M.close_explorer()

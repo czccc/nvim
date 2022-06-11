@@ -247,12 +247,15 @@ M.setup = function()
   utils.Key("n", "<Leader>uG", "<cmd>Neotree git_status float<cr>", "Git Status")
   utils.Key("n", "<Leader>ub", "<cmd>Neotree buffers left<cr>", "Opened Files")
   utils.Key("n", "<Leader>uB", "<cmd>Neotree buffers float<cr>", "Opened Files")
-  utils.Group("UserNeoTreeTabKey")
-    :cmd("FileType", "neo-tree", function()
+  utils.Group("UserNeoTreeTabKey", {
+    "FileType",
+    "neo-tree",
+    function()
       utils.IKey("n", "<Tab>", "<C-w>l"):buffer(0):set()
-    end)
-    :set()
-  utils.Group("UserNeoTreeNoNumber"):cmd("FileType", "neo-tree", "setlocal nonumber norelativenumber"):set()
+    end,
+  })
+
+  utils.Group("UserNeoTreeNoNumber", { "FileType", "neo-tree", "setlocal nonumber norelativenumber" })
 end
 
 return M

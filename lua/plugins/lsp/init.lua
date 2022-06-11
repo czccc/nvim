@@ -119,33 +119,31 @@ end
 function M.common_on_attach(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
   if client.supports_method("textDocument/documentHighlight") then
-    utils.Group("UserLSPDocumentHighlight" .. bufnr)
-      :extend({
-        utils.AuCmd("CursorHold"):buffer(bufnr):callback(wrap(vim.lsp.buf.document_highlight, client.id)),
-        utils.AuCmd("CursorMoved"):buffer(bufnr):callback(vim.lsp.buf.clear_references),
-      })
-      :set()
+    utils.Group("UserLSPDocumentHighlight" .. bufnr, {
+      "CursorHold",
+      bufnr,
+      wrap(vim.lsp.buf.document_highlight, client.id),
+    }, { "CursorMoved", bufnr, vim.lsp.buf.clear_references })
   end
   if client.supports_method("textDocument/codeLens") then
-    utils.Group("UserLSPCodeLensRefresh" .. bufnr)
-      :extend({
-        utils.AuCmd({ "BufEnter", "InsertLeave" }):buffer(bufnr):callback(wrap(vim.lsp.codelens.refresh)),
-        utils.AuCmd("InsertLeave"):buffer(bufnr):callback(wrap(vim.lsp.codelens.display)),
-      })
-      :set()
+    utils.Group(
+      "UserLSPCodeLensRefresh" .. bufnr,
+      { { "BufEnter", "InsertLeave" }, bufnr, wrap(vim.lsp.codelens.refresh) },
+      { "InsertLeave", bufnr, wrap(vim.lsp.codelens.display) }
+    )
   end
   if client.supports_method("textDocument/codeAction") then
-    utils.Group("UserLSPCodeAction" .. bufnr)
-      :cmd("CursorHold,CursorHoldI")
-      :buffer(bufnr)
-      :callback(require("plugins.lsp.utils").code_action_listener)
-      :set()
+    utils.Group(
+      "UserLSPCodeAction" .. bufnr,
+      { "CursorHold,CursorHoldI", bufnr, require("plugins.lsp.utils").code_action_listener }
+    )
   end
   if client.supports_method("textDocument/formatting") then
-    local format_group = utils.Group("UserLSPFormatOnSave" .. bufnr):extend({
-      utils.AuCmd("BufWritePre"):buffer(bufnr):callback(wrap(require("plugins.lsp.utils").format)),
+    local format_group = utils.Group("UserLSPFormatOnSave" .. bufnr, {
+      "BufWritePre",
+      bufnr,
+      wrap(require("plugins.lsp.utils").format),
     })
-    format_group:set()
     utils.IKey("n", "[of", function()
       format_group:set()
     end, "Format On Save"):buffer():set()
@@ -205,12 +203,12 @@ function M.setup()
   end
 
   local function enable_cursor_diagnostic()
-    utils.Group("UserCursorDiagnostic")
+    utils.IGroup("UserCursorDiagnostic")
       :cmd("CursorHold", "*", wrap(vim.diagnostic.open_float, 0, { focusable = false, scope = "cursor" }))
       :set()
   end
   local function disable_cursor_diagnostic()
-    utils.Group("UserCursorDiagnostic"):unset()
+    utils.IGroup("UserCursorDiagnostic"):unset()
   end
   enable_cursor_diagnostic()
 

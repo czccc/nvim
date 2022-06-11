@@ -237,7 +237,7 @@ function AuGroup:unset()
   end
 end
 
-M.AuCmd = function(event, pattern, command, opts)
+M.IAuCmd = function(event, pattern, command, opts)
   local cmd = AuCmd.new()
   if event then
     cmd:event(event)
@@ -258,11 +258,28 @@ M.AuCmd = function(event, pattern, command, opts)
   return cmd
 end
 
-M.Group = function(name)
+M.AuCmd = function(event, pattern, command, opts)
+  local aucmd = M.IAuCmd(event, pattern, command, opts)
+  aucmd:set()
+  return aucmd
+end
+
+M.IGroup = function(name)
   local group = AuGroup.new()
   if name then
     group:name(name)
   end
+  return group
+end
+
+M.Group = function(name, ...)
+  local cmds = { ... }
+  local group = AuGroup.new()
+  group:name(name)
+  for _, cmd in ipairs(cmds) do
+    group:add(M.IAuCmd(table.unpack(cmd)))
+  end
+  group:set()
   return group
 end
 

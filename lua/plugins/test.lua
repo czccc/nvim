@@ -30,7 +30,7 @@ M.setup_ultest = function()
     n = { "<cmd>UltestNearest<cr>", "Ultest Nearest" },
     s = { "<cmd>UltestStop<cr>", "Ultest Stop" },
   }, { prefix = "<Leader>t", mode = "n" })
-  utils.Group("UltestNoWrap"):cmd("FileType"):pattern("UltestSummary"):command("setlocal nowrap"):set()
+  utils.Group("UltestNoWrap", { "FileType", "UltestSummary", "setlocal nowrap" })
 end
 
 return M
