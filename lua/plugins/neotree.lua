@@ -251,7 +251,7 @@ M.setup = function()
     "FileType",
     "neo-tree",
     function()
-      utils.IKey("n", "<Tab>", "<C-w>l"):buffer(0):set()
+      utils.IKey("n", "<Tab>", "<C-w>l"):buffer():set()
     end,
   })
 

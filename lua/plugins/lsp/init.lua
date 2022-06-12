@@ -184,9 +184,10 @@ function M.setup()
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, M.config.float)
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, M.config.float)
 
-  require("plugins.lsp.lang").setup()
   require("plugins.lsp.null-ls").setup()
   require("nvim-lsp-installer").setup({})
+  -- must be setup after lsp-installer
+  require("plugins.lsp.lang").setup()
 
   local function enable_cursor_diagnostic()
     utils.Group(
