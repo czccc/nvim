@@ -7,6 +7,7 @@ M.lang_files = {
   "plugins.lsp.lang.lua",
   "plugins.lsp.lang.markdown",
   "plugins.lsp.lang.rust",
+  "plugins.lsp.lang.taplo",
   "plugins.lsp.lang.yaml",
 }
 
