@@ -46,6 +46,19 @@ M.packers = {
         end,
         -- disable = true,
       },
+      -- {
+      --   "zbirenbaum/copilot.lua",
+      --   event = "InsertEnter",
+      --   config = function()
+      --     vim.schedule(function()
+      --       require("copilot").setup()
+      --     end)
+      --   end,
+      -- },
+      -- {
+      --   "zbirenbaum/copilot-cmp",
+      --   module = "copilot_cmp",
+      -- },
     },
   },
 }
@@ -81,9 +94,11 @@ M.setup_luasnip = function()
   local util = require("luasnip.util.util")
   local luasnip = require("luasnip")
   luasnip.config.setup({
-    history = "false",
-    region_check_events = "CursorMoved",
-    delete_check_events = "TextChanged",
+    history = false,
+    update_events = "InsertLeave",
+    enable_autosnippets = true,
+    region_check_events = "CursorHold,InsertLeave",
+    delete_check_events = "TextChanged,InsertEnter",
     ext_opts = {
       [types.choiceNode] = {
         active = {
@@ -163,6 +178,24 @@ M.setup_cmp = function()
     vim.cmd([[ packadd luasnip ]])
     return
   end
+  -- local has_words_before = function()
+  --   local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
+  --   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  -- end
+
+  local feedkey = function(key, mode, replace)
+    if replace then
+      key = vim.api.nvim_replace_termcodes(key, true, false, true)
+      vim.api.nvim_feedkeys(key, mode, false)
+    else
+      vim.api.nvim_feedkeys(key, mode, true)
+    end
+  end
+
+  local get_copilot_keys = function()
+    local status_ok, copilot_keys = pcall(vim.fn["copilot#Accept"])
+    return status_ok and copilot_keys or ""
+  end
 
   M.config = {
     confirm_opts = {
@@ -171,7 +204,7 @@ M.setup_cmp = function()
     },
     completion = {
       ---@usage The minimum length of a word to complete on.
-      keyword_length = 1,
+      keyword_length = 2,
     },
     view = {
       entries = { name = "custom", selection_order = "near_cursor" },
@@ -245,9 +278,11 @@ M.setup_cmp = function()
       -- completion = {
       --   border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
       -- },
-      documentation = {
-        border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-      },
+      -- documentation = {
+      --   border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+      -- },
+      -- completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
     },
     sources = {
       { name = "nvim_lsp" },
@@ -256,7 +291,7 @@ M.setup_cmp = function()
       { name = "luasnip", max_item_count = 3 },
       { name = "cmp_tabnine" },
       { name = "nvim_lua" },
-      { name = "buffer", max_item_count = 5 },
+      { name = "buffer", max_item_count = 5, keyword_length = 3 },
       { name = "calc" },
       { name = "emoji" },
       { name = "treesitter" },
@@ -268,17 +303,17 @@ M.setup_cmp = function()
       -- ["<C-Space>"] = cmp.mapping.complete(),
       ["<C-y>"] = cmp.mapping.complete(),
       ["<Tab>"] = cmp.mapping(function(fallback)
-        local copilot_keys = vim.fn["copilot#Accept"]()
-        -- local has_words_before = function()
-        --   local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
-        --   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-        -- end
+        local copilot_keys = get_copilot_keys()
         if cmp.visible() then
           cmp.select_next_item()
         elseif copilot_keys ~= "" then
-          vim.api.nvim_feedkeys(copilot_keys, "i", true)
-        elseif luasnip.expand_or_locally_jumpable() then
+          feedkey(copilot_keys, "i")
+          -- vim.api.nvim_feedkeys(copilot_keys, "i", true)
+        elseif luasnip.jumpable() then
+          -- luasnip.jump()
           luasnip.expand_or_jump()
+          -- elseif luasnip.expand_or_locally_jumpable() then
+          --   luasnip.expand_or_jump()
           -- elseif has_words_before() then
           --   cmp.complete()
         else
@@ -303,8 +338,9 @@ M.setup_cmp = function()
       ["<Esc>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.abort()
-        elseif vim.fn["copilot#Accept"]() ~= "" then
-          vim.cmd([[normal \<Plug>(copilot-dismiss)<cr>]])
+        elseif get_copilot_keys() ~= "" then
+          -- vim.cmd([[execute \<Plug>(copilot-dismiss)]])
+          feedkey("<C-]>", "i", true)
         elseif luasnip.expand_or_locally_jumpable() then
           luasnip.session.current_nodes[vim.api.nvim_get_current_buf()] = nil
           fallback()
@@ -347,8 +383,9 @@ M.setup_cmp = function()
 end
 
 M.setup_copilot = function()
-  utils.IKey("i", "<C-h>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
   utils.IKey("i", "<C-l>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
+  utils.IKey("i", "<C-[>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
+  utils.IKey("i", "<C-]>", "<Plug>(copilot-dismiss)", "Copilot Dismiss"):set()
   utils.IKey("i", "<M-]>", "<Plug>(copilot-next)", "Copilot Next"):set()
   utils.IKey("i", "<M-[>", "<Plug>(copilot-previous)", "Copilot Previous"):set()
   utils.IKey("i", "<M-\\>", "<Cmd>vertical Copilot panel<CR>", "Copilot Panel"):set()
