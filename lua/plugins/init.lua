@@ -37,7 +37,7 @@ local plugin_files = {
   "plugins.spectre",
   "plugins.todo",
 
-  "plugins.competitest",
+  -- "plugins.competitest",
 }
 
 M.packers = {}

@@ -183,7 +183,7 @@ local components = {
       modified = { fg = colors.yellow },
       removed = { fg = colors.red },
     },
-    padding = { left = 0, right = 0 },
+    padding = { left = 1, right = 1 },
     cond = nil,
   },
   diagnostics = {
@@ -430,7 +430,7 @@ M.config = {
     icons_enabled = true,
     -- Disable sections and component separators
     component_separators = { left = "", right = "" },
-    section_separators = { left = "", right = "" },
+    section_separators = { left = "", right = "" },
     theme = "auto",
     disabled_filetypes = { "dashboard", "alpha" },
     always_divide_middle = true,
@@ -439,17 +439,18 @@ M.config = {
   sections = {
     -- these are to remove the defaults
     lualine_a = {
-      components.mode,
-    },
-    lualine_b = {},
-    lualine_c = {
       -- components.left,
       -- components.mode1,
+      components.mode,
+    },
+    lualine_b = {
       components.cwd,
       -- components.branch,
       components.branch1,
       components.filetype,
       components.filename,
+    },
+    lualine_c = {
       components.diff,
       components.gps,
       components.lsp_progress,

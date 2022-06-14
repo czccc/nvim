@@ -236,11 +236,6 @@ M.config = {
 
 M.init = function()
   vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
-end
-
-M.setup = function()
-  require("neo-tree").setup(M.config)
-
   utils.Key("n", "<Leader>e", "<cmd>Neotree filesystem<cr>", "Explorer")
   utils.Key("n", "<Leader>E", "<cmd>Neotree toggle<cr>", "Explorer")
   utils.Key("n", "<Leader>ug", "<cmd>Neotree git_status left<cr>", "Git Status")
@@ -256,6 +251,10 @@ M.setup = function()
   })
 
   utils.Group("UserNeoTreeNoNumber", { "FileType", "neo-tree", "setlocal nonumber norelativenumber" })
+end
+
+M.setup = function()
+  require("neo-tree").setup(M.config)
 end
 
 return M

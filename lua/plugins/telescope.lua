@@ -205,6 +205,8 @@ function M.set_keys()
     },
     h = { builtin.help_tags, "Find Help" },
     H = { builtin.highlights, "Highlights" },
+    j = { builtin.command_history, "Command History" },
+    J = { builtin.search_history, "Search History" },
     k = { builtin.keymaps, "Keymaps" },
     l = { builtin.resume, "Resume" },
     m = { builtin.commands, "Commands" },
