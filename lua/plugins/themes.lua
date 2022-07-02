@@ -1,5 +1,6 @@
 local M = {}
 
+-- M.colorscheme = "catppuccin"
 M.colorscheme = "onedark"
 
 M.init = function()
@@ -28,6 +29,14 @@ M.packers = {
       require("plugins.themes").setup_nightfox()
     end,
     -- disable = true,
+  },
+  {
+    "catppuccin/nvim",
+    as = "catppuccin",
+    -- opt = true,
+    config = function()
+      require("plugins.themes").setup_catppuccin()
+    end,
   },
 }
 
@@ -170,4 +179,85 @@ M.setup_nightfox = function()
     },
   })
 end
+
+vim.g.catppuccin_flavour = "frappe"
+M.setup_catppuccin = function()
+  local catppuccin = require("catppuccin")
+
+  -- configure it
+  catppuccin.setup({
+    transparent_background = false,
+    term_colors = false,
+    styles = {
+      comments = "italic",
+      conditionals = "italic",
+      loops = "NONE",
+      functions = "NONE",
+      keywords = "NONE",
+      strings = "NONE",
+      variables = "NONE",
+      numbers = "NONE",
+      booleans = "NONE",
+      properties = "NONE",
+      types = "NONE",
+      operators = "NONE",
+    },
+    integrations = {
+      treesitter = true,
+      native_lsp = {
+        enabled = true,
+        virtual_text = {
+          errors = "italic",
+          hints = "italic",
+          warnings = "italic",
+          information = "italic",
+        },
+        underlines = {
+          errors = "underline",
+          hints = "underline",
+          warnings = "underline",
+          information = "underline",
+        },
+      },
+      coc_nvim = false,
+      lsp_trouble = true,
+      cmp = true,
+      lsp_saga = false,
+      gitgutter = false,
+      gitsigns = true,
+      telescope = true,
+      nvimtree = {
+        enabled = false,
+        show_root = false,
+        transparent_panel = false,
+      },
+      neotree = {
+        enabled = true,
+        show_root = false,
+        transparent_panel = false,
+      },
+      which_key = true,
+      indent_blankline = {
+        enabled = true,
+        colored_indent_levels = false,
+      },
+      dashboard = true,
+      neogit = false,
+      vim_sneak = false,
+      fern = false,
+      barbar = false,
+      bufferline = true,
+      markdown = true,
+      lightspeed = true,
+      ts_rainbow = true,
+      hop = true,
+      notify = true,
+      telekasten = true,
+      symbols_outline = true,
+    },
+  })
+  local colors = require("catppuccin.api.colors").get_colors() -- fetch colors with API
+  catppuccin.remap({ Comment = { fg = colors.flamingo } })
+end
+
 return M

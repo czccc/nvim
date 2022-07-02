@@ -10,11 +10,34 @@ M.packer = {
     "plenary.nvim",
     "nvim-web-devicons",
     "nui.nvim",
+    -- "s1n7ax/nvim-window-picker",
   },
   requires = {
     "nvim-lua/plenary.nvim",
     "kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
     "MunifTanjim/nui.nvim",
+    {
+      -- only needed if you want to use the commands with "_with_window_picker" suffix
+      "s1n7ax/nvim-window-picker",
+      tag = "1.*",
+      config = function()
+        require("window-picker").setup({
+          autoselect_one = true,
+          include_current = false,
+          filter_rules = {
+            -- filter using buffer options
+            bo = {
+              -- if the file type is one of following, the window will be ignored
+              filetype = { "neo-tree", "neo-tree-popup", "notify", "quickfix" },
+
+              -- if the buffer type is one of following, the window will be ignored
+              buftype = { "terminal" },
+            },
+          },
+          other_win_hl_color = "#e35e4f",
+        })
+      end,
+    },
   },
   config = function()
     require("plugins.neotree").setup()
@@ -27,6 +50,9 @@ M.config = {
   enable_git_status = true,
   enable_diagnostics = true,
   default_component_configs = {
+    container = {
+      enable_character_fade = true,
+    },
     indent = {
       indent_size = 2,
       padding = 1, -- extra padding on left hand side
@@ -46,6 +72,7 @@ M.config = {
       folder_open = "",
       folder_empty = "ﰊ",
       default = "*",
+      highlight = "NeoTreeFileIcon",
     },
     modified = {
       symbol = "",
@@ -54,15 +81,15 @@ M.config = {
     name = {
       trailing_slash = false,
       use_git_status_colors = true,
+      highlight = "NeoTreeFileName",
     },
     git_status = {
       symbols = {
         -- Change type
-        -- added = "✚",
-        deleted = "✖",
-        -- modified = "",
-        modified = "",
-        renamed = "",
+        added = "", -- or "✚", but this is redundant info if you use git_status_colors on the name
+        modified = "", -- or "", but this is redundant info if you use git_status_colors on the name
+        deleted = "✖", -- this can only be used in the git_status source
+        renamed = "", -- this can only be used in the git_status source
         -- Status type
         -- untracked = "",
         untracked = "✚",
@@ -79,14 +106,17 @@ M.config = {
     width = 30,
     mappings = {
       ["<space>"] = "none",
-      ["<Tab>"] = "none",
+      -- ["<Tab>"] = "none",
+      ["<Tab>"] = wrap(vim.cmd, "wincmd l"),
       ["<2-LeftMouse>"] = "open",
       ["<cr>"] = "open",
       ["o"] = "open",
-      ["S"] = "open_split",
-      ["s"] = "open_vsplit",
+      -- ["S"] = "open_split",
+      -- ["s"] = "open_vsplit",
+      ["S"] = "split_with_window_picker",
+      ["s"] = "vsplit_with_window_picker",
+      ["w"] = "open_with_window_picker",
       ["C"] = "close_node",
-      ["R"] = "refresh",
       ["a"] = {
         "add",
         -- some commands may take optional config options, see `:h neo-tree-mappings` for details
@@ -103,6 +133,8 @@ M.config = {
       ["c"] = "copy", -- takes text input for destination
       ["m"] = "move", -- takes text input for destination
       ["q"] = "close_window",
+      ["R"] = "refresh",
+      ["?"] = "show_help",
       ["J"] = function(state)
         local tree = state.tree
         local node = tree:get_node()
@@ -119,87 +151,30 @@ M.config = {
       end,
     },
   },
-  renderers = {
-    directory = {
-      { "indent" },
-      { "icon" },
-      { "current_filter" },
-      {
-        "container",
-        width = "100%",
-        right_padding = 1,
-        --max_width = 60,
-        content = {
-          { "name", zindex = 10 },
-          -- {
-          --   "symlink_target",
-          --   zindex = 10,
-          --   highlight = "NeoTreeSymbolicLinkTarget",
-          -- },
-          { "clipboard", zindex = 10 },
-          { "diagnostics", errors_only = true, zindex = 20, align = "right" },
-        },
-      },
-    },
-    file = {
-      { "indent" },
-      { "icon" },
-      {
-        "container",
-        width = "100%",
-        right_padding = 1,
-        --max_width = 60,
-        content = {
-          {
-            "name",
-            use_git_status_colors = true,
-            zindex = 10,
-          },
-          -- {
-          --   "symlink_target",
-          --   zindex = 10,
-          --   highlight = "NeoTreeSymbolicLinkTarget",
-          -- },
-          { "clipboard", zindex = 10 },
-          { "bufnr", zindex = 10 },
-          { "modified", zindex = 20, align = "right" },
-          { "diagnostics", zindex = 20, align = "right" },
-          { "git_status", zindex = 20, align = "right" },
-        },
-      },
-    },
-  },
   nesting_rules = {},
   filesystem = {
-    bind_to_cwd = true,
-    window = {
-      mappings = {
-        ["H"] = "toggle_hidden",
-        ["/"] = "fuzzy_finder",
-        --["/"] = "filter_as_you_type", -- this was the default until v1.28
-        ["f"] = "filter_on_submit",
-        ["<C-x>"] = "clear_filter",
-        ["<bs>"] = "navigate_up",
-        ["."] = "set_root",
-      },
-    },
     filtered_items = {
       visible = true, -- when true, they will just be displayed differently than normal items
       hide_dotfiles = false,
       hide_gitignored = true,
+      hide_hidden = true, -- only works on Windows for hidden files/directories
       hide_by_name = {
         ".DS_Store",
         "thumbs.db",
         ".git",
         --"node_modules"
       },
+      hide_by_pattern = { -- uses glob style patterns
+        --"*.meta"
+      },
       never_show = { -- remains hidden even if visible is toggled to true
         --".DS_Store",
         --"thumbs.db"
       },
     },
-    follow_current_file = true, -- This will find and focus the file in the active buffer every
+    follow_current_file = false, -- This will find and focus the file in the active buffer every
     -- time the current file is changed while the tree is open.
+    group_empty_dirs = true, -- when true, empty folders will be grouped together
     hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
     -- in whatever position is specified in window.position
     -- "open_current",  -- netrw disabled, opening a directory opens within the
@@ -207,14 +182,29 @@ M.config = {
     -- "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
     use_libuv_file_watcher = true, -- This will use the OS level file watchers to detect changes
     -- instead of relying on nvim autocmd events.
-  },
-  buffers = {
-    show_unloaded = true,
     window = {
       mappings = {
         ["<bs>"] = "navigate_up",
         ["."] = "set_root",
+        ["H"] = "toggle_hidden",
+        ["/"] = "fuzzy_finder",
+        ["f"] = "filter_on_submit",
+        ["<c-x>"] = "clear_filter",
+        ["[g"] = "prev_git_modified",
+        ["]g"] = "next_git_modified",
+      },
+    },
+  },
+  buffers = {
+    follow_current_file = true, -- This will find and focus the file in the active buffer every
+    -- time the current file is changed while the tree is open.
+    group_empty_dirs = true, -- when true, empty folders will be grouped together
+    show_unloaded = true,
+    window = {
+      mappings = {
         ["bd"] = "buffer_delete",
+        ["<bs>"] = "navigate_up",
+        ["."] = "set_root",
       },
     },
   },
@@ -242,14 +232,6 @@ M.init = function()
   utils.Key("n", "<Leader>uG", "<cmd>Neotree git_status float<cr>", "Git Status")
   utils.Key("n", "<Leader>ub", "<cmd>Neotree buffers left<cr>", "Opened Files")
   utils.Key("n", "<Leader>uB", "<cmd>Neotree buffers float<cr>", "Opened Files")
-  utils.Group("UserNeoTreeTabKey", {
-    "FileType",
-    "neo-tree",
-    function()
-      utils.IKey("n", "<Tab>", "<C-w>l"):buffer():set()
-    end,
-  })
-
   utils.Group("UserNeoTreeNoNumber", { "FileType", "neo-tree", "setlocal nonumber norelativenumber" })
 end
 
