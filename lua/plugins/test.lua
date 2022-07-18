@@ -54,7 +54,12 @@ M.setup_ultest = function()
 end
 
 M.setup_neotest = function()
-  require("neotest").setup({
+  local status_ok, neotest = pcall(require, "neotest")
+  if not status_ok then
+    vim.notify("neotest not found")
+    return
+  end
+  neotest.setup({
     adapters = {
       require("neotest-python")({
         -- Extra arguments for nvim-dap configuration
@@ -80,7 +85,6 @@ M.setup_neotest = function()
       }),
     },
   })
-  local neotest = require("neotest")
   utils.Key("n", "[t", wrap(neotest.jump.prev), "Previous Test")
   utils.Key("n", "]t", wrap(neotest.jump.next), "Next Test")
   utils.Key("n", "[T", wrap(neotest.jump.prev, { status = "failed" }), "Previous Failed Test")
