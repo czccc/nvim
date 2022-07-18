@@ -153,7 +153,7 @@ function M.setup()
   end
   -- TODO: fix unknown fold issue when using tab as indent
   vim.cmd(
-    [[set foldtext=substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)).'\ ('.(v:foldend-v:foldstart+1).'\ lines)']]
+    [[set foldtext=substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)).'\ ('.(v:foldend-v:foldstart+1).'\ lines)'.repeat('\ ',300)]]
   )
   -- set blink cursor
   vim.cmd([[set guicursor+=a:-blinkwait5-blinkoff5-blinkon5]])
