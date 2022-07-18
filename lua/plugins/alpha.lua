@@ -51,7 +51,10 @@ end
 local function make_sessions()
   local function shorten_path(filename)
     if #filename > 35 then
-      return require("plenary.path"):new(filename):shorten()
+      filename = require("plenary.path"):new(filename):shorten()
+    end
+    if #filename > 35 then
+      filename = "..." .. string.sub(filename, -34, -1)
     end
     return filename
   end
