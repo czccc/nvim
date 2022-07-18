@@ -206,6 +206,7 @@ function M.setup()
   end
 
   treesitter_configs.setup(M.opts)
+  require("nvim-treesitter.install").prefer_git = true
 
   utils.load({
     utils.IKey("o", "af"):desc("Function Outer"),
