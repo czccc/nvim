@@ -45,10 +45,10 @@ M.setup = function()
     "--completion-style=detailed",
     "--header-insertion=iwyu",
     "--header-insertion-decorators",
-    "--enable-config",
+    -- "--enable-config",
     "--offset-encoding=utf-16",
-    "--ranking-model=heuristics",
-    "--folding-ranges",
+    -- "--ranking-model=heuristics",
+    -- "--folding-ranges",
   }
   clangd_extensions.setup({
     server = {
