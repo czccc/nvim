@@ -8,6 +8,7 @@ M.lang_files = {
   "plugins.lsp.lang.markdown",
   "plugins.lsp.lang.rust",
   "plugins.lsp.lang.taplo",
+  "plugins.lsp.lang.vue",
   "plugins.lsp.lang.yaml",
 }
 

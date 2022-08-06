@@ -29,15 +29,15 @@ function M.setup()
       null_ls.builtins.formatting.stylua,
       null_ls.builtins.formatting.black,
 
-      null_ls.builtins.diagnostics.shellcheck,
-      null_ls.builtins.diagnostics.luacheck,
-      null_ls.builtins.diagnostics.vint,
+      -- null_ls.builtins.diagnostics.shellcheck,
+      -- null_ls.builtins.diagnostics.luacheck,
+      -- null_ls.builtins.diagnostics.vint,
       null_ls.builtins.diagnostics.markdownlint.with({
         extra_args = { "--config", path.join(path.config_dir, "markdownlint.json") },
         filetypes = { "markdown" },
       }),
 
-      null_ls.builtins.code_actions.shellcheck,
+      -- null_ls.builtins.code_actions.shellcheck,
       -- null_ls.builtins.code_actions.gitsigns,
     },
   })

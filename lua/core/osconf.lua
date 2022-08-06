@@ -35,6 +35,8 @@ M.setup = function()
     utils.Key("n", "<A-Down>", ":resize +2<CR>", "Resize Down")
     utils.Key("n", "<A-Left>", ":vertical resize -2<CR>", "Resize Left")
     utils.Key("n", "<A-Right>", ":vertical resize +2<CR>", "Resize Right")
+    utils.Key("n", "<A-a>", "ggVG", "Select All")
+    utils.Key("n", "<A-s>", ":w<CR>", "Write")
   end
 end
 
