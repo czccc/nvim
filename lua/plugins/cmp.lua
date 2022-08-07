@@ -17,7 +17,6 @@ M.packers = {
       "hrsh7th/cmp-cmdline",
       "dmitmel/cmp-cmdline-history",
       "hrsh7th/cmp-nvim-lua",
-      -- "hrsh7th/cmp-copilot",
       "saadparwaiz1/cmp_luasnip",
       "rafamadriz/friendly-snippets",
       {
@@ -40,54 +39,13 @@ M.packers = {
       --     require("plugins.cmp").setup_tabout()
       --   end,
       -- },
-      {
-        "github/copilot.vim",
-        -- "gelfand/copilot.vim",
-        config = function()
-          require("plugins.cmp").setup_copilot()
-        end,
-        -- disable = true,
-      },
-      -- {
-      --   "zbirenbaum/copilot.lua",
-      --   event = "InsertEnter",
-      --   config = function()
-      --     vim.schedule(function()
-      --       require("copilot").setup()
-      --     end)
-      --   end,
-      -- },
-      -- {
-      --   "zbirenbaum/copilot-cmp",
-      --   module = "copilot_cmp",
-      -- },
     },
   },
 }
 
 M.config = {}
 
-M.init = function()
-  vim.g.copilot_no_tab_map = true
-  vim.g.copilot_assume_mapped = true
-  vim.g.copilot_tab_fallback = ""
-  vim.g.copilot_filetypes = {
-    ["*"] = false,
-    python = true,
-    lua = true,
-    go = true,
-    rust = true,
-    html = true,
-    c = true,
-    cpp = true,
-    java = true,
-    javascript = true,
-    typescript = true,
-    javascriptreact = true,
-    typescriptreact = true,
-    terraform = true,
-  }
-end
+M.init = function() end
 
 M.setup_luasnip = function()
   require("luasnip/loaders/from_vscode").lazy_load()
@@ -181,10 +139,6 @@ M.setup_cmp = function()
     vim.cmd([[ packadd luasnip ]])
     return
   end
-  -- local has_words_before = function()
-  --   local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
-  --   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-  -- end
 
   local feedkey = function(key, mode, replace)
     if replace then
@@ -193,11 +147,6 @@ M.setup_cmp = function()
     else
       vim.api.nvim_feedkeys(key, mode, true)
     end
-  end
-
-  local get_copilot_keys = function()
-    local status_ok, copilot_keys = pcall(vim.fn["copilot#Accept"])
-    return status_ok and copilot_keys or ""
   end
 
   M.config = {
@@ -231,7 +180,6 @@ M.setup_cmp = function()
     },
     sources = {
       { name = "nvim_lsp" },
-      { name = "copilot" },
       { name = "path", max_item_count = 5 },
       { name = "luasnip", max_item_count = 3 },
       { name = "nvim_lua" },
@@ -280,12 +228,8 @@ M.setup_cmp = function()
       },
       ["<Tab>"] = {
         i = function(fallback)
-          local copilot_keys = get_copilot_keys()
           if cmp.visible() then
             cmp.select_next_item()
-          elseif copilot_keys ~= "" then
-            feedkey(copilot_keys, "i")
-            -- vim.api.nvim_feedkeys(copilot_keys, "i", true)
           elseif luasnip.jumpable() then
             -- luasnip.jump()
             luasnip.expand_or_jump()
@@ -327,9 +271,6 @@ M.setup_cmp = function()
         i = function(fallback)
           if cmp.visible() then
             cmp.abort()
-          elseif get_copilot_keys() ~= "" then
-            -- vim.cmd([[execute \<Plug>(copilot-dismiss)]])
-            feedkey("<C-]>", "i", true)
           elseif luasnip.expand_or_locally_jumpable() then
             luasnip.session.current_nodes[vim.api.nvim_get_current_buf()] = nil
             fallback()
@@ -384,21 +325,11 @@ M.setup_cmp = function()
   })
   cmp.setup.filetype("markdown", {
     sources = cmp.config.sources({
-      { name = "copilot" },
       { name = "nvim_lsp" },
       { name = "buffer", max_item_count = 5 },
       { name = "spell" },
     }),
   })
-end
-
-M.setup_copilot = function()
-  utils.IKey("i", "<C-l>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
-  utils.IKey("i", "<C-[>", [[copilot#Accept("\<CR>")]], "Copilot Accept"):expr():set()
-  utils.IKey("i", "<C-]>", "<Plug>(copilot-dismiss)", "Copilot Dismiss"):set()
-  utils.IKey("i", "<M-]>", "<Plug>(copilot-next)", "Copilot Next"):set()
-  utils.IKey("i", "<M-[>", "<Plug>(copilot-previous)", "Copilot Previous"):set()
-  utils.IKey("i", "<M-\\>", "<Cmd>vertical Copilot panel<CR>", "Copilot Panel"):set()
 end
 
 M.setup_tabout = function()
