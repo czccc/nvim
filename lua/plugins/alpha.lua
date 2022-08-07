@@ -37,10 +37,10 @@ local function make_infos()
   table.insert(infos, os.date(" %H:%M:%S"))
   table.insert(infos, string.format(" v%d.%d.%d", v.major, v.minor, v.patch))
   table.insert(infos, string.format(" %d", plugins))
-  infos = table.concat(infos, "     ")
+  local infos_str = table.concat(infos, "     ")
   return {
     type = "text",
-    val = infos,
+    val = infos_str,
     opts = {
       position = "center",
       hl = "Number",
@@ -88,7 +88,7 @@ local function make_sessions()
       desc = desc .. "(l)"
     end
     local but = dashboard.button(
-      string.format("%d", #buttons.val),
+      string.format("%d", idx),
       "  > " .. shorten_path(session.dir.filename) .. desc,
       string.format(":lua require('session_manager.utils').load_session('%s')<CR>", session.filename)
     )

@@ -13,7 +13,7 @@ M.packers = {
       "nvim-neotest/neotest-vim-test",
       "vim-test/vim-test",
     },
-    setup = function()
+    config = function()
       require("plugins.test").setup_neotest()
     end,
     event = "BufRead",
