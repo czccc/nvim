@@ -135,20 +135,19 @@ function M.common_on_attach(client, bufnr)
       bufnr,
       wrap(require("plugins.lsp.utils").format),
     })
-    utils
-      .IKey("n", "[of", function()
-        format_group:set()
-      end, "Format On Save")
-      :buffer()
-      :set()
-    utils
-      .IKey("n", "]of", function()
-        format_group:unset()
-      end, "Format On Save")
-      :buffer()
-      :set()
+    utils.IKey("n", "[of", function()
+      format_group:set()
+    end, "Format On Save"):buffer():set()
+    utils.IKey("n", "]of", function()
+      format_group:unset()
+    end, "Format On Save"):buffer():set()
   end
   -- require("plugins.lsp.utils").enable_format_on_save()
+
+  local status_ok, navic = pcall(require, "nvim-navic")
+  if status_ok then
+    navic.attach(client, bufnr)
+  end
 
   utils.Key("n", "K", vim.lsp.buf.hover, "Show Hover")
   utils.load_wk({

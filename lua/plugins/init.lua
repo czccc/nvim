@@ -15,6 +15,7 @@ local plugin_files = {
   "plugins.autopairs",
   "plugins.wilder",
   "plugins.alpha",
+  "plugins.navic",
 
   "plugins.telescope",
   "plugins.treesitter",

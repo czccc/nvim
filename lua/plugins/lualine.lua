@@ -324,18 +324,17 @@ local components = {
     end,
     -- cond = conditions.large_window,
   },
-  gps = {
+  navic = {
     function()
-      local status_ok, gps = pcall(require, "nvim-gps")
+      local status_ok, navic = pcall(require, "nvim-navic")
       if not status_ok then
         return ""
       end
-      if not gps.is_available() then
+      if not navic.is_available() then
         return ""
       end
-      return gps.get_location()
+      return navic.get_location()
     end,
-    cond = conditions.large_window,
   },
   location = {
     "location",
@@ -477,7 +476,7 @@ M.config = {
     },
     lualine_c = {
       components.diff,
-      components.gps,
+      components.navic,
       components.lsp_progress,
       "%=",
     },
@@ -507,6 +506,16 @@ M.config = {
     lualine_z = {},
   },
   tabline = {},
+  winbar = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {
+      -- components.navic,
+    },
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {},
+  },
 }
 
 M.setup = function()
