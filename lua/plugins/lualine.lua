@@ -145,7 +145,11 @@ local components = {
   },
   cwd = {
     function()
-      return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+      local path_cwd = vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+      if #path_cwd > 30 then
+        path_cwd = require("plenary.path"):new(path_cwd):shorten()
+      end
+      return path_cwd
     end,
     cond = conditions.super_window,
     color = { gui = "bold" },
@@ -161,6 +165,27 @@ local components = {
       readonly = "[-]", -- Text to show when the file is non-modifiable or readonly.
       unnamed = "[No Name]", -- Text to show for unnamed buffers.
     },
+    cond = conditions.buffer_not_empty,
+    color = { gui = "bold" },
+    padding = { left = 0, right = 1 },
+  },
+  filename1 = {
+    function()
+      local filepath = vim.fn.expand("%:~:.")
+      if #filepath > 30 then
+        filepath = require("plenary.path"):new(filepath):shorten()
+      end
+      if filepath == "" then
+        filepath = "[No Name]"
+      end
+      if vim.bo.modified then
+        filepath = filepath .. "[+]"
+      end
+      if vim.bo.modifiable == false or vim.bo.readonly == true then
+        filepath = filepath .. "[-]"
+      end
+      return filepath
+    end,
     cond = conditions.buffer_not_empty,
     color = { gui = "bold" },
     padding = { left = 0, right = 1 },
@@ -448,7 +473,7 @@ M.config = {
       -- components.branch,
       components.branch1,
       components.filetype,
-      components.filename,
+      components.filename1,
     },
     lualine_c = {
       components.diff,
