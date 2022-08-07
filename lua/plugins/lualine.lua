@@ -155,7 +155,7 @@ local components = {
     "filename",
     file_status = true, -- Displays file status (readonly status, modified status)
     path = 1,
-    shorting_target = 80, -- Shortens path to leave 80 spaces in the window
+    shorting_target = 150, -- Shortens path to leave 80 spaces in the window
     symbols = {
       modified = "[+]", -- Text to show when the file is modified.
       readonly = "[-]", -- Text to show when the file is non-modifiable or readonly.
