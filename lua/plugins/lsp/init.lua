@@ -129,6 +129,12 @@ function M.common_on_attach(client, bufnr)
       { "CursorHold,CursorHoldI", bufnr, require("plugins.lsp.utils").code_action_listener }
     )
   end
+  if client.supports_method("textDocument/documentSymbol") then
+    local status_ok, navic = pcall(require, "nvim-navic")
+    if status_ok then
+      navic.attach(client, bufnr)
+    end
+  end
   if client.supports_method("textDocument/formatting") then
     local format_group = utils.Group("UserLSPFormatOnSave" .. bufnr, {
       "BufWritePre",
@@ -141,12 +147,6 @@ function M.common_on_attach(client, bufnr)
     utils.IKey("n", "]of", function()
       format_group:unset()
     end, "Format On Save"):buffer():set()
-  end
-  -- require("plugins.lsp.utils").enable_format_on_save()
-
-  local status_ok, navic = pcall(require, "nvim-navic")
-  if status_ok then
-    navic.attach(client, bufnr)
   end
 
   utils.Key("n", "K", vim.lsp.buf.hover, "Show Hover")

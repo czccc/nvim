@@ -16,6 +16,12 @@ M.packers = {
       -- "RRethy/nvim-treesitter-textsubjects",
       "p00f/nvim-ts-rainbow",
       "andymass/vim-matchup",
+      {
+        "nvim-treesitter/nvim-treesitter-context",
+        config = function()
+          require("plugins.treesitter").setup_context()
+        end,
+      },
     },
   },
 }

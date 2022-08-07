@@ -106,6 +106,8 @@ M.setup_onedark = function()
       LightspeedUnlabeledMatch = { fg = "$black", bg = "$yellow", fmt = "bold" },
       LightspeedMaskedChar = { fg = "$purple", fmt = "bold" },
       LightspeedGreyWash = { fg = "$grey" },
+      TreesitterContextLineNumber = { bg = "$bg2" },
+      TreesitterContext = { bg = "$bg2" },
     }, -- Override highlight groups
 
     -- Plugins Config --
