@@ -71,6 +71,7 @@ M.opts = {
     enable = true,
     config = {
       -- Languages that have a single comment style
+      lua = "-- %s",
       typescript = "// %s",
       css = "/* %s */",
       scss = "/* %s */",

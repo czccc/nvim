@@ -33,12 +33,12 @@ M.packers = {
         end,
         requires = "nvim-treesitter/nvim-treesitter",
       },
-      {
-        "abecodes/tabout.nvim",
-        config = function()
-          require("plugins.cmp").setup_tabout()
-        end,
-      },
+      -- {
+      --   "abecodes/tabout.nvim",
+      --   config = function()
+      --     require("plugins.cmp").setup_tabout()
+      --   end,
+      -- },
     },
   },
 }
@@ -193,7 +193,13 @@ M.setup_cmp = function()
         i = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
       },
       ["<C-n>"] = {
-        i = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Insert }),
+        i = function()
+          if cmp.visible() then
+            cmp.select_next_item({ behavior = types.cmp.SelectBehavior.Insert })
+          else
+            cmp.complete()
+          end
+        end,
         c = function(fallback)
           if cmp.visible() then
             cmp.select_prev_item({ behavior = types.cmp.SelectBehavior.Insert })
@@ -203,7 +209,13 @@ M.setup_cmp = function()
         end,
       },
       ["<C-p>"] = {
-        i = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Insert }),
+        i = function()
+          if cmp.visible() then
+            cmp.select_prev_item({ behavior = types.cmp.SelectBehavior.Insert })
+          else
+            cmp.complete()
+          end
+        end,
         c = function(fallback)
           if cmp.visible() then
             cmp.select_next_item({ behavior = types.cmp.SelectBehavior.Insert })
@@ -238,7 +250,19 @@ M.setup_cmp = function()
             -- elseif has_words_before() then
             --   cmp.complete()
           else
-            fallback()
+            local next_char = vim.api.nvim_eval("strcharpart(getline('.')[col('.') - 1:], 0, 1)")
+            if
+              next_char == '"'
+              or next_char == "'"
+              or next_char == "`"
+              or next_char == ")"
+              or next_char == "]"
+              or next_char == "}"
+            then
+              feedkey("<Right>", "n", true)
+            else
+              fallback()
+            end
           end
         end,
         c = function()
@@ -339,7 +363,7 @@ M.setup_tabout = function()
     act_as_tab = true, -- shift content if tab out is not possible
     act_as_shift_tab = true, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
     enable_backwards = true, -- well ...
-    completion = false, -- if the tabkey is used in a completion pum
+    completion = true, -- if the tabkey is used in a completion pum
     tabouts = {
       { open = "'", close = "'" },
       { open = '"', close = '"' },
