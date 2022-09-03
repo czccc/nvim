@@ -75,6 +75,7 @@ M.setup_onedark = function()
       -- Visual = { bg = "#404859" },
       Visual = { bg = "$bg3" },
       -- Search = { fg = "none", bg = "$bg3" },
+
       TSField = { fg = "$red" },
       TSOperator = { fg = "$purple" },
       TSVariable = { fg = "$red" },
@@ -87,25 +88,35 @@ M.setup_onedark = function()
       cppTSConstant = { fg = "$orange" },
       cTSConstant = { fg = "$orange" },
       TSPunctBracket = { fg = "$purple" },
+
       packerStatusSuccess = { fg = "$green" },
+
       CmpItemAbbrMatch = { fg = "$green" },
       CmpItemAbbrMatchFuzzy = { fg = "$green" },
+
       OperatorSandwichChange = { fg = "$bg0", bg = "$orange" },
       OperatorSandwichDelete = { fg = "$bg0", bg = "$orange" },
       OperatorSandwichAdd = { fg = "$bg0", bg = "$orange" },
+
       HlSearchLens = { bg = "$bg3" },
-      NeoTreeGitModified = { fg = "$yellow" },
+
+      NeoTreeVertSplit = { fg = "$bg0", bg = "$bg_d" },
+      NeoTreeWinSeparator = { fg = "$bg_d", bg = "$bg_d" },
+
       rainbowcol1 = { fg = "$purple" },
+
       HopNextKey = { fg = "$bg0", bg = "$orange", fmt = "none" },
       HopNextKey1 = { fg = "$bg0", bg = "$blue", fmt = "none" },
       HopNextKey2 = { fg = "$yellow", fmt = "bold" },
       HopUnmatched = { fg = "$grey" },
+
       LightspeedLabel = { fg = "$yellow", fmt = "bold,underline" },
       LightspeedShortcut = { fg = "$black", bg = "$blue", fmt = "bold" },
       LightspeedLabelDistant = { fg = "$blue", fmt = "bold,underline" },
       LightspeedUnlabeledMatch = { fg = "$black", bg = "$yellow", fmt = "bold" },
       LightspeedMaskedChar = { fg = "$purple", fmt = "bold" },
       LightspeedGreyWash = { fg = "$grey" },
+
       TreesitterContextLineNumber = { bg = "$bg2" },
       TreesitterContext = { bg = "$bg2" },
     }, -- Override highlight groups

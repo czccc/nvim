@@ -26,7 +26,7 @@ M.setup = function()
 
   utils.Group(
     "UserFileTypeSetting",
-    { "FileType", { "markdown", "gitcommit" }, "setlocal spell wrap" },
+    { "FileType", { "markdown", "gitcommit" }, "setlocal wrap" },
     { "FileType", "python", "setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4" },
     { "FileType", "go", "setlocal noexpandtab shiftwidth=2 tabstop=2 softtabstop=0" },
     { "FileType", "go", [[setlocal listchars=tab:\ \ ,nbsp:+,trail:·,extends:→,precedes:←]] }

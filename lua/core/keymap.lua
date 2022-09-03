@@ -118,8 +118,8 @@ M.setup = function()
   utils.Key("n", "[q", "<cmd>cprevious<CR>", "Previous Quickfix")
   utils.Key("n", "]q", "<cmd>cnext<CR>", "Next Quickfix")
 
-  utils.Key("n", "[<Space>", "<cmd>put!=repeat(nr2char(10) v:count1)|silent<CR>", "Previous Add Lines")
-  utils.Key("n", "]<Space>", "<cmd>put =repeat(nr2char(10) v:count1)|silent<CR>", "Previous Add Lines")
+  utils.Key("n", "[<Space>", "<cmd>put!=repeat(nr2char(10), v:count1)|silent<CR>", "Previous Add Lines")
+  utils.Key("n", "]<Space>", "<cmd>put =repeat(nr2char(10), v:count1)|silent<CR>", "Previous Add Lines")
 
   -- Which-Key Groups
   utils.load({

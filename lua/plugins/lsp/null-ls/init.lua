@@ -1,6 +1,6 @@
 local M = {}
 
-local path = require("utils.path")
+-- local path = require("utils.path")
 
 M.config = {
   setup = {
@@ -33,7 +33,7 @@ function M.setup()
       -- null_ls.builtins.diagnostics.luacheck,
       -- null_ls.builtins.diagnostics.vint,
       null_ls.builtins.diagnostics.markdownlint.with({
-        extra_args = { "--config", path.join(path.config_dir, "markdownlint.json") },
+        -- extra_args = { "--config", path.join(path.config_dir, "markdownlint.json") },
         filetypes = { "markdown" },
       }),
 

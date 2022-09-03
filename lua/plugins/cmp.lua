@@ -33,12 +33,12 @@ M.packers = {
         end,
         requires = "nvim-treesitter/nvim-treesitter",
       },
-      -- {
-      --   "abecodes/tabout.nvim",
-      --   config = function()
-      --     require("plugins.cmp").setup_tabout()
-      --   end,
-      -- },
+      {
+        "abecodes/tabout.nvim",
+        config = function()
+          require("plugins.cmp").setup_tabout()
+        end,
+      },
     },
   },
 }

@@ -10,6 +10,8 @@ M.packer = {
 }
 
 local globalstatus = vim.version().minor >= 7
+local winbarstatus = vim.version().minor >= 8
+
 local winwidth = function()
   if globalstatus then
     return vim.api.nvim_get_option("columns")
@@ -506,7 +508,10 @@ M.config = {
     lualine_z = {},
   },
   tabline = {},
-  winbar = {
+}
+
+if winbarstatus then
+  M.config.winbar = {
     lualine_a = {},
     lualine_b = {},
     lualine_c = {
@@ -515,8 +520,8 @@ M.config = {
     lualine_x = {},
     lualine_y = {},
     lualine_z = {},
-  },
-}
+  }
+end
 
 M.setup = function()
   local lualine = require("lualine")
