@@ -1,0 +1,3 @@
+-- vim.cmd([[
+--   au BufNewFile,BufRead *.v,*.vh,*.sv,*.svi set filetype=verilog
+-- ]])
