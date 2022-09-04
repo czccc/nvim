@@ -75,6 +75,7 @@ M.setup_onedark = function()
       -- Visual = { bg = "#404859" },
       Visual = { bg = "$bg3" },
       -- Search = { fg = "none", bg = "$bg3" },
+      CursorLineNr = { fg = "$yellow", fmt = "bold" },
 
       TSField = { fg = "$red" },
       TSOperator = { fg = "$purple" },
