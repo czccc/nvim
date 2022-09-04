@@ -150,6 +150,7 @@ M.setup_scrollbar = function()
     excluded_filetypes = {
       "prompt",
       "TelescopePrompt",
+      "neo-tree",
     },
     autocmd = {
       render = {
