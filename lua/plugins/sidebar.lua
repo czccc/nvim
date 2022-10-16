@@ -20,8 +20,7 @@ M.packers = {
 }
 
 M.setup_symbol = function()
-  -- require("symbols-outline")
-  vim.g.symbols_outline = {
+  require("symbols-outline").setup({
     highlight_hovered_item = true,
     show_guides = true,
     auto_preview = false,
@@ -43,7 +42,7 @@ M.setup_symbol = function()
     },
     lsp_blacklist = {},
     symbol_blacklist = {},
-  }
+  })
   vim.cmd([[ highlight! link FocusedSymbol Visual ]])
   utils.Key("n", "<Leader>us", "<cmd>SymbolsOutline<cr>", "Symbols Outline")
 end

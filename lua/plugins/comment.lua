@@ -107,7 +107,8 @@ M.setup = function()
     utils.IKey("n", "gb"):group("Block Comment"),
     utils.IKey("n", "gbc"):desc("Block Comment"),
     utils.IKey("x", "gb"):desc("Block Comment"),
-    utils.IKey({ "n", "i" }, "<C-_>", api.toggle_current_linewise, "Line Comment"),
+    utils.IKey("n", "<C-_>", api.toggle_current_linewise, "Line Comment"),
+    utils.IKey("i", "<C-_>", api.toggle_current_linewise, "Line Comment"),
   })
 end
 

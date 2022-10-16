@@ -210,7 +210,7 @@ function M.set_keys()
     k = { builtin.keymaps, "Keymaps" },
     l = { builtin.resume, "Resume" },
     m = { builtin.commands, "Commands" },
-    M = { builtin.man_pages, "Man Pages" },
+    M = { wrap(builtin.man_pages, { sections = { "1", "3" } }), "Man Pages" },
     s = { builtin.builtin, "Telescope" },
   }, { prefix = "<Leader>s", mode = "n" })
 end
@@ -236,23 +236,21 @@ function M.setup()
         if stat.size > 100000 then
           return
         else
-          Job
-            :new({
-              command = "file",
-              args = { "--mime-type", "-b", filepath },
-              on_exit = function(j)
-                local mime_type = vim.split(j:result()[1], "/")[1]
-                if mime_type == "text" then
-                  previewers.buffer_previewer_maker(filepath, bufnr, opts)
-                else
-                  -- maybe we want to write something to the buffer here
-                  vim.schedule(function()
-                    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "BINARY" })
-                  end)
-                end
-              end,
-            })
-            :sync()
+          Job:new({
+            command = "file",
+            args = { "--mime-type", "-b", filepath },
+            on_exit = function(j)
+              local mime_type = vim.split(j:result()[1], "/")[1]
+              if mime_type == "text" then
+                previewers.buffer_previewer_maker(filepath, bufnr, opts)
+              else
+                -- maybe we want to write something to the buffer here
+                vim.schedule(function()
+                  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "BINARY" })
+                end)
+              end
+            end,
+          }):sync()
         end
       end)
     end,

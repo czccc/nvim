@@ -10,7 +10,7 @@ M.packers = {
     end,
     wants = {
       "null-ls.nvim",
-      "lua-dev.nvim",
+      "neodev.nvim",
       "cmp-nvim-lsp",
       "nvim-lsp-installer",
     },
@@ -19,8 +19,7 @@ M.packers = {
         "jose-elias-alvarez/null-ls.nvim",
       },
       {
-        "folke/lua-dev.nvim",
-        module = "lua-dev",
+        "folke/neodev.nvim",
       },
       {
         "williamboman/nvim-lsp-installer",
@@ -101,7 +100,7 @@ function M.common_capabilities()
 
   local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
   if status_ok then
-    capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+    capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
   end
 
   return capabilities
@@ -141,12 +140,18 @@ function M.common_on_attach(client, bufnr)
       bufnr,
       wrap(require("plugins.lsp.utils").format),
     })
-    utils.IKey("n", "[of", function()
-      format_group:set()
-    end, "Format On Save"):buffer():set()
-    utils.IKey("n", "]of", function()
-      format_group:unset()
-    end, "Format On Save"):buffer():set()
+    utils
+      .IKey("n", "[of", function()
+        format_group:set()
+      end, "Format On Save")
+      :buffer()
+      :set()
+    utils
+      .IKey("n", "]of", function()
+        format_group:unset()
+      end, "Format On Save")
+      :buffer()
+      :set()
   end
 
   utils.Key("n", "K", vim.lsp.buf.hover, "Show Hover")
