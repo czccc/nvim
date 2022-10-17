@@ -62,8 +62,8 @@ M.setup = function()
   utils.load_wk({
     name = "Terminal",
     t = { wrap(M.toggle), "Float" },
-    h = { wrap(M.toggle, { nil, nil, "horizontal" }), "Horizontal" },
-    v = { wrap(M.toggle, { nil, nil, "vertical" }), "Vertical" },
+    -- h = { wrap(M.toggle, { nil, nil, "horizontal" }), "Horizontal" },
+    -- v = { wrap(M.toggle, { nil, nil, "vertical" }), "Vertical" },
     g = { wrap(M.toggle, { "lazygit" }), "Lazygit" },
     G = { wrap(M.toggle, { "gitui" }), "Git UI" },
     H = { wrap(M.toggle, { "htop" }), "Htop" },
