@@ -38,6 +38,7 @@ local plugin_files = {
   "plugins.spectre",
   "plugins.todo",
 
+  "plugins.oscyank",
   -- "plugins.competitest",
 }
 
@@ -57,7 +58,7 @@ M.merge = function(file_list, clean)
   for _, plugin_file in ipairs(file_list) do
     local status_ok, plugin = pcall(require_fn, plugin_file)
     if not status_ok then
-      vim.notify("Unable to require file " .. plugin, "ERROR")
+      vim.notify("Unable to require file " .. plugin, vim.log.levels.ERROR)
     end
     if plugin.init then
       pcall(plugin.init)

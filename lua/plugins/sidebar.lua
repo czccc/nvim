@@ -3,7 +3,7 @@ local M = {}
 M.packers = {
   {
     "simrat39/symbols-outline.nvim",
-    setup = function()
+    config = function()
       require("plugins.sidebar").setup_symbol()
     end,
     -- event = "BufRead",

@@ -225,8 +225,8 @@ M.setup_cmp = function()
         end,
       },
       ["<C-y>"] = {
-        i = cmp.mapping.complete(),
-        c = cmp.mapping.complete(),
+        i = cmp.mapping.complete({}),
+        c = cmp.mapping.complete({}),
       },
       ["<C-e>"] = {
         i = cmp.mapping.abort(),

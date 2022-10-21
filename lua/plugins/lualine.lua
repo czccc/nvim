@@ -279,7 +279,7 @@ local components = {
         table.insert(buf_client_names, "")
       end
       -- add client
-      local buf_clients = vim.lsp.buf_get_clients()
+      local buf_clients = vim.lsp.get_active_clients()
       if #buf_clients > 0 then
         table.insert(buf_client_names, "ﲀ")
       end
