@@ -77,31 +77,6 @@ M.config = {
       "--hidden",
       "--glob=!.git/",
     },
-    -- mappings = {
-    --   i = {
-    --     ["<C-c>"] = actions.close,
-    --     ["<C-y>"] = actions.which_key,
-    --     ["<C-j>"] = actions.cycle_history_next,
-    --     ["<C-k>"] = actions.cycle_history_prev,
-    --     ["<C-n>"] = actions.move_selection_next,
-    --     ["<C-p>"] = actions.move_selection_previous,
-    --     ["<Tab>"] = actions.toggle_selection + actions.move_selection_next,
-    --     ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_previous,
-    --     ["<CR>"] = actions.select_default + actions.center,
-    --     ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-    --   },
-    --   n = {
-    --     ["<Esc>"] = actions.close,
-    --     ["<c-j>"] = actions.cycle_history_next,
-    --     ["<c-k>"] = actions.cycle_history_prev,
-    --     ["<C-n>"] = actions.move_selection_next,
-    --     ["<C-p>"] = actions.move_selection_previous,
-    --     ["<Tab>"] = actions.toggle_selection + actions.move_selection_next,
-    --     ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_previous,
-    --     ["<CR>"] = actions.select_default + actions.center,
-    --     ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-    --   },
-    -- },
     file_ignore_patterns = {
       "vendor/*",
       "%.lock",
@@ -193,13 +168,18 @@ function M.set_keys()
     z = { M.search_only_certain_files, "Certain Filetype" },
   }, { prefix = "<Leader>f", mode = "n" })
   utils.load_wk({
+    name = "Find Files",
+    B = { M.curbuf_grep_visual_string, "Buffer CurWord" },
+    W = { M.grep_visual_string, "Live Grep CurWord" },
+  }, { prefix = "<Leader>f", mode = "v" })
+  utils.load_wk({
     name = "Search",
     a = { builtin.autocommands, "Autocommands" },
     b = { builtin.git_branches, "Checkout Branch" },
     c = { builtin.colorscheme, "Colorschemes" },
     C = {
       function()
-        require("telescope.builtin.internal").colorscheme({ enable_preview = true })
+        builtin.colorscheme({ enable_preview = true })
       end,
       "Colorschemes with Preview",
     },
@@ -236,23 +216,21 @@ function M.setup()
         if stat.size > 100000 then
           return
         else
-          Job
-            :new({
-              command = "file",
-              args = { "--mime-type", "-b", filepath },
-              on_exit = function(j)
-                local mime_type = vim.split(j:result()[1], "/", {})[1]
-                if mime_type == "text" then
-                  previewers.buffer_previewer_maker(filepath, bufnr, opts)
-                else
-                  -- maybe we want to write something to the buffer here
-                  vim.schedule(function()
-                    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "BINARY" })
-                  end)
-                end
-              end,
-            })
-            :sync()
+          Job:new({
+            command = "file",
+            args = { "--mime-type", "-b", filepath },
+            on_exit = function(j)
+              local mime_type = vim.split(j:result()[1], "/", {})[1]
+              if mime_type == "text" then
+                previewers.buffer_previewer_maker(filepath, bufnr, opts)
+              else
+                -- maybe we want to write something to the buffer here
+                vim.schedule(function()
+                  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "BINARY" })
+                end)
+              end
+            end,
+          }):sync()
         end
       end)
     end,
@@ -533,7 +511,7 @@ function M.search_only_certain_files()
       "rg",
       "--files",
       "--type",
-      vim.fn.input("Type: "),
+      vim.fn.input({ prompt = "Type: " }),
     },
   })
 end
@@ -572,7 +550,7 @@ function M.live_grep()
   require("telescope.builtin").live_grep(opts)
 end
 
-local visual_selection = function()
+local cur_word = function()
   local save_previous = vim.fn.getreg("a")
   vim.api.nvim_command('silent! normal! "ayiw')
   local selection = vim.fn.trim(vim.fn.getreg("a"))
@@ -582,21 +560,31 @@ end
 
 function M.grep_cursor_string()
   local opts = ivy_opts()
-  opts.default_text = visual_selection()
-  opts.file_ignore_patterns = {
-    "vendor/*",
-    "node_modules",
-    "%.jpg",
-    "%.jpeg",
-    "%.png",
-    "%.svg",
-    "%.otf",
-    "%.ttf",
-  }
+  opts.default_text = cur_word()
   require("telescope.builtin").live_grep(opts)
 end
 
 function M.curbuf_grep_cursor_string()
+  local opts = ivy_opts()
+  opts.default_text = cur_word()
+  require("telescope.builtin").current_buffer_fuzzy_find(opts)
+end
+
+local visual_selection = function()
+  local save_previous = vim.fn.getreg("a")
+  vim.api.nvim_command('silent! normal! "ay')
+  local selection = vim.fn.trim(vim.fn.getreg("a"))
+  vim.fn.setreg("a", save_previous)
+  return vim.fn.substitute(selection, [[\n]], [[\\n]], "g")
+end
+
+function M.grep_visual_string()
+  local opts = ivy_opts()
+  opts.default_text = visual_selection()
+  require("telescope.builtin").live_grep(opts)
+end
+
+function M.curbuf_grep_visual_string()
   local opts = ivy_opts()
   opts.default_text = visual_selection()
   require("telescope.builtin").current_buffer_fuzzy_find(opts)
@@ -607,17 +595,6 @@ function M.workspace_frequency()
     default_text = ":CWD:",
   }
   require("telescope").extensions.frecency.frecency(opts)
-end
-
-function M.file_browser()
-  local opts = dropdown_opts()
-  require("telescope").extensions.file_browser.file_browser(opts)
-end
-
-function M.projects()
-  local opts = dropdown_opts()
-  opts.initial_mode = "normal"
-  require("telescope").extensions.projects.projects(opts)
 end
 
 return M

@@ -83,7 +83,7 @@ M.toggle = function(opts)
   if opts.cmd then
     local binary = opts.cmd:match("(%S+)")
     if vim.fn.executable(binary) ~= 1 then
-      vim.notify("Unknown cmd: " .. binary .. ". Please make sure it is installed properly.", "INFO")
+      vim.notify("Unknown cmd: " .. binary .. ". Please make sure it is installed properly.", vim.log.levels.INFO)
       return
     end
   end
