@@ -194,13 +194,13 @@ M.opts = {
 function M.setup()
   -- avoid running in headless mode since it's harder to detect failures
   if #vim.api.nvim_list_uis() == 0 then
-    vim.notify("headless mode detected, skipping running setup for treesitter", "WARN")
+    vim.notify("headless mode detected, skipping running setup for treesitter", vim.log.levels.WARN)
     return
   end
 
   local status_ok, treesitter_configs = pcall(require, "nvim-treesitter.configs")
   if not status_ok then
-    vim.notify("Failed to load nvim-treesitter.configs", "ERROR")
+    vim.notify("Failed to load nvim-treesitter.configs", vim.log.levels.ERROR)
     return
   end
 

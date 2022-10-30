@@ -19,7 +19,7 @@ M.packer = {
     {
       -- only needed if you want to use the commands with "_with_window_picker" suffix
       "s1n7ax/nvim-window-picker",
-      tag = "1.*",
+      tag = "v1.*",
       config = function()
         require("window-picker").setup({
           autoselect_one = true,
@@ -28,13 +28,14 @@ M.packer = {
             -- filter using buffer options
             bo = {
               -- if the file type is one of following, the window will be ignored
-              filetype = { "neo-tree", "neo-tree-popup", "notify", "quickfix" },
+              filetype = { "neo-tree", "neo-tree-popup", "notify" },
 
               -- if the buffer type is one of following, the window will be ignored
-              buftype = { "terminal" },
+              buftype = { "terminal", "quickfix" },
             },
           },
-          other_win_hl_color = "#e35e4f",
+          fg_color = "#151820",
+          other_win_hl_color = "#97ca72",
         })
       end,
     },
@@ -108,14 +109,15 @@ M.config = {
       ["<space>"] = "none",
       -- ["<Tab>"] = "none",
       ["<Tab>"] = wrap(vim.cmd, "wincmd l"),
-      ["<2-LeftMouse>"] = "open",
-      ["<cr>"] = "open",
+      ["<2-LeftMouse>"] = "open_with_window_picker",
+      ["<cr>"] = "open_with_window_picker",
       ["o"] = "open",
       -- ["S"] = "open_split",
       -- ["s"] = "open_vsplit",
       ["S"] = "split_with_window_picker",
       ["s"] = "vsplit_with_window_picker",
       ["w"] = "open_with_window_picker",
+      ["t"] = "open_tabnew",
       ["C"] = "close_node",
       ["a"] = {
         "add",

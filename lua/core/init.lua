@@ -38,12 +38,12 @@ M.reload = function()
   require("core.osconf").setup()
   require("core.pack").setup()
 
-  vim.notify("Reloaded", "INFO")
+  vim.notify("Reloaded", vim.log.levels.INFO)
 end
 
 M.config_lua_list = function()
   local base_lua_dir = join_paths(utils.Path.config_dir, "lua")
-  local lua_files = vim.fn.globpath(base_lua_dir, "**/*.lua", 0, 1)
+  local lua_files = vim.fn.globpath(base_lua_dir, "**/*.lua", 0, true)
   for i, lua_file in ipairs(lua_files) do
     lua_file = lua_file:gsub(base_lua_dir, "")
     lua_file = lua_file:sub(2, -5)

@@ -8,6 +8,7 @@ M.packers = {
     end,
     -- event = "BufRead",
     cmd = { "SymbolsOutline", "SymbolsOutlineClose" },
+    keys = { "<Leader>us" },
     disable = false,
   },
   {

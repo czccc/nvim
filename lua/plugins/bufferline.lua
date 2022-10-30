@@ -156,7 +156,7 @@ M.config = {
         padding = 1,
       },
       {
-        filetype = "UltestSummary",
+        filetype = "neotest-summary",
         text = "Test Summary",
         highlight = "PanelHeading",
         padding = 1,

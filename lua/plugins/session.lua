@@ -43,7 +43,7 @@ M.setup_session_manager = function()
     p = { session_manager.load_session, "List" },
   }, { prefix = "<Leader>S", mode = "n" })
   utils.Group("UserSessionRestoreExplorer", { "User", "SessionLoadPost", M.restore_explorer })
-  utils.Group("UserSessionSaveOnLeave", { "QuitPre", "*", session_manager.autosave_session })
+  -- utils.Group("UserSessionSaveOnLeave", { "ExitPre", "*", session_manager.autosave_session })
 end
 
 function M.close_explorer()

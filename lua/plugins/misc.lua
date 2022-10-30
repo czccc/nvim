@@ -5,10 +5,6 @@ M.packers = {
   { "nvim-lua/plenary.nvim" },
   { "lewis6991/impatient.nvim" },
   { "kyazdani42/nvim-web-devicons" },
-  {
-    "antoinemadec/FixCursorHold.nvim",
-    event = "BufRead",
-  },
   { "mtdl9/vim-log-highlighting", ft = { "text", "log" } },
   { "b0o/schemastore.nvim" },
   {
@@ -29,29 +25,6 @@ M.packers = {
     end,
     event = { "BufRead" },
   },
-  -- {
-  --   "ethanholz/nvim-lastplace",
-  --   config = function()
-  --     require("nvim-lastplace").setup({
-  --       lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
-  --       lastplace_ignore_filetype = {
-  --         "gitcommit",
-  --         "gitrebase",
-  --         "svn",
-  --         "hgcommit",
-  --       },
-  --       lastplace_open_folds = true,
-  --     })
-  --   end,
-  --   event = "BufWinEnter",
-  --   disable = false,
-  -- },
-  -- {
-  --   "tpope/vim-surround",
-  -- },
-  -- {
-  --   "tpope/vim-repeat",
-  -- },
   {
     "machakann/vim-sandwich",
     setup = function()

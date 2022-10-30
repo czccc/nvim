@@ -25,7 +25,7 @@ local plugin_files = {
   "plugins.tmux",
   "plugins.toggleterm",
   "plugins.async",
-  -- "plugins.test",
+  "plugins.test",
   "plugins.session",
 
   "plugins.lsp",

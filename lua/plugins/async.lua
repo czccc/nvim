@@ -20,8 +20,8 @@ M.packers = {
 M.setup_async_run = function()
   vim.cmd([[ let g:asyncrun_open = 8 ]])
   vim.cmd([[ let g:asyncrun_mode = 'term' ]])
-  utils.Key("n", "<Leader>th", "<cmd>AsyncRun zsh<cr>")
-  utils.Key("n", "<Leader>tv", "<cmd>AsyncRun -pos=right zsh<cr>")
+  utils.Key("n", "<Leader>th", "<cmd>AsyncRun zsh<cr>", "Horizontal")
+  utils.Key("n", "<Leader>tv", "<cmd>AsyncRun -pos=right zsh<cr>", "Vertical")
 end
 
 M.setup_async_tasks = function()

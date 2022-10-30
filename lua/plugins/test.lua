@@ -19,39 +19,7 @@ M.packers = {
     event = "BufRead",
     opt = true,
   },
-  -- {
-  --   "rcarriga/vim-ultest",
-  --   requires = {
-  --     {
-  --       "vim-test/vim-test",
-  --       event = "BufRead",
-  --     },
-  --   },
-  --   run = ":UpdateRemotePlugins",
-  --   setup = function()
-  --     require("plugins.test").setup_ultest()
-  --   end,
-  --   event = "BufRead",
-  --   opt = true,
-  -- },
 }
-
-vim.g["test#strategy"] = "asyncrun"
-vim.g.ultest_use_pty = 1
-vim.g.ultest_output_on_line = 0
-vim.g.ultest_summary_width = 30
-
-M.setup_ultest = function()
-  utils.Key("n", "]t", "<Plug>(ultest-next-fail)", "Next Failed Test")
-  utils.Key("n", "[t", "<Plug>(ultest-prev-fail)", "Previous Failed Test")
-  utils.load_wk({
-    u = { "<cmd>UltestSummary<cr>", "Ultest Summary" },
-    l = { "<cmd>UltestLast<cr>", "Ultest Last" },
-    n = { "<cmd>UltestNearest<cr>", "Ultest Nearest" },
-    s = { "<cmd>UltestStop<cr>", "Ultest Stop" },
-  }, { prefix = "<Leader>t", mode = "n" })
-  utils.Group("UltestNoWrap", { "FileType", "UltestSummary", "setlocal nowrap" })
-end
 
 M.setup_neotest = function()
   local status_ok, neotest = pcall(require, "neotest")
@@ -84,14 +52,33 @@ M.setup_neotest = function()
         allow_file_types = { "haskell", "elixir" },
       }),
     },
+    summary = {
+      mappings = {
+        attach = "a",
+        clear_marked = "M",
+        clear_target = "T",
+        expand = { "<CR>", "<2-LeftMouse>" },
+        expand_all = "e",
+        jumpto = "i",
+        mark = "m",
+        next_failed = "J",
+        output = "o",
+        prev_failed = "K",
+        run = "r",
+        run_marked = "R",
+        short = "O",
+        stop = "u",
+        target = "t",
+      },
+    },
   })
   utils.Key("n", "[t", wrap(neotest.jump.prev), "Previous Test")
   utils.Key("n", "]t", wrap(neotest.jump.next), "Next Test")
   utils.Key("n", "[T", wrap(neotest.jump.prev, { status = "failed" }), "Previous Failed Test")
   utils.Key("n", "]T", wrap(neotest.jump.next, { status = "failed" }), "Next Failed Test")
   utils.load_wk({
-    u = { wrap(neotest.summary.toggle), "Test Summary" },
-    o = { wrap(neotest.output.open, { enter = true }), "Test Output" },
+    u = { wrap(neotest.summary.open), "Test Summary" },
+    o = { wrap(neotest.output.open, { enter = false }), "Test Output" },
     l = { wrap(neotest.run.run_last), "Test Last" },
     n = { wrap(neotest.run.run), "Test Nearest" },
     f = { wrap(neotest.run.run, vim.fn.expand("%")), "Test File" },
