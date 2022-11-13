@@ -117,8 +117,12 @@ M.setup_onedark = function()
       LightspeedMaskedChar = { fg = "$purple", fmt = "bold" },
       LightspeedGreyWash = { fg = "$grey" },
 
-      TreesitterContextLineNumber = { bg = "$bg2" },
+      TreesitterContextLineNumber = { bg = "$bg2", fg = "$yellow", fmt = "bold" },
       TreesitterContext = { bg = "$bg2" },
+
+      IlluminatedWordText = { fmt = "none" },
+      IlluminatedWordRead = { fmt = "none" },
+      IlluminatedWordWrite = { fmt = "none" },
     }, -- Override highlight groups
 
     -- Plugins Config --

@@ -134,11 +134,11 @@ function M.Peek(what)
     )
   else
     -- Make a new request and then create the new window in the callback
-    local params = vim.lsp.util.make_position_params()
+    local params = vim.lsp.util.make_position_params(0, "utf-8")
     local preview_callback = preview_location_callback_new_signature
     local success, _ = pcall(vim.lsp.buf_request, 0, "textDocument/" .. what, params, preview_callback)
     if not success then
-      print(
+      vim.notify(
         'peek: Error calling LSP method "textDocument/' .. what .. '". The current language lsp might not support it.'
       )
     end

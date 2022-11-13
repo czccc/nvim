@@ -9,8 +9,13 @@ M.packer = {
   disable = false,
 }
 
-M.config = {
-  setup = {
+M.setup = function()
+  local status_ok, terminal = pcall(require, "toggleterm")
+  if not status_ok then
+    return
+  end
+
+  terminal.setup({
     -- size can be a number or function which is passed the current terminal
     size = function(term)
       if term.direction == "horizontal" then
@@ -47,17 +52,7 @@ M.config = {
         background = "Normal",
       },
     },
-  },
-}
-
-M.setup = function()
-  local status_ok, terminal = pcall(require, "toggleterm")
-  if not status_ok then
-    return
-  end
-  local config = M.config
-
-  terminal.setup(config.setup)
+  })
 
   utils.load_wk({
     name = "Terminal",

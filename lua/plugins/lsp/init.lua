@@ -12,18 +12,26 @@ M.packers = {
       "null-ls.nvim",
       "neodev.nvim",
       "cmp-nvim-lsp",
-      "nvim-lsp-installer",
+      "mason.nvim",
+      "mason-lspconfig.nvim",
+      -- "vim-illuminate",
     },
     requires = {
+      {
+        "williamboman/mason.nvim",
+      },
+      {
+        "williamboman/mason-lspconfig.nvim",
+      },
       {
         "jose-elias-alvarez/null-ls.nvim",
       },
       {
         "folke/neodev.nvim",
       },
-      {
-        "williamboman/nvim-lsp-installer",
-      },
+      -- {
+      --   "RRethy/vim-illuminate",
+      -- },
       {
         "ray-x/lsp_signature.nvim",
         config = function()
@@ -88,6 +96,11 @@ M.config = {
 }
 
 function M.common_capabilities()
+  local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+  if status_ok then
+    return cmp_nvim_lsp.default_capabilities()
+  end
+
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
   capabilities.textDocument.completion.completionItem.resolveSupport = {
@@ -97,11 +110,6 @@ function M.common_capabilities()
       "additionalTextEdits",
     },
   }
-
-  local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-  if status_ok then
-    capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
-  end
 
   return capabilities
 end
@@ -194,17 +202,20 @@ function M.setup()
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, M.config.float)
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, M.config.float)
 
-  require("plugins.lsp.null-ls").setup()
-  require("nvim-lsp-installer").setup({
-    github = {
-      -- The template URL to use when downloading assets from GitHub.
-      -- The placeholders are the following (in order):
-      -- 1. The repository (e.g. "rust-lang/rust-analyzer")
-      -- 2. The release version (e.g. "v0.3.0")
-      -- 3. The asset name (e.g. "rust-analyzer-v0.3.0-x86_64-unknown-linux-gnu.tar.gz")
-      download_url_template = "https://ghproxy.com/https://github.com/%s/releases/download/%s/%s",
+  require("mason").setup({
+    ui = {
+      icons = {
+        package_installed = "✓",
+        package_pending = "➜",
+        package_uninstalled = "✗",
+      },
     },
   })
+  require("mason-lspconfig").setup({
+    ensure_installed = { "sumneko_lua", "pyright", "yamlls" },
+    automatic_installation = true,
+  })
+  require("plugins.lsp.null-ls").setup()
   -- must be setup after lsp-installer
   require("plugins.lsp.lang").setup()
 
@@ -226,7 +237,7 @@ function M.setup()
 
   utils.load_wk({
     name = "LSP",
-    I = { "<cmd>LspInstallInfo<cr>", "Lsp Installer" },
+    I = { "<cmd>Mason<cr>", "Lsp Installer" },
     i = { "<cmd>LspInfo<cr>", "Lsp Info" },
     r = { "<cmd>LspRestart<cr>", "Lsp Restart" },
     q = { vim.diagnostic.setloclist, "Loc List" },
@@ -238,6 +249,30 @@ function M.setup()
 
   utils.Key("n", "<Leader>ui", "<cmd>LspInfo<cr>", "Lsp Info")
   utils.Key("n", "<Leader>uI", "<cmd>NullLsInfo<cr>", "NullLs Info")
+end
+
+M.setup_illuminate = function()
+  require("illuminate").configure({
+    -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
+    filetypes_denylist = {
+      "dirvish",
+      "fugitive",
+      "alpha",
+      "NvimTree",
+      "neo-tree",
+      "packer",
+      "neogitstatus",
+      "Trouble",
+      "lir",
+      "Outline",
+      "spectre_panel",
+      "toggleterm",
+      "DressingSelect",
+      "TelescopePrompt",
+    },
+    -- under_cursor: whether or not to illuminate under the cursor
+    under_cursor = true,
+  })
 end
 
 return M

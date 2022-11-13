@@ -15,7 +15,12 @@ M.packers = {
       "nvim-treesitter/nvim-treesitter-textobjects",
       -- "RRethy/nvim-treesitter-textsubjects",
       "p00f/nvim-ts-rainbow",
-      "andymass/vim-matchup",
+      {
+        "andymass/vim-matchup",
+        setup = function()
+          vim.g.matchup_matchparen_offscreen = { method = "status_manual" }
+        end,
+      },
       {
         "nvim-treesitter/nvim-treesitter-context",
         config = function()
@@ -49,14 +54,47 @@ M.opts = {
   matchup = {
     enable = true, -- mandatory, false will disable the whole extension
     -- disable = { "c", "ruby" },  -- optional, list of language that will be disabled
-    matchparen_offscreen = { method = "popup" },
+    -- matchparen_offscreen = { method = "popup" },
     -- vim.cmd([[ let g:matchup_matchparen_offscreen = {'method': 'popup'} ]]),
-    vim.cmd([[ let g:matchup_matchparen_offscreen = {'method': 'status_manual'} ]]),
+    -- vim.cmd([[ let g:matchup_matchparen_offscreen = {'method': 'status_manual'} ]]),
   },
   highlight = {
     enable = true, -- false will disable the whole extension
     additional_vim_regex_highlighting = false,
-    disable = { "latex" },
+    disable = function(lang, buf)
+      if vim.tbl_contains({ "latex" }, lang) then
+        return true
+      end
+
+      local max_filesize = 1024 * 1024
+      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+      if ok and stats and stats.size > max_filesize then
+        vim.schedule(function()
+          vim.api.nvim_buf_call(buf, function()
+            vim.cmd("setlocal noswapfile noundofile")
+
+            if vim.tbl_contains({ "json" }, lang) then
+              vim.cmd("NoMatchParen")
+              vim.cmd("syntax off")
+              vim.cmd("syntax clear")
+              vim.cmd("setlocal nocursorline nolist bufhidden=unload")
+
+              vim.api.nvim_create_autocmd({ "BufDelete" }, {
+                callback = function()
+                  vim.cmd("DoMatchParen")
+                  vim.cmd("syntax on")
+                end,
+                buffer = buf,
+              })
+            end
+          end)
+        end)
+
+        vim.notify("File larger than 1MB, turned off treesitter for this buffer")
+
+        return true
+      end
+    end,
   },
   incremental_selection = {
     enable = true,
@@ -81,8 +119,6 @@ M.opts = {
       json = "",
     },
   },
-  -- indent = {enable = true, disable = {"python", "html", "javascript"}},
-  -- TODO seems to be broken
   indent = {
     enable = true,
     disable = { "yaml" },
@@ -139,7 +175,7 @@ M.opts = {
     },
     lsp_interop = {
       enable = true,
-      border = "none",
+      border = "rounded",
       peek_definition_code = {
         ["<leader>lf"] = "@function.outer",
         ["<leader>lc"] = "@class.outer",
@@ -245,11 +281,19 @@ M.setup_context = function()
         "class",
         "function",
         "method",
-        -- 'for', -- These won't appear in the context
-        -- 'while',
-        -- 'if',
-        -- 'switch',
-        -- 'case',
+        "for", -- These won't appear in the context
+        "while",
+        "if",
+        "switch",
+        "case",
+      },
+      rust = {
+        "impl_item",
+        "struct",
+        "enum",
+      },
+      markdown = {
+        "section",
       },
       -- Example for a specific filetype.
       -- If a pattern is missing, *open a PR* so everyone can benefit.

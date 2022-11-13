@@ -28,13 +28,13 @@ local conditions = {
     return vim.fn.empty(vim.fn.expand("%:t")) ~= 1
   end,
   wide_window = function()
-    return winwidth(0) > 80
+    return winwidth() > 80
   end,
   large_window = function()
-    return winwidth(0) > 150
+    return winwidth() > 150
   end,
   super_window = function()
-    return winwidth(0) > 200
+    return winwidth() > 200
   end,
   check_git_workspace = function()
     -- local filepath = vim.fn.expand "%:p:h"

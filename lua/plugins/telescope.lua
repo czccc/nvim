@@ -209,6 +209,7 @@ function M.setup()
       opts = opts or {}
       filepath = vim.fn.expand(filepath)
       local Job = require("plenary.job")
+      ---@diagnostic disable-next-line: redundant-parameter
       vim.loop.fs_stat(filepath, function(_, stat)
         if not stat then
           return
